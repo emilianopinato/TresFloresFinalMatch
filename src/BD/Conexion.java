@@ -552,5 +552,39 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         }
         return listaCotizaciones;
     }
+    public List<Proveedor> listarProveedoresArticulo(String codigo){
+        EntityManager em = getEntity();
+        List<Proveedor> listaProveedor = null;
+        em.getTransaction().begin();
+        try{
+            listaProveedor = em.createNativeQuery("SELECT p.* FROM proveedor as p,articulo_proveedor as ap WHERE ap.proveedores_codigo = p.codigo AND p.deshabilitado = false AND ap.articulos_codigo = :codigo", Proveedor.class)
+                    .setParameter("codigo", codigo)
+                    .getResultList();
+            em.getTransaction().commit();
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        return listaProveedor;
+
+    }
+
+    public List<Historial> listarHistorialProveedorArticulo(String codigoArt,int codigoPro){
+        EntityManager em = getEntity();
+        List<Historial> listaHistorial = null;
+        em.getTransaction().begin();
+        try{
+            listaHistorial = em.createNativeQuery("SELECT * FROM historial WHERE articulo_codigo = :codigoArt AND proveedor_codigo = :codigoPro ", Historial.class)
+                    .setParameter("codigoArt", codigoArt)
+                    .setParameter("codigoPro", codigoPro)
+                    .getResultList();
+            em.getTransaction().commit();
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        return listaHistorial;
+
+    }
 
 }
+
+

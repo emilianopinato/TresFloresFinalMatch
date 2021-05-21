@@ -23,7 +23,9 @@ import javax.swing.table.DefaultTableModel;
  * @author Leo
  */
 public class compararPrecios2 extends javax.swing.JFrame {
-
+    
+    private Articulo article;
+    private List<Proveedor> listaProveedors;
     /**
      * Creates new form compararPrecios2
      */
@@ -37,91 +39,43 @@ public class compararPrecios2 extends javax.swing.JFrame {
 
     public compararPrecios2(Articulo a) {
         initComponents();
+        article = a;
 
         tablita2.getColumnModel().getColumn(4).setMinWidth(0);
         tablita2.getColumnModel().getColumn(4).setMaxWidth(0);
         tablita2.getColumnModel().getColumn(4).setWidth(0);
 
-        this.setTitle(a.getCodigo() + " - " + a.getNombre().toUpperCase());
-
-        Iterator<Historial> it = Conexion.getInstance().listarHistorialArticulo(a.getCodigo()).iterator();
-        List<Historial> l = new ArrayList(); //LISTA PARA GUARDAR LOS PRECIOS DIFERENTES 
-
-        //FILTRADO DE LISTA DE PRECIOS
-        while (it.hasNext()) {
-
-            Historial h = (Historial) it.next();
-            String proveedor = h.getProveedor().getRUT();
-            String codigoP = a.getCodigo();
-            float precio = h.getPrecio();
-            Date date = h.getFecha();
-
-            if (!existeProveedor(l, proveedor)) {//SI EL PROVEEDOR NO EXISTE EN LA LISTA LO INGRESO CON DICHO PRODUCTO.
-                l.add(h);
-                Collections.sort(l);
-            } else {
-                if (!existePrecioProveedor(l, proveedor, codigoP, precio)) {//SI EXISTE INGRESO SUS PRODUCOS CON DIFERENTES PRECIOS.
-                    l.add(h);
-                    Collections.sort(l);
-                } else if (!existeProductoIgualFechaPrecioProv(l,h)){
-                    if (!insertarPrimero(l, h)) {
-                        if (!insertarFinal(l, h)) {
-                            insertarMedio(l, h);
-                        }
-                    }
-                }
-            }
-            Collections.sort(l);
+        this.setTitle(article.getCodigo() + " - " + article.getNombre().toUpperCase());
+        listaProveedors = Conexion.getInstance().listarProveedoresArticulo(article.getCodigo());
+        Iterator it3 = listaProveedors.iterator();
+        jComboBox1.addItem("Todos");
+        
+        while(it3.hasNext()){
+            Proveedor p = (Proveedor)it3.next();
+            jComboBox1.addItem(p.getRUT());
         }
-
-        int shrek = 0;
-        //PINTAR TABLA
-
-        DefaultTableModel mdl = (DefaultTableModel) tablita2.getModel();
-        Iterator<Historial> it2 = l.iterator();
-
-        while (it2.hasNext()) {
-
-            Historial historia = it2.next();
-
-            if (!a.isDeshabilitado()) {
-
-                Object[] fila = new Object[8];
-                fila[0] = historia.getProveedor().getRUT();
-                fila[1] = historia.getProveedor().getRazonSocial();
-
-                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                Date f = historia.getFecha();
-                sdf.format(f);
-
-                fila[2] = f;
-                fila[3] = historia.getPrecio();
-                fila[4] = historia;
-                mdl.addRow(fila);
-            }
-        }
-
+        
+        //mostrarTodosProveedores();
     }
     
     private boolean existeProductoIgualFechaPrecioProv(List lista, Historial h){
         boolean existe = false;
         
-        String RUT = h.getProveedor().getRUT();
         Date date = h.getFecha();
         float precio = h.getPrecio();
-        
         Iterator it = lista.iterator();
+        
         while(it.hasNext()){
             Historial h2 = (Historial)it.next();
-            String RUT2 = h2.getProveedor().getRUT();
             Date date2 = h2.getFecha();
             float precio2 = h2.getPrecio();
             
-            if(date.equals(date2) && RUT.equals(RUT2) && precio == precio2){
+            if(date.equals(date2) && precio == precio2){
                 existe = true;
                 break;
             }
         }
+        
         return existe;
     }
 
@@ -148,7 +102,7 @@ public class compararPrecios2 extends javax.swing.JFrame {
         return existe;
     }
 
-    private boolean existePrecioProveedor(List<Historial> lista, String rut, String codigoP, float precio) {
+    private boolean existePrecioProveedor(List<Historial> lista,float precio) {
 
         Iterator it = lista.iterator();
         boolean existe = false;
@@ -156,206 +110,15 @@ public class compararPrecios2 extends javax.swing.JFrame {
         while (it.hasNext()) {
 
             Historial h = (Historial) it.next();
-            Proveedor p = h.getProveedor();
-            String codigoPLista2 = h.getProducto().getCodigo();
+            if (h.getPrecio() == precio) {
 
-            if (p.getRUT().equals(rut) && codigoPLista2.equals(codigoP) && h.getPrecio() == precio) {
-                    
                 existe = true;
                 break;
             }
         }
         return existe;
     }
-
-    private boolean insertarPrimero(List lista, Historial h) {
-
-        boolean primero = false;
-        
-        Date date = h.getFecha();
-        String RUT = h.getProveedor().getRUT();
-        float precio = h.getPrecio();
-
-        Historial h2 = (Historial) lista.get(0);
-        Date date2 = h2.getFecha();
-        String RUT2 = h2.getProveedor().getRUT();
-        float precio2 = h2.getPrecio();
-        
-        if (date.equals(date2) && precio2 == precio ) {
-            if (!verificarProveedoresIgualFecha(lista, h)) {
-                lista.add(h);
-                primero = true;
-            }
-        } else if (date.before(date2) && RUT.equals(RUT2) && precio == precio2) {
-            lista.remove(h2);
-            lista.add(h);
-            primero = true;
-        } else if (date.before(date2) && RUT.equals(RUT2) && precio != precio2) {
-            lista.add(h);
-            primero = true;
-        } else if (date.before(date2) && !RUT.equals(RUT2)) {
-            lista.add(h);
-            primero = true;
-        }
-        return primero;
-    }
-    
-    private boolean insertarFinal(List lista, Historial h) {
-        boolean ultimo = false;
-
-        Date date = h.getFecha();
-        String RUT = h.getProveedor().getRUT();
-        float precio = h.getPrecio();
-
-        
-        int tamLista = lista.size();
-
-        Historial h2 = (Historial) lista.get(lista.size() - 1);
-        Date date2 = h2.getFecha();
-        String RUT2 = h2.getProveedor().getRUT();
-        float precio2 = h2.getPrecio();
-
-        if (date.equals(date2)) {
-            if (!verificarProveedoresIgualFecha(lista, h)) {
-                lista.add(h);
-                ultimo = true;
-            }
-        } else if (date.after(date2) && RUT.equals(RUT2) && precio != precio2) {
-            lista.add(h);
-            ultimo = true;
-
-        } else if (date.after(date2) && !RUT.equals(RUT2)) {
-            if (verificarConFechaAnteriorConIgualPro(lista, h)) {
-                lista.add(h);
-                ultimo = true;
-            }
-        } else if (tamLista >= 2) {
-            Historial h3 = (Historial) lista.get(lista.size() - 2);
-            Date date3 = h3.getFecha();
-            String RUT3 = h3.getProveedor().getRUT();
-            float precio3 = h3.getPrecio();
-            
-            if ((date.after(date3) || date.equals(date3)) && date.before(date2) && RUT.equals(RUT2) && precio == precio2) {
-                lista.remove(h2);
-                lista.add(h);
-                ultimo = true;
-            }
-
-
-        }
-
-        return ultimo;
-    }
-
-    private boolean verificarProveedoresIgualFecha(List lista, Historial h) {
-        boolean repetido = false;
-
-        String RUT = h.getProveedor().getRUT();
-        Date date = h.getFecha();
-        float precio = h.getPrecio();
-
-        Iterator it = lista.iterator();
-        while (it.hasNext()) {
-            Historial h2 = (Historial) it.next();
-            String RUT2 = h2.getProveedor().getRUT();
-            Date date2 = h2.getFecha();
-            float precio2 = h2.getPrecio();
-
-            if (date.equals(date2) && RUT.equals(RUT2) && precio == precio2) {
-                repetido = true;
-                break;
-            }
-        }
-        return repetido;
-    }
-
-    private boolean verificarConFechaAnteriorConIgualPro(List lista, Historial h) {
-        boolean ingresa = false;
-        boolean mayor;
-
-        String RUT = h.getProveedor().getRUT();
-        Date date = h.getFecha();
-        float precio = h.getPrecio();
-
-        Historial h2 = null;
-        String RUT2;
-        Date date2;
-        float precio2;
-
-        Iterator it = lista.iterator();
-        while (it.hasNext()) {            //BUSCO LA MAYOR FECHA PARA ESE PROVEEDOR CON MET. BURBUJA DEA
-
-            h2 = (Historial) it.next();
-            RUT2 = h2.getProveedor().getRUT();
-            date2 = h2.getFecha();
-            mayor = true;
-
-            Iterator it2 = lista.iterator();
-            while (it2.hasNext()) {
-                Historial h3 = (Historial) it2.next();
-                String RUT3 = h3.getProveedor().getRUT();
-                Date date3 = h3.getFecha();
-
-                if (date2.before(date3) && RUT2.equals(RUT3)) {
-                    mayor = false;
-                    break;
-                }
-            }
-            if (mayor) {
-                break;
-            }
-        }
-        precio2 = h2.getPrecio();
-        if (precio2 != precio) {
-            ingresa = true;
-        }
-        return ingresa;
-    }
-
-    private void insertarMedio(List lista, Historial h) {
-
-        ListIterator it = lista.listIterator();
-        Historial h2 = null;
-        Historial h3 = null;
-        int maximo = lista.size() - 1;
-        int indice = 1;
-        while (it.hasNext()) {
-            h2 = (Historial) it.next();
-
-            if (it.hasNext()) {
-                h3 = (Historial) it.next();
-                it.previous();
-            } else {
-                break;
-            }
-            Date f = h.getFecha();
-            String RUT = h.getProveedor().getRUT();
-            float p = h.getPrecio();
-
-            Date f2 = h2.getFecha();
-            String RUT2 = h2.getProveedor().getRUT();
-            float p2 = h2.getPrecio();
-
-            Date f3 = h3.getFecha();
-            String RUT3 = h3.getProveedor().getRUT();
-            float p3 = h3.getPrecio();
-                
-            if (f.after(f2) && f.before(f3) && RUT.equals(RUT2) && RUT.equals(RUT3) && p != p2 && p != p3) {
-                lista.add(h);
-                break;
-
-            }else if( (f.after(f2)|| f.equals(f2)) && f.before(f3) && RUT.equals(RUT2) && RUT.equals(RUT3) && p == p3){
-                lista.remove(h3);
-                lista.add(h);
-                break;
-            }
-        }
-
-    }
-
-
-
-    /**
+/**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
@@ -367,6 +130,8 @@ public class compararPrecios2 extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tablita2 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -403,25 +168,47 @@ public class compararPrecios2 extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setText("Seleccionar Proveedor");
+
+        jComboBox1.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jComboBox1ItemStateChanged(evt);
+            }
+        });
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(18, 18, 18)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton1)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 678, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addGap(18, 18, 18)
+                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 404, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1)
-                .addGap(28, 28, 28))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
@@ -431,8 +218,250 @@ public class compararPrecios2 extends javax.swing.JFrame {
         // TODO add your handling code here:
         this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
+    
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    /**
+    private List mostrarTodosProveedores(){
+        List<Historial> lista = new ArrayList<>();
+        List<List> listas = new ArrayList<>();
+        List<Historial> l = null;
+        
+        Iterator it = listaProveedors.iterator();
+        
+        while(it.hasNext()){
+            Proveedor p = (Proveedor)it.next();
+            int codigoPro = p.getCodigo();
+            l = mostrarPreciosProveedor(codigoPro,article);
+            listas.add(l);
+        }
+        
+        Iterator it2 = listas.iterator();
+        while(it2.hasNext()){
+            List l2 = (List)it2.next();
+            Iterator it3 = l2.iterator();
+            while(it3.hasNext()){
+                Historial h = (Historial)it3.next();
+                lista.add(h);
+            }
+        }
+        
+        Collections.sort(lista);
+        return lista;
+    }
+    
+    private int getCodigoProveedor(String RUT){
+        int codigo = 0;
+        Iterator it = listaProveedors.iterator();
+        while(it.hasNext()){
+            Proveedor p = (Proveedor)it.next();
+            String RUT2 = p.getRUT();
+            if(RUT2.equals(RUT)){
+                codigo = p.getCodigo();
+                break;
+            }
+                
+        }
+        return codigo;
+    }
+    private void jComboBox1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox1ItemStateChanged
+        // TODO add your handling code here:
+        String opcion = jComboBox1.getSelectedItem().toString();
+        DefaultTableModel model = (DefaultTableModel) this.tablita2.getModel();
+        model.setRowCount(0);
+        List l = null;
+        if (opcion.equals("Todos")) {
+           l =  mostrarTodosProveedores();
+        } else {
+            int codigo = getCodigoProveedor(opcion);
+            l = mostrarPreciosProveedor(codigo, article);
+        }
+        pintarTabla(l);
+    }//GEN-LAST:event_jComboBox1ItemStateChanged
+    
+    
+    private void eliminarFechaMayorSiExiste(List lista,Historial h){
+        boolean teEncontre = false;
+        boolean borrar = false;
+        Historial h2 = null;
+        Date f = h.getFecha();
+        float p = h.getPrecio();
+        
+        Iterator it = lista.iterator();
+        
+        while(it.hasNext()){
+            h2 = (Historial)it.next();
+            Date f2 = h2.getFecha();
+            float p2 = h2.getPrecio();
+            
+            if(teEncontre){
+                if(f.before(f2) && p == p2){
+                    borrar = true;
+                    break;
+                }
+            }
+            
+            if(f.equals(f2) && p == p2){
+                teEncontre = true;
+            }         
+        }
+        
+        if(borrar){
+            lista.remove(h2);
+        }
+    }
+    
+    private List mostrarPreciosProveedor(int codigo, Articulo articulo) {
+        List<Historial> listaHistorial = Conexion.getInstance().listarHistorialProveedorArticulo(articulo.getCodigo(),codigo);
+
+        Iterator<Historial> it = listaHistorial.iterator();
+        List<Historial> l = new ArrayList(); //LISTA PARA GUARDAR LOS PRECIOS DIFERENTES 
+
+        //FILTRADO DE LISTA DE PRECIOS
+        while (it.hasNext()) {
+
+            Historial h = (Historial) it.next();
+            float precio = h.getPrecio();
+            
+            if (l.size() == 0) {//SI EL PROVEEDOR NO EXISTE EN LA LISTA LO INGRESO CON DICHO PRODUCTO.
+                l.add(h);
+            } else {
+                if (!existePrecioProveedor(l, precio)) {//SI EXISTE INGRESO SUS PRODUCOS CON DIFERENTES PRECIOS.
+                    l.add(h);
+                } else if (!existeProductoIgualFechaPrecioProv(l, h)) {
+                    if (ingresarPrecio(l, h)) {
+                        l.add(h);
+                        Collections.sort(l);
+                        eliminarFechaMayorSiExiste(l, h);
+                    }
+                }
+            }
+            Collections.sort(l);
+        }
+        return l;
+    }
+
+    private boolean ingresarPrimero(List lista, Historial h) {
+
+        Historial h2 = (Historial) lista.get(0);
+        Date date = h.getFecha();
+        Date date2 = h2.getFecha();
+        float precio = h.getPrecio();
+        float precio2 = h2.getPrecio();
+        
+        if(date.before(date2) || (date.equals(date2) && precio != precio2)){
+            return true;
+        }
+        return false;
+    }
+    
+    private boolean ingresarFinal(List lista, Historial h) {
+        int tamLista = lista.size();
+        Historial h2 = (Historial) lista.get(lista.size() - 1);
+        Date date = h.getFecha();
+        Date date2 = h2.getFecha();
+        float precio = h.getPrecio();
+        float precio2 = h2.getPrecio();
+
+        if (tamLista == 1) {
+            if(date.after(date2) && precio != precio){
+                return true;
+            }
+
+        } else if (tamLista >= 2) {
+            Historial h3 = (Historial) lista.get(lista.size() - 2);
+            Date date3 = h3.getFecha();
+            
+            if(date.after(date3) && date.before(date2) && precio == precio2){
+                return true;
+            }else if( date.after(date2) && precio != precio2){
+                return true;
+            } 
+        }
+        return false;
+    }
+    
+    private boolean ingresarMedio(List lista,Historial h){
+        boolean medio = false;
+        ListIterator it = lista.listIterator();
+        Historial h2 = null;
+        Historial h3 = null;
+
+        Date f = h.getFecha();
+        float p = h.getPrecio();
+        
+        while (it.hasNext()) {
+            h2 = (Historial) it.next();
+            
+            if (it.hasNext()) {
+                h3 = (Historial) it.next();
+                it.previous();
+            } else {
+                break;
+            }
+            
+            Date f2 = h2.getFecha();
+            Date f3 = h3.getFecha();
+            float p2 = h2.getPrecio();
+            float p3 = h3.getPrecio();
+            
+            if(f.after(f2) && f.before(f3) && p != p2 && p != p3){
+                medio = true;
+                break;
+            }
+            
+            if(f.after(f2) && f.before(f3) && p != p2 && p == p3){
+                medio = true;
+                break;
+            }
+        }
+        return medio;
+    }
+    
+    
+    private boolean ingresarPrecio(List l,Historial h){
+        
+        if (ingresarPrimero(l, h)) {
+            return true;
+        }
+        if (ingresarFinal(l, h)) {
+            return true;
+        }
+        if (ingresarMedio(l, h)) {
+            return true;
+        }
+        return false;
+    }
+    
+    private void pintarTabla(List l){
+        
+            //PINTAR TABLA
+            DefaultTableModel mdl = (DefaultTableModel) tablita2.getModel();
+            Iterator<Historial> it2 = l.iterator();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            while (it2.hasNext()) {
+
+                Historial historia = it2.next();
+
+                if (!article.isDeshabilitado()) {
+
+                    Object[] fila = new Object[8];
+                    fila[0] = historia.getProveedor().getRUT();
+                    fila[1] = historia.getProveedor().getRazonSocial();
+
+                    
+                    Date f = historia.getFecha();
+                    sdf.format(f);
+
+                    fila[2] = f;
+                    fila[3] = historia.getPrecio();
+                    fila[4] = historia;
+                    mdl.addRow(fila);
+                }
+            }
+    }
+/**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
@@ -469,9 +498,13 @@ public class compararPrecios2 extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tablita2;
     // End of variables declaration//GEN-END:variables
+
+    
 
     
     
