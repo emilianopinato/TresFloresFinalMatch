@@ -20,6 +20,7 @@ import javax.swing.table.DefaultTableModel;
 public class modificarCotización extends javax.swing.JFrame {
     boolean tipo;
     LocalDate fecha;
+    AltaFactura af;
     /**
      * Creates new form modificarCotización
      */
@@ -49,9 +50,10 @@ public class modificarCotización extends javax.swing.JFrame {
         }
     }
     
-    public modificarCotización(LocalDate fechaCotizacion) {
+    public modificarCotización(LocalDate fechaCotizacion, AltaFactura altaFactura) {
         initComponents();
         tipo = false;
+        af = altaFactura;
         this.setLocationRelativeTo(null);
         jTable1.getColumnModel().getColumn(3).setMinWidth(0);
         jTable1.getColumnModel().getColumn(3).setMaxWidth(0);
@@ -188,6 +190,11 @@ public class modificarCotización extends javax.swing.JFrame {
                 int row = jTable1.getSelectedRow();
                 Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
                 controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
+                double cot = controladorBasura.getInstance().getPrecioCotizacion();
+                if (cot == 0) {
+                    af.labelCotizacion.setText("La cotización es: " + cot);
+                    af.precioCotizacion = cot;
+                }
                 this.dispose();
             }
         }
