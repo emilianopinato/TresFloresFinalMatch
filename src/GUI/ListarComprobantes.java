@@ -385,9 +385,15 @@ public class ListarComprobantes extends javax.swing.JFrame {
     }
         
     private void jTableComprobantesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableComprobantesMouseClicked
-        Factura fac = (Factura) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
-        AltaFactura af = new AltaFactura(fac);
-        af.show();
+        if(this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11) instanceof Factura){
+            Factura fac = (Factura) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
+            AltaFactura af = new AltaFactura(fac);
+            af.show();
+        }else if(this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11) instanceof Recibo){
+            Recibo rec = (Recibo) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
+            AltaRecibo ar = new AltaRecibo(rec);
+            ar.show();
+        }
     }//GEN-LAST:event_jTableComprobantesMouseClicked
 
     private void jCheckBoxSinFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSinFechaActionPerformed

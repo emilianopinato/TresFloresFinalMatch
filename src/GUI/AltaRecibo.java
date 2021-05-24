@@ -25,6 +25,8 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  */
 public class AltaRecibo extends javax.swing.JFrame {
 
+    boolean vista = false;
+
     /**
      * Creates new form AltaRecibo
      */
@@ -40,6 +42,7 @@ public class AltaRecibo extends javax.swing.JFrame {
             }
         });
         this.jCBMoneda.setModel(new DefaultComboBoxModel(tipoMoneda.values()));
+        this.jPanelModificar.setVisible(false);
 
         this.jTableFacturas.getColumnModel().getColumn(5).setMinWidth(0);
         this.jTableFacturas.getColumnModel().getColumn(5).setMaxWidth(0);
@@ -54,6 +57,50 @@ public class AltaRecibo extends javax.swing.JFrame {
                 numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
         }
 
+    }
+
+    public AltaRecibo(Recibo rec) {
+        initComponents();
+        this.setLocationRelativeTo(null);
+        this.jMenuBar1.setVisible(true);
+        AutoCompleteDecorator.decorate(this.jCBProveedor);
+        this.jCBMoneda.setModel(new DefaultComboBoxModel(tipoMoneda.values()));
+        this.jPanelModificar.setVisible(false);
+        this.vista = true;
+        
+        this.jTextSerie.setEditable(false);
+        this.jTextNumero.setEditable(false);
+        this.jTextImporte.setEditable(false);
+        this.jTextComentario.setEditable(false);
+        this.jCBProveedor.setEnabled(false);
+        this.jCBMoneda.setEnabled(false);
+        this.jDateChooser.setEnabled(false);
+        this.jButtonIngresar.setVisible(false);
+
+        this.jTableFacturas.getColumnModel().getColumn(5).setMinWidth(0);
+        this.jTableFacturas.getColumnModel().getColumn(5).setMaxWidth(0);
+        this.jTableFacturas.getColumnModel().getColumn(5).setWidth(0);
+
+        this.jCBProveedor.addItem(rec.getProveedor());
+        this.jTextSerie.setText(rec.getSerieComprobante());
+        this.jTextNumero.setText(String.valueOf(rec.getNroComprobante()));
+        this.jTextImporte.setText(String.valueOf(rec.getTotal()));
+        this.jDateChooser.setDate(rec.getFecha());
+        this.jTextComentario.setText(rec.getObservacion());
+        if (rec.getMoneda() == tipoMoneda.$U) {
+            this.jCBMoneda.setSelectedIndex(0);
+        } else if (rec.getMoneda() == tipoMoneda.US$) {
+            this.jCBMoneda.setSelectedIndex(1);
+        }
+
+        DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
+        List<F_R> listaf_r = rec.getFr_s();
+
+        for (int i = 0; i < listaf_r.size(); i++) {
+            String numeroComp = listaf_r.get(i).getFactura().getSerieComprobante() + "-" + listaf_r.get(i).getFactura().getNroComprobante();
+            model.addRow(new Object[]{listaf_r.get(i).getFactura().getFecha(), numeroComp, listaf_r.get(i).getFactura().getTotal(), listaf_r.get(i).getFactura().getPendiente(),
+                 listaf_r.get(i).getSaldo(), listaf_r.get(i).getFactura()});
+        }
     }
 
     /**
@@ -82,6 +129,9 @@ public class AltaRecibo extends javax.swing.JFrame {
         jCBProveedor = new javax.swing.JComboBox<>();
         jDateChooser = new com.toedter.calendar.JDateChooser();
         jTextNumero = new javax.swing.JTextField();
+        jPanelModificar = new javax.swing.JPanel();
+        jButtonCerrarMod = new javax.swing.JButton();
+        jButtonModificar = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuEdicion = new javax.swing.JMenu();
         jMenuItemModificar = new javax.swing.JMenuItem();
@@ -198,6 +248,43 @@ public class AltaRecibo extends javax.swing.JFrame {
             }
         });
 
+        jPanelModificar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
+
+        jButtonCerrarMod.setText("x");
+        jButtonCerrarMod.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCerrarModActionPerformed(evt);
+            }
+        });
+
+        jButtonModificar.setText("Modificar");
+        jButtonModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonModificarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanelModificarLayout = new javax.swing.GroupLayout(jPanelModificar);
+        jPanelModificar.setLayout(jPanelModificarLayout);
+        jPanelModificarLayout.setHorizontalGroup(
+            jPanelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelModificarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonModificar)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButtonCerrarMod)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelModificarLayout.setVerticalGroup(
+            jPanelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelModificarLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelModificarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonModificar)
+                    .addComponent(jButtonCerrarMod))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         jMenuEdicion.setText("Edición");
 
         jMenuItemModificar.setText("Modificar");
@@ -227,8 +314,10 @@ public class AltaRecibo extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(layout.createSequentialGroup()
+                            .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButtonIngresar)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jButtonCerrar))
@@ -272,7 +361,7 @@ public class AltaRecibo extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(35, 35, 35)
+                .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(jTextSerie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -297,10 +386,12 @@ public class AltaRecibo extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jTextComentario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonIngresar)
-                    .addComponent(jButtonCerrar))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonIngresar)
+                        .addComponent(jButtonCerrar))
+                    .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -311,13 +402,15 @@ public class AltaRecibo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCerrarActionPerformed
 
     private void jCBProveedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBProveedorItemStateChanged
-        DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
-        model.setRowCount(0);
-        List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
-        for (int i = 0; i < ListaFactCredit.size(); i++) {
-            String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
-            model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
-                numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+        if (this.vista = false) {
+            DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
+            model.setRowCount(0);
+            List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+            for (int i = 0; i < ListaFactCredit.size(); i++) {
+                String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                    numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+            }
         }
     }//GEN-LAST:event_jCBProveedorItemStateChanged
 
@@ -446,7 +539,15 @@ public class AltaRecibo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonIngresarActionPerformed
 
     private void jMenuItemModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemModificarActionPerformed
-
+        this.jPanelModificar.setVisible(true);
+        
+        this.jTextSerie.setEditable(true);
+        this.jTextNumero.setEditable(true);
+        this.jTextImporte.setEditable(true);
+        this.jTextComentario.setEditable(true);
+        this.jCBProveedor.setEnabled(true);
+        this.jCBMoneda.setEnabled(true);
+        this.jDateChooser.setEnabled(true);
     }//GEN-LAST:event_jMenuItemModificarActionPerformed
 
     private void jMenuItemEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEliminarActionPerformed
@@ -536,6 +637,23 @@ public class AltaRecibo extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTableFacturasKeyPressed
 
+    private void jButtonCerrarModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarModActionPerformed
+        this.jTextSerie.setEditable(false);
+        this.jTextNumero.setEditable(false);
+        this.jTextImporte.setEditable(false);
+        this.jTextComentario.setEditable(false);
+        this.jCBProveedor.setEnabled(false);
+        this.jCBMoneda.setEnabled(false);
+        this.jDateChooser.setEnabled(false);
+        this.jButtonIngresar.setVisible(false);
+
+        this.jPanelModificar.setVisible(false);
+    }//GEN-LAST:event_jButtonCerrarModActionPerformed
+
+    private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
+
+    }//GEN-LAST:event_jButtonModificarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -570,15 +688,17 @@ public class AltaRecibo extends javax.swing.JFrame {
             }
         });
     }
-    
-        private void jTextSerieFocusLost(java.awt.event.FocusEvent evt) {                                     
-        String cadena= (this.jTextSerie.getText()).toUpperCase();
+
+    private void jTextSerieFocusLost(java.awt.event.FocusEvent evt) {
+        String cadena = (this.jTextSerie.getText()).toUpperCase();
         this.jTextSerie.setText(cadena);
-    }   
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCerrar;
+    private javax.swing.JButton jButtonCerrarMod;
     private javax.swing.JButton jButtonIngresar;
+    private javax.swing.JButton jButtonModificar;
     private javax.swing.JComboBox<String> jCBMoneda;
     private javax.swing.JComboBox<Proveedor> jCBProveedor;
     private com.toedter.calendar.JDateChooser jDateChooser;
@@ -592,6 +712,7 @@ public class AltaRecibo extends javax.swing.JFrame {
     private javax.swing.JMenu jMenuEdicion;
     private javax.swing.JMenuItem jMenuItemEliminar;
     private javax.swing.JMenuItem jMenuItemModificar;
+    private javax.swing.JPanel jPanelModificar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableFacturas;
     private javax.swing.JTextField jTextComentario;
