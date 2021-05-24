@@ -552,6 +552,7 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         }
         return listaCotizaciones;
     }
+    
     public List<Proveedor> listarProveedoresArticulo(String codigo){
         EntityManager em = getEntity();
         List<Proveedor> listaProveedor = null;
@@ -565,9 +566,9 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
             em.getTransaction().rollback();
         }
         return listaProveedor;
-
+    
     }
-
+    
     public List<Historial> listarHistorialProveedorArticulo(String codigoArt,int codigoPro){
         EntityManager em = getEntity();
         List<Historial> listaHistorial = null;
@@ -582,9 +583,7 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
             em.getTransaction().rollback();
         }
         return listaHistorial;
-
+    
     }
 
 }
-
-
