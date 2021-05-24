@@ -191,14 +191,13 @@ public class modificarCotización extends javax.swing.JFrame {
                 Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
                 controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
                 double cot = controladorBasura.getInstance().getPrecioCotizacion();
-                if (cot == 0) {
+                if (cot != 0) {
                     af.labelCotizacion.setText("La cotización es: " + cot);
                     af.precioCotizacion = cot;
                 }
                 this.dispose();
             }
         }
-
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

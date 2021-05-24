@@ -16,7 +16,6 @@ import Clases.controladorBasura;
 import Clases.tipoComprobante;
 import Clases.tipoIVA;
 import Clases.tipoMoneda;
-import java.awt.Label;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,7 +25,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JLabel;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -58,6 +56,7 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jTextRut.setEditable(false);
         this.jTextSubTotalArt.setEditable(false);
         this.jTextIVAbasico.setEditable(false);
+        boolean semaforo = false;
 
         //agregar listado de proveedores
         AutoCompleteDecorator.decorate(this.jCBProveedor);
@@ -87,7 +86,7 @@ public class AltaFactura extends javax.swing.JFrame {
 
         this.jDateChooser.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void propertyChange(PropertyChangeEvent e) {
+            public void propertyChange(PropertyChangeEvent e) {                
                 if (AltaFactura.this.jCBMoneda.getSelectedItem().toString().equals("US$") && AltaFactura.this.jDateChooser.getDate() != null) {
                     //Tomo la fecha ingresada por el usuario//
                     Date fechaSeleccionada = AltaFactura.this.jDateChooser.getDate();
@@ -266,7 +265,7 @@ public class AltaFactura extends javax.swing.JFrame {
                                 + "nueva", "Seleccione una opción",
                                 javax.swing.JOptionPane.YES_NO_OPTION);
                         if (input == 0) {
-                            modificarCotización mC = new modificarCotización(fechaCotizacion);
+                            modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
                             mC.setLocationRelativeTo(null);
                             mC.setVisible(true);
                             double cot = controladorBasura.getInstance().getPrecioCotizacion();
@@ -1677,9 +1676,42 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jTextTOTAL.setText(String.valueOf(total));
     }
 
-    private void CalcularTotales_conIVA_inc(){
-        
-    } 
+    private void CalcularTotales_conIVA_inc() {
+        float subtotal = 0, iva_minimo = 0, iva_basico = 0, total = 0;
+
+        //Subtotal excento, basico y minimo.
+        float subtotalExcento = 0;
+        float subtotalBasico = 0;
+        float subtotalMinimo = 0;
+
+        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            Articulo a = this.ListaArticulo.get(i);
+            String v = modelo.getValueAt(i, 4).toString();
+            float val = Float.parseFloat(v);
+
+            if (a.getIva().getTipo() == tipoIVA.Minimo) {
+                float porcentajeIVA = a.getIva().getPorcentaje();
+                subtotalMinimo = subtotalMinimo + (val / (1 + (porcentajeIVA / 100)));
+                iva_minimo = iva_minimo + (subtotalMinimo * a.getIva().getPorcentaje() / 100);
+            } else if (a.getIva().getTipo() == tipoIVA.Basico) {
+                float porcentajeIVA = a.getIva().getPorcentaje();
+                subtotalBasico = subtotalBasico + (val / (1 + (porcentajeIVA / 100)));
+                iva_basico = iva_basico + (subtotalBasico * a.getIva().getPorcentaje() / 100);
+            } else if (a.getIva().getTipo() == tipoIVA.Excento) {
+                subtotalExcento = subtotalExcento + val;
+            }
+
+        }
+
+        subtotal = subtotalExcento + subtotalMinimo + subtotalBasico;
+        total = subtotal + iva_minimo + iva_basico;
+
+        this.jTextIVAminimo.setText(String.valueOf(iva_minimo));
+        this.jTextIVAbasico.setText(String.valueOf(iva_basico));
+        this.jTextSubTotal.setText(String.valueOf(subtotal));
+        this.jTextTOTAL.setText(String.valueOf(total));
+    }
 
     private List<LocalDate> traerFechas(LocalDate fechaCotizacion) {
         List<LocalDate> listaFechas = new ArrayList<>();
