@@ -16,6 +16,8 @@ public class controladorBasura {
 
     private static Usuario u;
     List<Articulo> articulosDeshabilitados;
+    double precioCotizacion;
+    
     private controladorBasura() {
         articulosDeshabilitados = new ArrayList<>();
     }
@@ -44,5 +46,15 @@ public class controladorBasura {
     public List<Articulo> getAtrticulosDeshabilitados(){
         return articulosDeshabilitados;
     }
+
+    public double getPrecioCotizacion() {
+        return precioCotizacion;
+    }
+
+    public void setPrecioCotizacion(double precioCotizacion) {
+        this.precioCotizacion = precioCotizacion;
+    }
+    
+    
     
 }
