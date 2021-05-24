@@ -8,9 +8,11 @@ package GUI;
 import BD.Conexion;
 import Clases.Cotizacion;
 import Clases.controladorBasura;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -133,6 +135,7 @@ public class altaCotizacion extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");  
         if (this.jDateChooser.getDate() == null) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar una fecha.");
         } else if (this.jTextField1.getText().isEmpty()) {
@@ -150,7 +153,13 @@ public class altaCotizacion extends javax.swing.JFrame {
                     boolean exito = Conexion.getInstance().persist(c);
                     if (exito == true) {
                         controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
-                        
+                        DefaultTableModel mdl = (DefaultTableModel) tabla.getModel();
+                        Object[] fila = new Object[4];
+                        fila[0] = sdf.format(c.getFecha());
+                        fila[1] = "U$S";
+                        fila[2] = c.getImporte();
+                        fila[3] = c;                    
+                        mdl.addRow(fila);
                         javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue dado de alta exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);

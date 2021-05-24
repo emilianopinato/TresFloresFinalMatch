@@ -44,6 +44,7 @@ public class AltaFactura extends javax.swing.JFrame {
 
     double precioCotizacion;
     
+    private boolean banderita = false;
 
     public AltaFactura() {
         initComponents();
@@ -56,8 +57,6 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jTextRut.setEditable(false);
         this.jTextSubTotalArt.setEditable(false);
         this.jTextIVAbasico.setEditable(false);
-        boolean semaforo = false;
-
         //agregar listado de proveedores
         AutoCompleteDecorator.decorate(this.jCBProveedor);
         List<Proveedor> LProv = Conexion.getInstance().listadoProveedores();
@@ -84,58 +83,62 @@ public class AltaFactura extends javax.swing.JFrame {
 //        this.jButtonCerrarMod.setVisible(false);
         this.jPanelModificar.setVisible(false);
 
-        this.jDateChooser.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+        this.jDateChooser.getDateEditor().addPropertyChangeListener("date", new PropertyChangeListener() {
             @Override
-            public void propertyChange(PropertyChangeEvent e) {                
+            public void propertyChange(PropertyChangeEvent e) {
                 if (AltaFactura.this.jCBMoneda.getSelectedItem().toString().equals("US$") && AltaFactura.this.jDateChooser.getDate() != null) {
-                    //Tomo la fecha ingresada por el usuario//
-                    Date fechaSeleccionada = AltaFactura.this.jDateChooser.getDate();
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(fechaSeleccionada);
-                    //-------------------------------//
+                    if (banderita) {
+                    } else {
+                        //Tomo la fecha ingresada por el usuario//
+                        Date fechaSeleccionada = AltaFactura.this.jDateChooser.getDate();
+                        Calendar c = Calendar.getInstance();
+                        c.setTime(fechaSeleccionada);
+                        //-------------------------------//
 
-                    //Cuando el usuario va a dar de alta una factura se toma
-                    //la cotización del día anterior al que seleccionó, por
-                    //eso se procede a quitarle un día a la fecha seleccionada.
-                    LocalDate fechaCotizacion = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH) - 1);
-                    //---------------------------------------------------------//
-                    if (fechaCotizacion.getDayOfWeek().toString().equals("SUNDAY")) {
-                        fechaCotizacion = fechaCotizacion.minusDays(1);
-                    }
-                    if (fechaCotizacion.getDayOfWeek().toString().equals("SATURDAY")) {
-                        fechaCotizacion = fechaCotizacion.minusDays(1);
-                    }
-
-                    //Traigo los últimos 5 registros de cotizaciones teniendo en cuenta la fecha de la cotización.
-                    List<LocalDate> ultimas5FechasAnteriores = traerFechas(fechaCotizacion);
-
-                    //Pregunto por los feriados inamovibles.
-                    for (LocalDate fecha : ultimas5FechasAnteriores) {
-                        int diaCotizacion = fecha.getDayOfMonth();
-                        int mesCotizacion = fecha.getMonthValue();
-                        String diaymes = diaCotizacion + "/" + mesCotizacion;
-                        if (diaymes.equals("1/1") || diaymes.equals("6/1") || diaymes.equals("1/5")
-                                || diaymes.equals("19/6") || diaymes.equals("18/7") || diaymes.equals("25/8")
-                                || diaymes.equals("2/9") || diaymes.equals("25/12") || diaymes.equals("31/12")) {
+                        //Cuando el usuario va a dar de alta una factura se toma
+                        //la cotización del día anterior al que seleccionó, por
+                        //eso se procede a quitarle un día a la fecha seleccionada.
+                        LocalDate fechaCotizacion = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH) - 1);
+                        //---------------------------------------------------------//
+                        if (fechaCotizacion.getDayOfWeek().toString().equals("SUNDAY")) {
                             fechaCotizacion = fechaCotizacion.minusDays(1);
                         }
-                    }
-                    //------------------------------------//  
-
-                    Cotizacion cotizacion = Conexion.getInstance().traerCotizacion(fechaCotizacion);
-                    if (cotizacion != null) {
-                        AltaFactura.this.labelCotizacion.setText("La cotización es: " + cotizacion.getImporte());
-                        precioCotizacion = cotizacion.getImporte();
-                    } else {
-                        int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización,"
-                                + "esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una"
-                                + "nueva", "Seleccione una opción",
-                                javax.swing.JOptionPane.YES_NO_OPTION);
-                        if (input == 0) {
-                            modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
-                            mC.setLocationRelativeTo(null);
-                            mC.setVisible(true);                          
+                        if (fechaCotizacion.getDayOfWeek().toString().equals("SATURDAY")) {
+                            fechaCotizacion = fechaCotizacion.minusDays(1);
                         }
+
+                        //Traigo los últimos 5 registros de cotizaciones teniendo en cuenta la fecha de la cotización.
+                        List<LocalDate> ultimas5FechasAnteriores = traerFechas(fechaCotizacion);
+
+                        //Pregunto por los feriados inamovibles.
+                        for (LocalDate fecha : ultimas5FechasAnteriores) {
+                            int diaCotizacion = fecha.getDayOfMonth();
+                            int mesCotizacion = fecha.getMonthValue();
+                            String diaymes = diaCotizacion + "/" + mesCotizacion;
+                            if (diaymes.equals("1/1") || diaymes.equals("6/1") || diaymes.equals("1/5")
+                                    || diaymes.equals("19/6") || diaymes.equals("18/7") || diaymes.equals("25/8")
+                                    || diaymes.equals("2/9") || diaymes.equals("25/12") || diaymes.equals("31/12")) {
+                                fechaCotizacion = fechaCotizacion.minusDays(1);
+                            }
+                        }
+                        //------------------------------------//  
+
+                        Cotizacion cotizacion = Conexion.getInstance().traerCotizacion(fechaCotizacion);
+                        if (cotizacion != null) {
+                            AltaFactura.this.labelCotizacion.setText("La cotización es: " + cotizacion.getImporte());
+                            precioCotizacion = cotizacion.getImporte();
+                        } else {
+                            int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización,"
+                                    + "esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una"
+                                    + "nueva", "Seleccione una opción",
+                                    javax.swing.JOptionPane.YES_NO_OPTION);
+                            if (input == 0) {
+                                modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
+                                mC.setLocationRelativeTo(null);
+                                mC.setVisible(true);
+                            }
+                        }
+                        banderita = false;
                     }
                 }
             }
