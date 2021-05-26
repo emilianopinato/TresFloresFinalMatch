@@ -11,28 +11,20 @@ import Clases.Cotizacion;
 import Clases.F_P;
 import Clases.Factura;
 import Clases.Historial;
-import Clases.IVA;
 import Clases.Proveedor;
 import Clases.controladorBasura;
 import Clases.tipoComprobante;
 import Clases.tipoIVA;
 import Clases.tipoMoneda;
-import java.awt.PopupMenu;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JTable;
-import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -43,12 +35,14 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 public class AltaFactura extends javax.swing.JFrame {
 
     List<Articulo> ListaArticulo = new ArrayList<Articulo>();
-
+    
     Articulo articulo_seleccionado = null;
 
     Factura f;
 
     boolean buscarart = false;
+
+    double precioCotizacion;
     
 
     public AltaFactura() {
@@ -62,6 +56,7 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jTextRut.setEditable(false);
         this.jTextSubTotalArt.setEditable(false);
         this.jTextIVAbasico.setEditable(false);
+        boolean semaforo = false;
 
         //agregar listado de proveedores
         AutoCompleteDecorator.decorate(this.jCBProveedor);
@@ -88,11 +83,11 @@ public class AltaFactura extends javax.swing.JFrame {
 //        this.jButtonModificar.setVisible(false);
 //        this.jButtonCerrarMod.setVisible(false);
         this.jPanelModificar.setVisible(false);
-        
+
         this.jDateChooser.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
             @Override
-            public void propertyChange(PropertyChangeEvent e) {
-                if (AltaFactura.this.jCBMoneda.getSelectedItem().toString().equals("US$")) {
+            public void propertyChange(PropertyChangeEvent e) {                
+                if (AltaFactura.this.jCBMoneda.getSelectedItem().toString().equals("US$") && AltaFactura.this.jDateChooser.getDate() != null) {
                     //Tomo la fecha ingresada por el usuario//
                     Date fechaSeleccionada = AltaFactura.this.jDateChooser.getDate();
                     Calendar c = Calendar.getInstance();
@@ -111,28 +106,41 @@ public class AltaFactura extends javax.swing.JFrame {
                         fechaCotizacion = fechaCotizacion.minusDays(1);
                     }
 
-                    int diaCotizacion = fechaCotizacion.getDayOfMonth();
-                    int mesCotizacion = fechaCotizacion.getMonthValue();
-                    String diaymes = diaCotizacion + "/" + mesCotizacion;
-                    
                     //Traigo los últimos 5 registros de cotizaciones teniendo en cuenta la fecha de la cotización.
-                    Conexion.getInstance().comprobarFechaCotizacion(fechaCotizacion);
+                    List<LocalDate> ultimas5FechasAnteriores = traerFechas(fechaCotizacion);
 
                     //Pregunto por los feriados inamovibles.
-                    if (diaymes.equals("01/01") || diaymes.equals("06/01") || diaymes.equals("01/05")
-                            || diaymes.equals("19/06") || diaymes.equals("18/07") || diaymes.equals("25/08")
-                            || diaymes.equals("02/09") || diaymes.equals("25/12") || diaymes.equals("31/12")) {
-                        fechaCotizacion = fechaCotizacion.minusDays(1);
+                    for (LocalDate fecha : ultimas5FechasAnteriores) {
+                        int diaCotizacion = fecha.getDayOfMonth();
+                        int mesCotizacion = fecha.getMonthValue();
+                        String diaymes = diaCotizacion + "/" + mesCotizacion;
+                        if (diaymes.equals("1/1") || diaymes.equals("6/1") || diaymes.equals("1/5")
+                                || diaymes.equals("19/6") || diaymes.equals("18/7") || diaymes.equals("25/8")
+                                || diaymes.equals("2/9") || diaymes.equals("25/12") || diaymes.equals("31/12")) {
+                            fechaCotizacion = fechaCotizacion.minusDays(1);
+                        }
                     }
-                    //------------------------------------//
-                    Cotizacion cotizacion = Conexion.getInstance().traerCotizacion(fechaCotizacion);
-                    AltaFactura.this.labelCotizacion.setText("La cotización es: " + cotizacion.getImporte());
+                    //------------------------------------//  
 
+                    Cotizacion cotizacion = Conexion.getInstance().traerCotizacion(fechaCotizacion);
+                    if (cotizacion != null) {
+                        AltaFactura.this.labelCotizacion.setText("La cotización es: " + cotizacion.getImporte());
+                        precioCotizacion = cotizacion.getImporte();
+                    } else {
+                        int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización,"
+                                + "esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una"
+                                + "nueva", "Seleccione una opción",
+                                javax.swing.JOptionPane.YES_NO_OPTION);
+                        if (input == 0) {
+                            modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
+                            mC.setLocationRelativeTo(null);
+                            mC.setVisible(true);                          
+                        }
+                    }
                 }
             }
+        });
 
-	});
-        
     }
 
     public AltaFactura(Factura fac) {
@@ -188,10 +196,10 @@ public class AltaFactura extends javax.swing.JFrame {
 
             this.ListaArticulo.add(ListF_P.get(i).getArticulo());
         }
-        
-        if(f.getProveedor().isTipoFacturacion()){
+
+        if (f.getProveedor().isTipoFacturacion()) {
             this.jCheckBoxIvaInc.setSelected(true);
-        }else{
+        } else {
             this.jCheckBoxIvaInc.setSelected(false);
         }
 
@@ -208,6 +216,68 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jCBTipoComprobante.setEnabled(false);
         this.jCBMoneda.setEnabled(false);
         this.jCheckBoxIvaInc.setEnabled(false);
+        
+        this.jDateChooser.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                if (AltaFactura.this.jCBMoneda.getSelectedItem().toString().equals("US$") && AltaFactura.this.jDateChooser.getDate() != null) {
+                    //Tomo la fecha ingresada por el usuario//
+                    Date fechaSeleccionada = AltaFactura.this.jDateChooser.getDate();
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(fechaSeleccionada);
+                    //-------------------------------//
+
+                    //Cuando el usuario va a dar de alta una factura se toma
+                    //la cotización del día anterior al que seleccionó, por
+                    //eso se procede a quitarle un día a la fecha seleccionada.
+                    LocalDate fechaCotizacion = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH) - 1);
+                    //---------------------------------------------------------//
+                    if (fechaCotizacion.getDayOfWeek().toString().equals("SUNDAY")) {
+                        fechaCotizacion = fechaCotizacion.minusDays(1);
+                    }
+                    if (fechaCotizacion.getDayOfWeek().toString().equals("SATURDAY")) {
+                        fechaCotizacion = fechaCotizacion.minusDays(1);
+                    }
+
+                    //Traigo los últimos 5 registros de cotizaciones teniendo en cuenta la fecha de la cotización.
+                    List<LocalDate> ultimas5FechasAnteriores = traerFechas(fechaCotizacion);
+
+                    //Pregunto por los feriados inamovibles.
+                    for (LocalDate fecha : ultimas5FechasAnteriores) {
+                        int diaCotizacion = fecha.getDayOfMonth();
+                        int mesCotizacion = fecha.getMonthValue();
+                        String diaymes = diaCotizacion + "/" + mesCotizacion;
+                        if (diaymes.equals("1/1") || diaymes.equals("6/1") || diaymes.equals("1/5")
+                                || diaymes.equals("19/6") || diaymes.equals("18/7") || diaymes.equals("25/8")
+                                || diaymes.equals("2/9") || diaymes.equals("25/12") || diaymes.equals("31/12")) {
+                            fechaCotizacion = fechaCotizacion.minusDays(1);
+                        }
+                    }
+                    //------------------------------------//  
+
+                    Cotizacion cotizacion = Conexion.getInstance().traerCotizacion(fechaCotizacion);
+                    if (cotizacion != null) {
+                        AltaFactura.this.labelCotizacion.setText("La cotización es: " + cotizacion.getImporte());
+                        precioCotizacion = cotizacion.getImporte();
+                    } else {
+                        int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización,"
+                                + "esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una"
+                                + "nueva", "Seleccione una opción",
+                                javax.swing.JOptionPane.YES_NO_OPTION);
+                        if (input == 0) {
+                            modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
+                            mC.setLocationRelativeTo(null);
+                            mC.setVisible(true);
+                            double cot = controladorBasura.getInstance().getPrecioCotizacion();
+                            if (cot == 0) {
+                                AltaFactura.this.labelCotizacion.setText("La cotización es: " + cot);
+                                precioCotizacion = cot;
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -797,8 +867,7 @@ public class AltaFactura extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "Es necesario ingresar minimo un articulo.");
         } else {
             if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
-                fac.setTipo(tipoComprobante.Contado);
-                fac.setCotizacion(45);
+                fac.setTipo(tipoComprobante.Contado);                
                 fac.setSerieComprobante(this.jTextSerie.getText());
                 fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
                 fac.setPendiente(0);
@@ -807,8 +876,10 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
 
                 if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                    fac.setCotizacion(1);
                     fac.setMoneda(tipoMoneda.$U);
                 } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                    fac.setCotizacion((float)precioCotizacion);
                     fac.setMoneda(tipoMoneda.US$);
                 }
 
@@ -850,7 +921,6 @@ public class AltaFactura extends javax.swing.JFrame {
 
             } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Crédito")) {
                 fac.setTipo(tipoComprobante.Credito);
-                fac.setCotizacion(45);
                 fac.setSerieComprobante(this.jTextSerie.getText());
                 fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
                 fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
@@ -859,8 +929,10 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
 
                 if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                    fac.setCotizacion(1);
                     fac.setMoneda(tipoMoneda.$U);
                 } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                    fac.setCotizacion((float)precioCotizacion);
                     fac.setMoneda(tipoMoneda.US$);
                 }
 
@@ -901,7 +973,6 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setFp_s(listaf_p);
             } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Devolución Contado")) {
                 fac.setTipo(tipoComprobante.DevolucionContado);
-                fac.setCotizacion(45);
                 fac.setSerieComprobante(this.jTextSerie.getText());
                 fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
                 fac.setPendiente(0);
@@ -910,8 +981,10 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
 
                 if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                    fac.setCotizacion(1);
                     fac.setMoneda(tipoMoneda.$U);
                 } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                    fac.setCotizacion((float)precioCotizacion);
                     fac.setMoneda(tipoMoneda.US$);
                 }
 
@@ -952,7 +1025,6 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setFp_s(listaf_p);
             } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Nota de crédito")) {
                 fac.setTipo(tipoComprobante.NotaCredito);
-                fac.setCotizacion(45);
                 fac.setSerieComprobante(this.jTextSerie.getText());
                 fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
                 fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
@@ -961,8 +1033,10 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
 
                 if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                    fac.setCotizacion(1);
                     fac.setMoneda(tipoMoneda.$U);
                 } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                    fac.setCotizacion((float)precioCotizacion);
                     fac.setMoneda(tipoMoneda.US$);
                 }
 
@@ -1109,9 +1183,9 @@ public class AltaFactura extends javax.swing.JFrame {
         Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
         this.jTextRut.setText(p.getRUT());
         this.jTextDireccion.setText(p.getDireccion());
-        if(p.isTipoFacturacion()){
+        if (p.isTipoFacturacion()) {
             this.jCheckBoxIvaInc.setSelected(true);
-        }else{
+        } else {
             this.jCheckBoxIvaInc.setSelected(false);
         }
     }//GEN-LAST:event_jCBProveedorItemStateChanged
@@ -1173,7 +1247,7 @@ public class AltaFactura extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar un articulo.", "Precaucion!", javax.swing.JOptionPane.WARNING_MESSAGE);
             } else if (this.jTextCantidad.getText().length() == 0) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar la cantidad.", "Precaucion!", javax.swing.JOptionPane.WARNING_MESSAGE);
-            }else if (Float.parseFloat(this.jTextCantidad.getText()) == 0) {
+            } else if (Float.parseFloat(this.jTextCantidad.getText()) == 0) {
                 javax.swing.JOptionPane.showMessageDialog(null, "La cantidad tiene que ser mayor a cero.", "Precaucion!", javax.swing.JOptionPane.WARNING_MESSAGE);
             } else if (this.jTextUnitario.getText().length() == 0) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar el precio unitario del articulo.", "Precaucion!", javax.swing.JOptionPane.WARNING_MESSAGE);
@@ -1296,7 +1370,6 @@ public class AltaFactura extends javax.swing.JFrame {
 
         if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
             fac.setTipo(tipoComprobante.Contado);
-            fac.setCotizacion(45);
             fac.setSerieComprobante(this.jTextSerie.getText());
             fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
             fac.setPendiente(0);
@@ -1305,10 +1378,12 @@ public class AltaFactura extends javax.swing.JFrame {
             fac.setProveedor(this.getProveedor());
 
             if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                fac.setMoneda(tipoMoneda.$U);
-            } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                fac.setMoneda(tipoMoneda.US$);
-            }
+                    fac.setCotizacion(1);
+                    fac.setMoneda(tipoMoneda.$U);
+                } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                    fac.setCotizacion((float)precioCotizacion);
+                    fac.setMoneda(tipoMoneda.US$);
+                }
 
             fac.getFp_s().clear();
 
@@ -1339,7 +1414,6 @@ public class AltaFactura extends javax.swing.JFrame {
 
         } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Crédito")) {
             fac.setTipo(tipoComprobante.Credito);
-            fac.setCotizacion(45);
             fac.setSerieComprobante(this.jTextSerie.getText());
             fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
             fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
@@ -1348,10 +1422,12 @@ public class AltaFactura extends javax.swing.JFrame {
             fac.setProveedor(this.getProveedor());
 
             if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                fac.setMoneda(tipoMoneda.$U);
-            } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                fac.setMoneda(tipoMoneda.US$);
-            }
+                    fac.setCotizacion(1);
+                    fac.setMoneda(tipoMoneda.$U);
+                } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                    fac.setCotizacion((float)precioCotizacion);
+                    fac.setMoneda(tipoMoneda.US$);
+                }
 
             fac.getFp_s().clear();
 
@@ -1381,7 +1457,6 @@ public class AltaFactura extends javax.swing.JFrame {
 //            fac.setFp_s(listaf_p);
         } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Devolución Contado")) {
             fac.setTipo(tipoComprobante.DevolucionContado);
-            fac.setCotizacion(45);
             fac.setSerieComprobante(this.jTextSerie.getText());
             fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
             fac.setPendiente(0);
@@ -1390,10 +1465,12 @@ public class AltaFactura extends javax.swing.JFrame {
             fac.setProveedor(this.getProveedor());
 
             if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                fac.setMoneda(tipoMoneda.$U);
-            } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                fac.setMoneda(tipoMoneda.US$);
-            }
+                    fac.setCotizacion(1);
+                    fac.setMoneda(tipoMoneda.$U);
+                } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                    fac.setCotizacion((float)precioCotizacion);
+                    fac.setMoneda(tipoMoneda.US$);
+                }
 
             fac.getFp_s().clear();
 
@@ -1506,7 +1583,7 @@ public class AltaFactura extends javax.swing.JFrame {
 
             float sub = Float.parseFloat(this.jTextCantidad.getText()) * un - des;
             this.jTextSubTotalArt.setText(Float.toString(sub));
-        }else{
+        } else {
             float des = 0, un = 0;
             if (this.jTextDescuento.getText().length() > 0) {
                 des = Float.parseFloat(this.jTextDescuento.getText());
@@ -1532,7 +1609,7 @@ public class AltaFactura extends javax.swing.JFrame {
 
             float sub = cant * Float.parseFloat(this.jTextUnitario.getText()) - des;
             this.jTextSubTotalArt.setText(Float.toString(sub));
-        }else{
+        } else {
             float cant = 0, des = 0;
             if (this.jTextCantidad.getText().length() > 0) {
                 cant = Float.parseFloat(this.jTextCantidad.getText());
@@ -1558,7 +1635,7 @@ public class AltaFactura extends javax.swing.JFrame {
 
             float sub = cant * un - Float.parseFloat(this.jTextDescuento.getText());
             this.jTextSubTotalArt.setText(Float.toString(sub));
-        }else{
+        } else {
             float cant = 0, un = 0;
             if (this.jTextCantidad.getText().length() > 0) {
                 cant = Float.parseFloat(this.jTextCantidad.getText());
@@ -1598,21 +1675,21 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jTextTOTAL.setText(String.valueOf(total));
     }
 
-private void CalcularTotales_conIVA_inc() {
+    private void CalcularTotales_conIVA_inc() {
         float subtotal = 0, iva_minimo = 0, iva_basico = 0, total = 0;
-        
+
         //Subtotal excento, basico y minimo.
         float subtotalExcento = 0;
         float subtotalBasico = 0;
         float subtotalMinimo = 0;
-        
+
         DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
         for (int i = 0; i < modelo.getRowCount(); i++) {
             Articulo a = this.ListaArticulo.get(i);
             String v = modelo.getValueAt(i, 4).toString();
             float val = Float.parseFloat(v);
 
-            if (a.getIva().getTipo() == tipoIVA.Minimo) {               
+            if (a.getIva().getTipo() == tipoIVA.Minimo) {
                 float porcentajeIVA = a.getIva().getPorcentaje();
                 subtotalMinimo = subtotalMinimo + (val / (1 + (porcentajeIVA / 100)));
                 iva_minimo = iva_minimo + (subtotalMinimo * a.getIva().getPorcentaje() / 100);
@@ -1633,7 +1710,20 @@ private void CalcularTotales_conIVA_inc() {
         this.jTextIVAbasico.setText(String.valueOf(iva_basico));
         this.jTextSubTotal.setText(String.valueOf(subtotal));
         this.jTextTOTAL.setText(String.valueOf(total));
-}
+    }
+
+    private List<LocalDate> traerFechas(LocalDate fechaCotizacion) {
+        List<LocalDate> listaFechas = new ArrayList<>();
+        listaFechas.add(fechaCotizacion);
+        for (int i = 1; i <= 5; i++) {
+            LocalDate fecha = LocalDate.of(fechaCotizacion.getYear(), fechaCotizacion.getMonthValue(), fechaCotizacion.getDayOfMonth() - i);
+            if (fecha != null) {
+                listaFechas.add(fecha);
+            }
+
+        }
+        return listaFechas;
+    }
 
     private void ListaFacparaNC(boolean b) {
         //this.jLabel17.setVisible(b);
@@ -1726,6 +1816,6 @@ private void CalcularTotales_conIVA_inc() {
     private javax.swing.JTextField jTextSubTotalArt;
     private javax.swing.JTextField jTextTOTAL;
     private javax.swing.JTextField jTextUnitario;
-    private javax.swing.JLabel labelCotizacion;
+    public javax.swing.JLabel labelCotizacion;
     // End of variables declaration//GEN-END:variables
 }

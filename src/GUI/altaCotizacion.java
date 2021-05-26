@@ -7,6 +7,8 @@ package GUI;
 
 import BD.Conexion;
 import Clases.Cotizacion;
+import Clases.controladorBasura;
+import java.time.LocalDate;
 import java.util.Date;
 import javax.swing.JTable;
 
@@ -15,11 +17,14 @@ import javax.swing.JTable;
  * @author joaco
  */
 public class altaCotizacion extends javax.swing.JFrame {
-
+    String tipo;
+    JTable tabla;
     /**
      * Creates new form altaCotizacion
      */
     public altaCotizacion() {
+        tipo = "alta";
+        
         initComponents();
         this.setLocationRelativeTo(null);
         
@@ -27,8 +32,17 @@ public class altaCotizacion extends javax.swing.JFrame {
     
     altaCotizacion(Cotizacion c, JTable jTable1) {
         initComponents();
+        tipo = "altamodificar";
+        tabla = jTable1;      
         this.jDateChooser.setDate(c.getFecha());
         this.jTextField1.setText(String.valueOf(c.getImporte()));
+    }
+
+    altaCotizacion(LocalDate fecha, JTable jTable1) {
+        initComponents();
+        tipo = "altafactura";
+        tabla = jTable1;
+        this.jDateChooser.setDate(java.sql.Date.valueOf(fecha));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -79,10 +93,10 @@ public class altaCotizacion extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(52, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -133,12 +147,24 @@ public class altaCotizacion extends javax.swing.JFrame {
                     Cotizacion c = new Cotizacion();
                     c.setFecha(fechaIngresada);
                     c.setImporte(Double.parseDouble(this.jTextField1.getText()));
-                    Conexion.getInstance().persist(c);
+                    boolean exito = Conexion.getInstance().persist(c);
+                    if (exito == true) {
+                        controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
+                        
+                        javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue dado de alta exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    }
                 } else {
                     javax.swing.JOptionPane.showMessageDialog(null, "Ya existe una cotización con la fecha ingresada. Vuelva a intentarlo con otra fecha.");
                 }
             }
         }
+
+        if (tipo.equals("altafactura") || tipo.equals("altamodificar")) {
+            this.dispose();
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

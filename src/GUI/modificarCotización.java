@@ -6,9 +6,10 @@
 package GUI;
 
 import BD.Conexion;
-import Clases.Articulo;
 import Clases.Cotizacion;
+import Clases.controladorBasura;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 
@@ -17,17 +18,48 @@ import javax.swing.table.DefaultTableModel;
  * @author joaco
  */
 public class modificarCotización extends javax.swing.JFrame {
-
+    boolean tipo;
+    LocalDate fecha;
+    AltaFactura af;
     /**
      * Creates new form modificarCotización
      */
     public modificarCotización() {
         initComponents();
-
+        tipo = true;
         this.setLocationRelativeTo(null);
         jTable1.getColumnModel().getColumn(3).setMinWidth(0);
         jTable1.getColumnModel().getColumn(3).setMaxWidth(0);
         jTable1.getColumnModel().getColumn(3).setWidth(0);
+        this.jButton3.setVisible(false);
+        
+        DefaultTableModel mdl = (DefaultTableModel) jTable1.getModel();
+        Iterator<Cotizacion> it = Conexion.getInstance().listarCotizaciones().iterator();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        
+        while (it.hasNext()) {
+            Cotizacion next = it.next();
+            Object[] fila = new Object[5];
+            
+            fila[0] = sdf.format(next.getFecha());
+            fila[1] = "U$S";
+            fila[2] = next.getImporte();
+            fila[3] = next;
+            mdl.addRow(fila);
+            
+        }
+    }
+    
+    public modificarCotización(LocalDate fechaCotizacion, AltaFactura altaFactura) {
+        initComponents();
+        tipo = false;
+        af = altaFactura;
+        this.setLocationRelativeTo(null);
+        jTable1.getColumnModel().getColumn(3).setMinWidth(0);
+        jTable1.getColumnModel().getColumn(3).setMaxWidth(0);
+        jTable1.getColumnModel().getColumn(3).setWidth(0);
+        
+        jButton2.setText("Seleccionar");
 
         DefaultTableModel mdl = (DefaultTableModel) jTable1.getModel();
         Iterator<Cotizacion> it = Conexion.getInstance().listarCotizaciones().iterator();
@@ -60,6 +92,7 @@ public class modificarCotización extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         jLabel1.setText("jLabel1");
 
@@ -98,6 +131,13 @@ public class modificarCotización extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Crear nueva cotización");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -107,7 +147,8 @@ public class modificarCotización extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 504, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1)))
@@ -121,7 +162,8 @@ public class modificarCotización extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1)
-                    .addComponent(jButton2))
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
                 .addContainerGap())
         );
 
@@ -135,12 +177,37 @@ public class modificarCotización extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        int row = jTable1.getSelectedRow();
-        Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
-        altaCotizacion aC = new altaCotizacion(c, jTable1);
-        aC.setLocationRelativeTo(null);
-        aC.show();
+        if (tipo == true) {
+            int row = jTable1.getSelectedRow();
+            Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
+            altaCotizacion aC = new altaCotizacion(c, jTable1);
+            aC.setLocationRelativeTo(null);
+            aC.setVisible(true);
+        } else {
+            int input = javax.swing.JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea seleccionar esta cotización?", "Seleccione una opción",
+                    javax.swing.JOptionPane.YES_NO_OPTION);
+            if (input == 0) {
+                int row = jTable1.getSelectedRow();
+                Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
+                controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
+                double cot = controladorBasura.getInstance().getPrecioCotizacion();
+                if (cot != 0) {
+                    af.labelCotizacion.setText("La cotización es: " + cot);
+                    af.precioCotizacion = cot;
+                }
+                this.dispose();
+            }
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if (tipo == false) {            
+            altaCotizacion aC = new altaCotizacion(this.fecha, jTable1);
+            aC.setLocationRelativeTo(null);
+            aC.setVisible(true);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,6 +247,7 @@ public class modificarCotización extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
