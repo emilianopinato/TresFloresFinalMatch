@@ -692,10 +692,11 @@ public class AltaFactura extends javax.swing.JFrame {
                             .addComponent(jLabel4)
                             .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jCBMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(labelCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(labelCotizacion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel5)
+                                .addComponent(jCBMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCBTipoComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -988,17 +989,16 @@ public class AltaFactura extends javax.swing.JFrame {
 
                     listaf_p.add(f_p);
                     
+                    
+                    Historial h = new Historial();
+                    h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                    h.setPrecio(precio);
+                    h.setProducto(this.ListaArticulo.get(i));
+                    h.setFecha(this.jDateChooser.getDate());
+                    this.ListaArticulo.get(i).getHistoriales().add(h);
+                    Conexion.getInstance().persist(h);
+                    
                 }
-
-                //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
-//                    Historial h = new Historial();
-//                    h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-//                    h.setPrecio(precio);
-//                    h.setProducto(this.ListaArticulo.get(i));
-//                    h.setFecha(this.jDateChooser.getDate());
-//                    this.ListaArticulo.get(i).getHistoriales().add(h);
-//                    Conexion.getInstance().persist(h);
-                //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
             }
             fac.setUsuario(controladorBasura.getU());
 

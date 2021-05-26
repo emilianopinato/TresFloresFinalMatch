@@ -367,9 +367,9 @@ public class ListarComprobantes extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonConsultarActionPerformed
 
     private void jTableComprobantesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableComprobantesMouseClicked
-        Factura fac = (Factura) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
-        AltaFactura af = new AltaFactura(fac);
-        af.show();
+            Factura fac = (Factura) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
+            AltaFactura af = new AltaFactura(fac);
+            af.show();       
     }//GEN-LAST:event_jTableComprobantesMouseClicked
 
     private void jCheckBoxSinFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSinFechaActionPerformed
