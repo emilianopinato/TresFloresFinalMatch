@@ -21,6 +21,8 @@ import javax.swing.table.DefaultTableModel;
 public class altaCotizacion extends javax.swing.JFrame {
     String tipo;
     JTable tabla;
+    private Cotizacion c;
+    
     /**
      * Creates new form altaCotizacion
      */
@@ -35,7 +37,8 @@ public class altaCotizacion extends javax.swing.JFrame {
     altaCotizacion(Cotizacion c, JTable jTable1) {
         initComponents();
         tipo = "altamodificar";
-        tabla = jTable1;      
+        this.c = c;
+        tabla = jTable1;
         this.jDateChooser.setDate(c.getFecha());
         this.jTextField1.setText(String.valueOf(c.getImporte()));
     }
@@ -135,41 +138,71 @@ public class altaCotizacion extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");  
-        if (this.jDateChooser.getDate() == null) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar una fecha.");
-        } else if (this.jTextField1.getText().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el importe correspondiente.");
-        } else {
-            Date fechaIngresada = this.jDateChooser.getDate();
-            Date fechaActual = new Date();
-            if (fechaIngresada.after(fechaActual)) {
-                javax.swing.JOptionPane.showMessageDialog(null, "La fecha ingresada es mayor a la fecha actual.");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        //Falta la parte de modificar.
+        if (tipo.equals("altafactura") || tipo.equals("alta")) {
+            if (this.jDateChooser.getDate() == null) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar una fecha.");
+            } else if (this.jTextField1.getText().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el importe correspondiente.");
             } else {
-                if (!Conexion.getInstance().existeFecha(fechaIngresada)) {
-                    Cotizacion c = new Cotizacion();
-                    c.setFecha(fechaIngresada);
-                    c.setImporte(Double.parseDouble(this.jTextField1.getText()));
-                    boolean exito = Conexion.getInstance().persist(c);
-                    if (exito == true) {
-                        controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
-                        DefaultTableModel mdl = (DefaultTableModel) tabla.getModel();
-                        Object[] fila = new Object[4];
-                        fila[0] = sdf.format(c.getFecha());
-                        fila[1] = "U$S";
-                        fila[2] = c.getImporte();
-                        fila[3] = c;                    
-                        mdl.addRow(fila);
-                        javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue dado de alta exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                    } else {
-                        javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                    }
+                Date fechaIngresada = this.jDateChooser.getDate();
+                Date fechaActual = new Date();
+                if (fechaIngresada.after(fechaActual)) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "La fecha ingresada es mayor a la fecha actual.");
                 } else {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Ya existe una cotización con la fecha ingresada. Vuelva a intentarlo con otra fecha.");
+                    if (!Conexion.getInstance().existeFecha(fechaIngresada)) {
+                        Cotizacion c = new Cotizacion();
+                        c.setFecha(fechaIngresada);
+                        c.setImporte(Double.parseDouble(this.jTextField1.getText()));
+                        boolean exito = Conexion.getInstance().persist(c);
+                        if (exito == true) {
+                            controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
+                            DefaultTableModel mdl = (DefaultTableModel) tabla.getModel();
+                            Object[] fila = new Object[4];
+                            fila[0] = sdf.format(c.getFecha());
+                            fila[1] = "U$S";
+                            fila[2] = c.getImporte();
+                            fila[3] = c;
+                            mdl.addRow(fila);
+                            javax.swing.JOptionPane.showMessageDialog(null, "La cotización fue dada de alta exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                        }
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Ya existe una cotización con la fecha ingresada. Vuelva a intentarlo con otra fecha.");
+                    }
                 }
             }
         }
-
+        
+//        if (tipo.equals("altamodificar")) {
+//            if (this.jDateChooser.getDate() == null) {
+//                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar una fecha.");
+//            } else if (this.jTextField1.getText().isEmpty()) {
+//                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el importe correspondiente.");
+//            } else {
+//                Date fechaIngresada = this.jDateChooser.getDate();
+//                Date fechaActual = new Date();
+//                if (fechaIngresada.after(fechaActual)) {
+//                    javax.swing.JOptionPane.showMessageDialog(null, "La fecha ingresada es mayor a la fecha actual.");
+//                } else {
+//                    if (Conexion.getInstance().existeFecha(fechaIngresada)) {
+//                        double importe = Float.parseFloat(this.jTextField1.getText());
+//                        this.c.setFecha(fechaActual);
+//                        this.c.setImporte(importe);
+//                        boolean exito = Conexion.getInstance().mergebool(c);
+//                        if (exito) {
+//                            DefaultTableModel dm = (DefaultTableModel) tabla.getModel();                           
+//                            javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue dado de alta exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+//                        } else {
+//                            javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+       
         if (tipo.equals("altafactura") || tipo.equals("altamodificar")) {
             this.dispose();
         }

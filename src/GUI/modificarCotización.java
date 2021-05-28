@@ -27,6 +27,7 @@ public class modificarCotización extends javax.swing.JFrame {
      */
     public modificarCotización() {
         initComponents();
+        this.setTitle("Modificar cotizaciones");
         tipo = "a";
         crear = false;
         this.setLocationRelativeTo(null);
@@ -54,6 +55,7 @@ public class modificarCotización extends javax.swing.JFrame {
     
     public modificarCotización(LocalDate fechaCotizacion, AltaFactura altaFactura) {
         initComponents();
+        this.setTitle("Seleccionar cotización");
         tipo = "b";
         af = altaFactura;
         fecha = fechaCotizacion;
@@ -100,7 +102,6 @@ public class modificarCotización extends javax.swing.JFrame {
         jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Modificar cotizaciones.");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

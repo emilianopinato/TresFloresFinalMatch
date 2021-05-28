@@ -76,6 +76,20 @@ public class Conexion {
             em.getTransaction().rollback();
         }
     }
+    
+    public boolean mergebool(Object object) {
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            em.merge(object);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();          
+            em.getTransaction().rollback();
+            return false;
+        }
+        return true;
+    }
 
     public void delete(Object object) {
         EntityManager em = getEntity();
