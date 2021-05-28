@@ -362,9 +362,16 @@ public class AltaFactura extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jTableArticulos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
@@ -1637,9 +1644,6 @@ public class AltaFactura extends javax.swing.JFrame {
         
         DefaultTableModel model = (DefaultTableModel) this.jTableArticulos.getModel();
         model.setRowCount(0);
-//        for(int i=0 ; i < this.jTableArticulos.getModel().getRowCount() ;i++){
-//            model.removeRow(i);
-//        }
 
         for (int i = 0; i < ListF_P.size(); i++) {
             String nombre_desc = ListF_P.get(i).getArticulo().getNombre() + " - " + ListF_P.get(i).getArticulo().getDescripcion();
