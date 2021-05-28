@@ -156,12 +156,15 @@ public class recuperarProveedor extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         int row = tablaRecuperar.getSelectedRow();
-        Proveedor pro = (Proveedor) tablaRecuperar.getModel().getValueAt(row,7);
-        pro.setDeshabilitado(false);
-        Conexion.getInstance().merge(pro);
-        DefaultTableModel mdl = (DefaultTableModel)tablaRecuperar.getModel();
-        mdl.removeRow(row);
-        javax.swing.JOptionPane.showMessageDialog(this, "El proveedor se ha recuperado");
+        if(row != -1){
+            Proveedor pro = (Proveedor) tablaRecuperar.getModel().getValueAt(row,7);
+            pro.setDeshabilitado(false);
+            Conexion.getInstance().merge(pro);
+            DefaultTableModel mdl = (DefaultTableModel)tablaRecuperar.getModel();
+            mdl.removeRow(row);
+            javax.swing.JOptionPane.showMessageDialog(this, "El proveedor se ha recuperado");
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -151,12 +151,15 @@ public class bajaProveedor extends javax.swing.JFrame {
     private void jButtonEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEliminarActionPerformed
         // TODO add your handling code here:
         int row = TablaDatosProveedorBaja.getSelectedRow();
-        Proveedor pro = (Proveedor) TablaDatosProveedorBaja.getModel().getValueAt(row,7);
-        pro.setDeshabilitado(true);
-        Conexion.getInstance().merge(pro);
-        DefaultTableModel mdl = (DefaultTableModel)TablaDatosProveedorBaja.getModel();
-        mdl.removeRow(row);
-        javax.swing.JOptionPane.showMessageDialog(this, "El proveedor se ha deshabilitado.");
+        if(row != -1){
+            Proveedor pro = (Proveedor) TablaDatosProveedorBaja.getModel().getValueAt(row,7);
+            pro.setDeshabilitado(true);
+            Conexion.getInstance().merge(pro);
+            DefaultTableModel mdl = (DefaultTableModel)TablaDatosProveedorBaja.getModel();
+            mdl.removeRow(row);
+            javax.swing.JOptionPane.showMessageDialog(this, "El proveedor se ha deshabilitado.");
+
+        }
         
     }//GEN-LAST:event_jButtonEliminarActionPerformed
 
