@@ -452,9 +452,9 @@ public class compararPrecios2 extends javax.swing.JFrame {
 
                     
                     Date f = historia.getFecha();
-                    sdf.format(f);
+                    
 
-                    fila[2] = f;
+                    fila[2] = sdf.format(f);
                     fila[3] = historia.getPrecio();
                     fila[4] = historia;
                     mdl.addRow(fila);
