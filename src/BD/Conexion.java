@@ -625,5 +625,37 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         return listaHistorial;
     
     }
+    
+    public List<Factura> listarFacturasDeshabilitados() {
+        EntityManager em = getEntity();
+        List<Factura> listaComprobantes = new ArrayList<>();
+        em.getTransaction().begin();
+        try {
+            listaComprobantes = em.createNativeQuery("SELECT factura.* FROM factura"
+                    + " WHERE factura.deshabilitado = 1 ", Factura.class)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+
+        return listaComprobantes;
+    }
+        
+    public List<Recibo> listarRecibosDeshabilitados() {
+        EntityManager em = getEntity();
+        List<Recibo> listaComprobantes = new ArrayList<>();
+        em.getTransaction().begin();
+        try {
+            listaComprobantes = em.createNativeQuery("SELECT recibo.* FROM recibo"
+                    + " WHERE recibo.deshabilitado = 1 ", Recibo.class)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+
+        return listaComprobantes;
+    }
 
 }

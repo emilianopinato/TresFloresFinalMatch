@@ -5,6 +5,12 @@
  */
 package GUI;
 
+import BD.Conexion;
+import Clases.Factura;
+import Clases.Recibo;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author emiliano
@@ -17,6 +23,25 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
     public RecuperarComprobantes() {
         initComponents();
         this.setLocationRelativeTo(null);
+        this.jTable1.getColumnModel().getColumn(6).setMinWidth(0);
+        this.jTable1.getColumnModel().getColumn(6).setMaxWidth(0);
+        this.jTable1.getColumnModel().getColumn(6).setWidth(0);
+        
+        DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
+
+        List<Factura> ListaFact = Conexion.getInstance().listarFacturasDeshabilitados();
+        for (int i = 0; i < ListaFact.size(); i++) {
+            String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
+            model.addRow(new Object[]{ListaFact.get(i).getFecha().toString(), ListaFact.get(i).getTipo().toString(),
+                numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(),"Deshabilitado", ListaFact.get(i)});
+        }
+        
+        List<Recibo> ListaRec = Conexion.getInstance().listarRecibosDeshabilitados();
+        for (int i = 0; i < ListaRec.size(); i++) {
+            String numeroComp = ListaRec.get(i).getSerieComprobante() + "-" + ListaRec.get(i).getNroComprobante();
+            model.addRow(new Object[]{ListaRec.get(i).getFecha().toString(), "Recibo",
+                numeroComp, ListaRec.get(i).getMoneda().toString(), ListaRec.get(i).getTotal(),"Deshabilitado", ListaRec.get(i)});
+        }
     }
 
     /**
@@ -39,14 +64,14 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Fecha", "Numero", "Total", "Estado", "Objeto"
+                "Fecha", "Tipo", "Numero", "Moneda", "Total", "Estado", "Objeto"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, true, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -60,6 +85,11 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         jButton1.setText("Habilitar");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,7 +98,7 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 720, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton1)))
@@ -86,6 +116,20 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if(this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6) instanceof Factura){
+            Factura fac = (Factura) this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6);
+            fac.setDeshabilitado(false);
+            Conexion.getInstance().merge(fac);
+            javax.swing.JOptionPane.showMessageDialog(this, "La factura se ha habilitado correctamente.");
+        }else if(this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6) instanceof Recibo){
+            Recibo rec = (Recibo) this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6);
+            rec.setDeshabilitado(false);
+            Conexion.getInstance().merge(rec);
+            javax.swing.JOptionPane.showMessageDialog(this, "El recibo se ha habilitado correctamente.");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
