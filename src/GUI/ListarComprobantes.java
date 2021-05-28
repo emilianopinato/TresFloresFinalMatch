@@ -243,7 +243,8 @@ public class ListarComprobantes extends javax.swing.JFrame {
                     for (int i = 0; i < ListaFact.size(); i++) {
                         String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
                         model.addRow(new Object[]{ListaFact.get(i).getFecha().toString(), ListaFact.get(i).getTipo().toString(),
-                            numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(), 0, 0, 0, 0, "nada", ListaFact.get(i)});
+                            numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(),
+                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", ListaFact.get(i)});
                     }
                 }
 
@@ -265,7 +266,8 @@ public class ListarComprobantes extends javax.swing.JFrame {
                         for (int i = 0; i < ListaFact.size(); i++) {
                             String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
                             model.addRow(new Object[]{ListaFact.get(i).getFecha().toString(), ListaFact.get(i).getTipo().toString(),
-                                numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(), 0, 0, 0, 0, "nada", ListaFact.get(i)});
+                                numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(),
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", ListaFact.get(i)});
                         }
                     }
                 }
@@ -281,7 +283,8 @@ public class ListarComprobantes extends javax.swing.JFrame {
                     for (int i = 0; i < listaRecibos.size(); i++) {
                         String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
                         model.addRow(new Object[]{listaRecibos.get(i).getFecha().toString(), "Recibo",
-                            numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), 0, 0, 0, 0, 0, "nada", listaRecibos.get(i)});
+                            numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), Float.parseFloat("0"),
+                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", listaRecibos.get(i)});
                     }
                 }
             }
@@ -302,7 +305,8 @@ public class ListarComprobantes extends javax.swing.JFrame {
                         for (int i = 0; i < listaRecibos.size(); i++) {
                             String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
                             model.addRow(new Object[]{listaRecibos.get(i).getFecha().toString(), "Recibo",
-                                numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), 0, 0, 0, 0, 0, "nada", listaRecibos.get(i)});
+                                numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), Float.parseFloat("0"),
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", listaRecibos.get(i)});
                         }
                     }
                 }
@@ -322,12 +326,14 @@ public class ListarComprobantes extends javax.swing.JFrame {
                             Factura f = (Factura) comprobante;
                             String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
                             model.addRow(new Object[]{f.getFecha().toString(), f.getTipo().toString(),
-                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), 0, 0, 0, 0, "nada", f});
+                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", f});
                         } else {
                             Recibo r = (Recibo) comprobante;
                             String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
                             model.addRow(new Object[]{r.getFecha().toString(), "Recibo",
-                                numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), 0, 0, 0, 0, "nada", r});
+                                numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", r});
                         }
                     }
                 }
@@ -352,12 +358,14 @@ public class ListarComprobantes extends javax.swing.JFrame {
                                 Factura f = (Factura) comprobante;
                                 String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
                                 model.addRow(new Object[]{f.getFecha().toString(), f.getTipo().toString(),
-                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), 0, 0, 0, 0, "nada", f});
+                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
+                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", f});
                             } else {
                                 Recibo r = (Recibo) comprobante;
                                 String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
                                 model.addRow(new Object[]{r.getFecha().toString(), "Recibo",
-                                    numeroComp, r.getMoneda().toString(), r.getTotal(), 0, 0, 0, 0, 0, "nada", r});
+                                    numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
+                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", r});
                             }
                         }
                     }
