@@ -239,7 +239,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         });
         jMenuFactura.add(jMenuItem9);
 
-        jMenuItem19.setText("Recuperar Comprobantes");
+        jMenuItem19.setText("Listar Deudas");
         jMenuItem19.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem19ActionPerformed(evt);
@@ -449,8 +449,10 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
-        RecuperarComprobantes rc = new RecuperarComprobantes();
-        rc.setVisible(true);
+        // TODO add your handling code here:
+        listarDeudas ld = new listarDeudas();
+        ld.setLocationRelativeTo(null);
+        ld.setVisible(true);
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     /**

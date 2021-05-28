@@ -532,7 +532,7 @@ public class AltaRecibo extends javax.swing.JFrame {
                     }
                 }
                 if (recibo) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Recibo ingreado correctamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    javax.swing.JOptionPane.showMessageDialog(null, "Recibo ingresado correctamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                     this.dispose();
                 } else {
                     javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);

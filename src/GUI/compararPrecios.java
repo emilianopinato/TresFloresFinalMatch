@@ -154,10 +154,13 @@ public class compararPrecios extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         int row = tablita.getSelectedRow();
-        Articulo a = (Articulo) tablita.getModel().getValueAt(row,3);
-        compararPrecios2 cp2 = new compararPrecios2(a);
-        cp2.setLocationRelativeTo(null);
-        cp2.show();
+        if(row != -1){
+            Articulo a = (Articulo) tablita.getModel().getValueAt(row,3);
+            compararPrecios2 cp2 = new compararPrecios2(a);
+            cp2.setLocationRelativeTo(null);
+            cp2.show();
+        }
+        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

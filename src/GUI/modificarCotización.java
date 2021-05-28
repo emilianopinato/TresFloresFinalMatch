@@ -18,7 +18,8 @@ import javax.swing.table.DefaultTableModel;
  * @author joaco
  */
 public class modificarCotización extends javax.swing.JFrame {
-    boolean tipo;
+    String tipo;
+    boolean crear;
     LocalDate fecha;
     AltaFactura af;
     /**
@@ -26,7 +27,9 @@ public class modificarCotización extends javax.swing.JFrame {
      */
     public modificarCotización() {
         initComponents();
-        tipo = true;
+        this.setTitle("Modificar cotizaciones");
+        tipo = "a";
+        crear = false;
         this.setLocationRelativeTo(null);
         jTable1.getColumnModel().getColumn(3).setMinWidth(0);
         jTable1.getColumnModel().getColumn(3).setMaxWidth(0);
@@ -52,8 +55,10 @@ public class modificarCotización extends javax.swing.JFrame {
     
     public modificarCotización(LocalDate fechaCotizacion, AltaFactura altaFactura) {
         initComponents();
-        tipo = false;
+        this.setTitle("Seleccionar cotización");
+        tipo = "b";
         af = altaFactura;
+        fecha = fechaCotizacion;
         this.setLocationRelativeTo(null);
         jTable1.getColumnModel().getColumn(3).setMinWidth(0);
         jTable1.getColumnModel().getColumn(3).setMaxWidth(0);
@@ -97,7 +102,6 @@ public class modificarCotización extends javax.swing.JFrame {
         jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Modificar cotizaciones.");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -177,32 +181,36 @@ public class modificarCotización extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        if (tipo == true) {
+        crear = false;
+        if (tipo.equals("a")) {
             int row = jTable1.getSelectedRow();
             Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
             altaCotizacion aC = new altaCotizacion(c, jTable1);
             aC.setLocationRelativeTo(null);
             aC.setVisible(true);
         } else {
-            int input = javax.swing.JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea seleccionar esta cotización?", "Seleccione una opción",
-                    javax.swing.JOptionPane.YES_NO_OPTION);
-            if (input == 0) {
-                int row = jTable1.getSelectedRow();
-                Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
-                controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
-                double cot = controladorBasura.getInstance().getPrecioCotizacion();
-                if (cot != 0) {
-                    af.labelCotizacion.setText("La cotización es: " + cot);
-                    af.precioCotizacion = cot;
+            if (crear == false) {
+                int input = javax.swing.JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea seleccionar esta cotización?", "Seleccione una opción",
+                        javax.swing.JOptionPane.YES_NO_OPTION);
+                if (input == 0) {
+                    int row = jTable1.getSelectedRow();
+                    Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
+                    controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
+                    double cot = controladorBasura.getInstance().getPrecioCotizacion();
+                    if (cot != 0) {
+                        af.labelCotizacion.setText("La cotización es: " + cot);
+                        af.precioCotizacion = cot;
+                    }
+                    this.dispose();
                 }
-                this.dispose();
             }
         }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        if (tipo == false) {            
+        crear = true;
+        if (tipo.equals("b") && crear == true) {
             altaCotizacion aC = new altaCotizacion(this.fecha, jTable1);
             aC.setLocationRelativeTo(null);
             aC.setVisible(true);

@@ -76,6 +76,20 @@ public class Conexion {
             em.getTransaction().rollback();
         }
     }
+    
+    public boolean mergebool(Object object) {
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            em.merge(object);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            e.printStackTrace();          
+            em.getTransaction().rollback();
+            return false;
+        }
+        return true;
+    }
 
     public void delete(Object object) {
         EntityManager em = getEntity();
@@ -325,16 +339,29 @@ public class Conexion {
     }
 
     public List<Factura> ListarFacturasPorFecha(int codigoProveedor, Date fechaDesde, Date fechaHasta) {
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+
+        int anio = Integer.parseInt(getAnioFormato.format(fechaDesde));
+        int mes = Integer.parseInt(getMesFormato.format(fechaDesde));
+        int dia = Integer.parseInt(getDiaFormato.format(fechaDesde));
+        
+        int anio2 = Integer.parseInt(getAnioFormato.format(fechaHasta));
+        int mes2 = Integer.parseInt(getMesFormato.format(fechaHasta));
+        int dia2 = Integer.parseInt(getDiaFormato.format(fechaHasta));
+
+        String fecha1 = "'" + anio + "-" + mes + "-" + dia + "'";
+        String fecha2 = "'" + anio2 + "-" + mes2 + "-" + dia2 + "'";
+
         EntityManager em = getEntity();
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();              
         try {
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
                     + "AND factura.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
-                    + "AND comprobante.fecha >= :fechaDesde AND comprobante.fecha <= :fechaHasta ORDER BY comprobante.fecha ASC", Factura.class)
+                    + "AND comprobante.fecha >= "+ fecha1 +" AND comprobante.fecha <= "+ fecha2 +" ORDER BY comprobante.fecha ASC", Factura.class)
                     .setParameter("codigo", codigoProveedor)
-                    .setParameter("fechaDesde", fechaDesde)
-                    .setParameter("fechaHasta", fechaHasta)
                     .getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -372,6 +399,21 @@ public class Conexion {
     }
 
     public List<Recibo> listarRecibosPorFecha(int codigo, Date fechaDesde, Date fechaHasta) {
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+
+        int anio = Integer.parseInt(getAnioFormato.format(fechaDesde));
+        int mes = Integer.parseInt(getMesFormato.format(fechaDesde));
+        int dia = Integer.parseInt(getDiaFormato.format(fechaDesde));
+        
+        int anio2 = Integer.parseInt(getAnioFormato.format(fechaHasta));
+        int mes2 = Integer.parseInt(getMesFormato.format(fechaHasta));
+        int dia2 = Integer.parseInt(getDiaFormato.format(fechaHasta));
+
+        String fecha1 = "'" + anio + "-" + mes + "-" + dia + "'";
+        String fecha2 = "'" + anio2 + "-" + mes2 + "-" + dia2 + "'";
+
         EntityManager em = getEntity();
         List<Recibo> listaRecibos = null;
         em.getTransaction().begin();
@@ -380,8 +422,6 @@ public class Conexion {
                     + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
                     + "AND comprobante.fecha >= :fechaDesde AND recibo.deshabilitado = 0 AND comprobante.fecha <= :fechaHasta ORDER BY comprobante.fecha ASC", Recibo.class)
                     .setParameter("codigo", codigo)
-                    .setParameter("fechaDesde", fechaDesde)
-                    .setParameter("fechaHasta", fechaHasta)
                     .getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {

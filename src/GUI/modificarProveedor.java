@@ -147,10 +147,12 @@ public class modificarProveedor extends javax.swing.JFrame {
     private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
         // TODO add your handling code here:
         int row = TablaDatosProveedor.getSelectedRow();
-        Proveedor pro = (Proveedor) TablaDatosProveedor.getModel().getValueAt(row,7);
-        altaProveedor a = new altaProveedor(pro,TablaDatosProveedor);
-        a.setLocationRelativeTo(null);
-        a.show();
+        if(row != -1){
+            Proveedor pro = (Proveedor) TablaDatosProveedor.getModel().getValueAt(row,7);
+            altaProveedor a = new altaProveedor(pro,TablaDatosProveedor);
+            a.setLocationRelativeTo(null);
+            a.show();
+        }    
     }//GEN-LAST:event_jButtonModificarActionPerformed
 
     private void jButtonCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCancelarActionPerformed
