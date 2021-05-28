@@ -1513,7 +1513,7 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.getFp_s().add(f_p);
             }
 //            fac.setFp_s(listaf_p);
-        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Nota de crédito")) {
+        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals(tipoComprobante.NotaCredito.toString())) {
             fac.setTipo(tipoComprobante.NotaCredito);
                 fac.setSerieComprobante(this.jTextSerie.getText());
                 fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
