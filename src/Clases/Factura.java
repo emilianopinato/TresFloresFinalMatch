@@ -19,7 +19,8 @@ import javax.persistence.OneToMany;
 public class Factura extends Comprobante implements Serializable {
     private tipoComprobante tipo;
     private float Pendiente;
-    
+
+    private boolean deshabilitado;
     //LINKS-------------------------//
       
     @OneToMany(mappedBy = "factura",cascade = CascadeType.ALL, orphanRemoval = true)
@@ -59,6 +60,14 @@ public class Factura extends Comprobante implements Serializable {
 
     public void setFr_s(List<F_R> fr_s) {
         this.fr_s = fr_s;
+    }
+    
+        public boolean isDeshabilitado() {
+        return deshabilitado;
+    }
+
+    public void setDeshabilitado(boolean deshabilitado) {
+        this.deshabilitado = deshabilitado;
     }
     
     

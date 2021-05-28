@@ -25,6 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -625,6 +626,9 @@ public class AltaFactura extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextNumeroFactKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextNumeroFactKeyTyped(evt);
+            }
         });
 
         jPanelModificar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 153, 153)));
@@ -860,6 +864,7 @@ public class AltaFactura extends javax.swing.JFrame {
 
     private void jButtonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIngresarActionPerformed
         Factura fac = new Factura();
+        fac.setDeshabilitado(false);
         if (this.jTextSerie.getText().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la serie del numero de factura.");
         } else if (this.jTextNumeroFact.getText().isEmpty()) {
@@ -1026,7 +1031,7 @@ public class AltaFactura extends javax.swing.JFrame {
                     //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
                 }
                 fac.setFp_s(listaf_p);
-            } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Nota de crédito")) {
+            } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals(tipoComprobante.NotaCredito.toString())) {
                 fac.setTipo(tipoComprobante.NotaCredito);
                 fac.setSerieComprobante(this.jTextSerie.getText());
                 fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
@@ -1076,6 +1081,7 @@ public class AltaFactura extends javax.swing.JFrame {
                     Conexion.getInstance().persist(h);
                     
                 }
+                fac.setFp_s(listaf_p);
             }
             fac.setUsuario(controladorBasura.getU());
 
@@ -1364,7 +1370,13 @@ public class AltaFactura extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemModificarActionPerformed
 
     private void jMenuItemEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEliminarActionPerformed
-        // TODO add your handling code here:
+        
+        int resp = JOptionPane.showConfirmDialog(this, "Seguro desea deshabilitar esta factura?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (resp == 0) {  
+            this.f.setDeshabilitado(true);
+            Conexion.getInstance().merge(f);
+            javax.swing.JOptionPane.showMessageDialog(this, "La factura se ha deshabilitado correctamente.");
+        }
     }//GEN-LAST:event_jMenuItemEliminarActionPerformed
 
     private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
@@ -1503,7 +1515,58 @@ public class AltaFactura extends javax.swing.JFrame {
 //            fac.setFp_s(listaf_p);
         } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Nota de crédito")) {
             fac.setTipo(tipoComprobante.NotaCredito);
-        }
+                fac.setSerieComprobante(this.jTextSerie.getText());
+                fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
+                fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                fac.setFecha(this.jDateChooser.getDate());
+                fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+
+                if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                    fac.setCotizacion(1);
+                    fac.setMoneda(tipoMoneda.$U);
+                } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                    fac.setCotizacion((float)precioCotizacion);
+                    fac.setMoneda(tipoMoneda.US$);
+                }
+                
+                fac.getFp_s().clear();
+
+                //List<F_P> listaf_p = new ArrayList<F_P>();
+                DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                for (int i = 0; i < modelo.getRowCount(); i++) {
+                    F_P f_p = new F_P();
+                    f_p.setFactura(fac);
+                    f_p.setArticulo(this.ListaArticulo.get(i));
+
+                    String c = modelo.getValueAt(i, 1).toString();
+                    float cant = Float.parseFloat(c);
+                    f_p.setCantidad(cant);
+
+                    String p = modelo.getValueAt(i, 2).toString();
+                    float precio = Float.parseFloat(p);
+                    f_p.setPrecio(precio);
+
+                    String d = modelo.getValueAt(i, 3).toString();
+                    float descuento = Float.parseFloat(d);
+                    f_p.setDescuento(descuento);
+
+                    this.ListaArticulo.get(i).addF_P(f_p);
+
+                    fac.getFp_s().add(f_p);
+                    
+                    
+//                    Historial h = new Historial();
+//                    h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+//                    h.setPrecio(precio);
+//                    h.setProducto(this.ListaArticulo.get(i));
+//                    h.setFecha(this.jDateChooser.getDate());
+//                    this.ListaArticulo.get(i).getHistoriales().add(h);
+//                    Conexion.getInstance().persist(h);
+                    
+                }
+            }
+            //fac.setUsuario(controladorBasura.getU());
         //fac.setUsuario(usuario);
         Conexion.getInstance().merge(fac);
         javax.swing.JOptionPane.showMessageDialog(null, "Factura fue modificada exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -1651,6 +1714,15 @@ public class AltaFactura extends javax.swing.JFrame {
             this.jTextSubTotalArt.setText(Float.toString(sub));
         }
     }//GEN-LAST:event_jTextDescuentoKeyReleased
+
+    private void jTextNumeroFactKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextNumeroFactKeyTyped
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0')
+                || (caracter > '9'))
+                && (caracter != '\b' /*corresponde a BACK_SPACE*/)) {
+            evt.consume();  // ignorar el evento de teclado
+        }
+    }//GEN-LAST:event_jTextNumeroFactKeyTyped
 
     private void CalcularTotales_sinIVA_inc() {
         float subtotal = 0, iva_minimo = 0, iva_basico = 0, total = 0;

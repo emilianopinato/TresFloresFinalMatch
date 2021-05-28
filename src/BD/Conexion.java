@@ -329,7 +329,7 @@ public class Conexion {
         em.getTransaction().begin();
         try{
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo", Factura.class)
+                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo()).getResultList();
             em.getTransaction().commit();
         }catch(Exception e){
@@ -359,7 +359,7 @@ public class Conexion {
         em.getTransaction().begin();              
         try {
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo "
                     + "AND comprobante.fecha >= "+ fecha1 +" AND comprobante.fecha <= "+ fecha2 +" ORDER BY comprobante.fecha ASC", Factura.class)
                     .setParameter("codigo", codigoProveedor)
                     .getResultList();
