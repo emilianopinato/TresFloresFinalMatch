@@ -362,7 +362,7 @@ public class Conexion {
         em.getTransaction().begin();
         try {
             recibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
-                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo", Recibo.class)
+                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND recibo.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Recibo.class)
                     .setParameter("codigo", codigo).getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -378,7 +378,7 @@ public class Conexion {
         try {
             listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
                     + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
-                    + "AND comprobante.fecha >= :fechaDesde AND comprobante.fecha <= :fechaHasta ORDER BY comprobante.fecha ASC", Recibo.class)
+                    + "AND comprobante.fecha >= :fechaDesde AND recibo.deshabilitado = 0 AND comprobante.fecha <= :fechaHasta ORDER BY comprobante.fecha ASC", Recibo.class)
                     .setParameter("codigo", codigo)
                     .setParameter("fechaDesde", fechaDesde)
                     .setParameter("fechaHasta", fechaHasta)

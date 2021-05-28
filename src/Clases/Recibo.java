@@ -18,6 +18,7 @@ import javax.persistence.OneToMany;
 public class Recibo extends Comprobante implements Serializable {
     
     private String observacion;
+    private boolean deshabilitado;
 
     //LINKS------------------------//
     @OneToMany(mappedBy = "recibo")
@@ -38,6 +39,14 @@ public class Recibo extends Comprobante implements Serializable {
 
     public void setObservacion(String observacion) {
         this.observacion = observacion;
+    }
+
+    public boolean isDeshabilitado() {
+        return deshabilitado;
+    }
+
+    public void setDeshabilitado(boolean deshabilitado) {
+        this.deshabilitado = deshabilitado;
     }
 
 }

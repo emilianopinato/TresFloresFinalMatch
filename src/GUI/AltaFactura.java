@@ -1509,7 +1509,7 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jDateChooser.setEnabled(false);
         this.jCBTipoComprobante.setEnabled(false);
         this.jCBMoneda.setEnabled(false);
-//        this.jButtonModificar.setVisible(true);
+//      this.jButtonModificar.setVisible(true);
         this.jPanelSetArticulo.setVisible(false);
 
         this.jPanelModificar.setVisible(false);
