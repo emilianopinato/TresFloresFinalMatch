@@ -116,6 +116,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem19 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
@@ -237,6 +238,14 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             }
         });
         jMenuFactura.add(jMenuItem9);
+
+        jMenuItem19.setText("Listar Deudas");
+        jMenuItem19.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem19ActionPerformed(evt);
+            }
+        });
+        jMenuFactura.add(jMenuItem19);
 
         jMenuBar1.add(jMenuFactura);
 
@@ -439,6 +448,13 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         mC.setVisible(true);
     }//GEN-LAST:event_jMenuItem17ActionPerformed
 
+    private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
+        // TODO add your handling code here:
+        listarDeudas ld = new listarDeudas();
+        ld.setLocationRelativeTo(null);
+        ld.setVisible(true);
+    }//GEN-LAST:event_jMenuItem19ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -494,6 +510,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem18;
+    private javax.swing.JMenuItem jMenuItem19;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

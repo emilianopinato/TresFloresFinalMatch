@@ -259,7 +259,6 @@ public class login extends javax.swing.JFrame {
                             if (u.getContrasenia().equals(pass1)) { //si es correcto ingresa a PP
                                 u = usu;
                                 controladorBasura.setU(u);
-                                javax.swing.JOptionPane.showMessageDialog(null, "Ha iniciado sesión correctamente.");
                                 pantallaPrincipal pP = new pantallaPrincipal();
                                 pP.setVisible(true);
                                 this.dispose();
@@ -289,7 +288,6 @@ public class login extends javax.swing.JFrame {
                         String pass1 = new String(passArray);
                         if (u.getContrasenia().equals(pass1)) {
                             controladorBasura.setU(u);
-                            javax.swing.JOptionPane.showMessageDialog(null, "Ha iniciado sesión correctamente.");
                             pantallaPrincipal pP = new pantallaPrincipal();
                             pP.setVisible(true);
                             controladorBasura.setU(u);
