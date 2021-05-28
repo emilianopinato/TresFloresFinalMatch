@@ -631,11 +631,13 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         List<Factura> listaComprobantes = new ArrayList<>();
         em.getTransaction().begin();
         try {
-            listaComprobantes = em.createNativeQuery("SELECT factura.* FROM factura"
-                    + " WHERE factura.deshabilitado = 1 ", Factura.class)
+            listaComprobantes = em.createNativeQuery("SELECT factura.* , comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante "
+                    + "AND factura.deshabilitado = 1 ", Factura.class)
                     .getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
+            System.out.println(e);
             em.getTransaction().rollback();
         }
 
@@ -647,11 +649,13 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         List<Recibo> listaComprobantes = new ArrayList<>();
         em.getTransaction().begin();
         try {
-            listaComprobantes = em.createNativeQuery("SELECT recibo.* FROM recibo"
-                    + " WHERE recibo.deshabilitado = 1 ", Recibo.class)
+            listaComprobantes = em.createNativeQuery("SELECT recibo.* , comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
+                    + "AND recibo.nroComprobante = comprobante.nroComprobante "
+                    + " AND recibo.deshabilitado = 1 ", Recibo.class)
                     .getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
+            System.out.println(e);
             em.getTransaction().rollback();
         }
 

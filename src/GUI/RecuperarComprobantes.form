@@ -62,9 +62,9 @@
               <Table columnCount="7" rowCount="0">
                 <Column editable="false" title="Fecha" type="java.lang.String"/>
                 <Column editable="false" title="Tipo" type="java.lang.String"/>
-                <Column editable="false" title="Numero" type="java.lang.Float"/>
-                <Column editable="true" title="Moneda" type="java.lang.String"/>
-                <Column editable="false" title="Total" type="java.lang.Float"/>
+                <Column editable="false" title="Numero" type="java.lang.String"/>
+                <Column editable="false" title="Moneda" type="java.lang.String"/>
+                <Column editable="false" title="Total" type="java.lang.String"/>
                 <Column editable="false" title="Estado" type="java.lang.String"/>
                 <Column editable="false" title="Objeto" type="java.lang.Object"/>
               </Table>
