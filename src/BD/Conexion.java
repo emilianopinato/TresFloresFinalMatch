@@ -330,7 +330,7 @@ public class Conexion {
         em.getTransaction().begin();
         try{
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo", Factura.class)
+                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo()).getResultList();
             em.getTransaction().commit();
         }catch(Exception e){
@@ -360,7 +360,7 @@ public class Conexion {
         em.getTransaction().begin();              
         try {
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo "
                     + "AND comprobante.fecha >= "+ fecha1 +" AND comprobante.fecha <= "+ fecha2 +" ORDER BY comprobante.fecha ASC", Factura.class)
                     .setParameter("codigo", codigoProveedor)
                     .getResultList();
@@ -390,7 +390,7 @@ public class Conexion {
         em.getTransaction().begin();
         try {
             recibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
-                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo", Recibo.class)
+                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND recibo.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Recibo.class)
                     .setParameter("codigo", codigo).getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -421,7 +421,7 @@ public class Conexion {
         try {
             listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
                     + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
-                    + "AND comprobante.fecha >= "+ fecha1 +" AND comprobante.fecha <= "+ fecha2 +" ORDER BY comprobante.fecha ASC", Recibo.class)
+                    + "AND comprobante.fecha >= :fechaDesde AND recibo.deshabilitado = 0 AND comprobante.fecha <= :fechaHasta ORDER BY comprobante.fecha ASC", Recibo.class)
                     .setParameter("codigo", codigo)
                     .getResultList();
             em.getTransaction().commit();
@@ -645,5 +645,40 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
     
     
     
+    public List<Factura> listarFacturasDeshabilitados() {
+        EntityManager em = getEntity();
+        List<Factura> listaComprobantes = new ArrayList<>();
+        em.getTransaction().begin();
+        try {
+            listaComprobantes = em.createNativeQuery("SELECT factura.* , comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante "
+                    + "AND factura.deshabilitado = 1 ", Factura.class)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            em.getTransaction().rollback();
+        }
+
+        return listaComprobantes;
+    }
+        
+    public List<Recibo> listarRecibosDeshabilitados() {
+        EntityManager em = getEntity();
+        List<Recibo> listaComprobantes = new ArrayList<>();
+        em.getTransaction().begin();
+        try {
+            listaComprobantes = em.createNativeQuery("SELECT recibo.* , comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
+                    + "AND recibo.nroComprobante = comprobante.nroComprobante "
+                    + " AND recibo.deshabilitado = 1 ", Recibo.class)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            em.getTransaction().rollback();
+        }
+
+        return listaComprobantes;
+    }
 
 }
