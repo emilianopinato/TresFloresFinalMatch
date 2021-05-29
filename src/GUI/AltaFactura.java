@@ -99,6 +99,7 @@ public class AltaFactura extends javax.swing.JFrame {
                         //la cotización del día anterior al que seleccionó, por
                         //eso se procede a quitarle un día a la fecha seleccionada.
                         LocalDate fechaCotizacion = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH) - 1);
+                        
                         //---------------------------------------------------------//
                         if (fechaCotizacion.getDayOfWeek().toString().equals("SUNDAY")) {
                             fechaCotizacion = fechaCotizacion.minusDays(1);

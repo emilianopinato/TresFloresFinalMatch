@@ -16,6 +16,7 @@ import Clases.IVA;
 import Clases.Proveedor;
 import Clases.Recibo;
 import Clases.Usuario;
+import Clases.tipoComprobante;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -625,5 +626,24 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         return listaHistorial;
     
     }
+    
+    public List<Factura> ListarNotasCreditos(Proveedor p){
+        EntityManager em = getEntity();
+        List<Factura> listaFacturas = null;
+        em.getTransaction().begin();
+        try{
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.tipo = 3 AND comprobante.proveedor_codigo = :codigo", Factura.class)
+                    .setParameter("codigo", p.getCodigo())
+                    .getResultList();
+            em.getTransaction().commit();
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        return listaFacturas;
+    }
+    
+    
+    
 
 }
