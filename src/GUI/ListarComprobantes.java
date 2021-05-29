@@ -10,6 +10,7 @@ import Clases.Comprobante;
 import Clases.Factura;
 import Clases.Proveedor;
 import Clases.Recibo;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -228,7 +229,15 @@ public class ListarComprobantes extends javax.swing.JFrame {
         Date fechaHasta = this.jDateChooserHasta.getDate();
         String valorCombo = this.jComboBox1.getSelectedItem().toString();
         Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
-
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        
+        if (!jCheckBoxSinFecha.isSelected()) {
+            if (fechaDesde.after(fechaHasta)) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
+        }
+      
+        
         if (valorCombo.equals("Ingrese una opción")) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar una opción", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
@@ -242,7 +251,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                 } else {
                     for (int i = 0; i < ListaFact.size(); i++) {
                         String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
-                        model.addRow(new Object[]{ListaFact.get(i).getFecha().toString(), ListaFact.get(i).getTipo().toString(),
+                        model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
                             numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(),
                             Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", ListaFact.get(i)});
                     }
@@ -265,7 +274,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                     } else {
                         for (int i = 0; i < ListaFact.size(); i++) {
                             String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
-                            model.addRow(new Object[]{ListaFact.get(i).getFecha().toString(), ListaFact.get(i).getTipo().toString(),
+                            model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
                                 numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(),
                                 Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", ListaFact.get(i)});
                         }
@@ -282,7 +291,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                 } else {
                     for (int i = 0; i < listaRecibos.size(); i++) {
                         String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
-                        model.addRow(new Object[]{listaRecibos.get(i).getFecha().toString(), "Recibo",
+                        model.addRow(new Object[]{sdf.format(listaRecibos.get(i).getFecha()), "Recibo",
                             numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), Float.parseFloat("0"),
                             Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", listaRecibos.get(i)});
                     }
@@ -304,7 +313,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                     } else {
                         for (int i = 0; i < listaRecibos.size(); i++) {
                             String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
-                            model.addRow(new Object[]{listaRecibos.get(i).getFecha().toString(), "Recibo",
+                            model.addRow(new Object[]{sdf.format(listaRecibos.get(i).getFecha()), "Recibo",
                                 numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), Float.parseFloat("0"),
                                 Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", listaRecibos.get(i)});
                         }
@@ -325,13 +334,13 @@ public class ListarComprobantes extends javax.swing.JFrame {
                         if (comprobante instanceof Factura) {
                             Factura f = (Factura) comprobante;
                             String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                            model.addRow(new Object[]{f.getFecha().toString(), f.getTipo().toString(),
+                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
                                 numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
                                 Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", f});
                         } else {
                             Recibo r = (Recibo) comprobante;
                             String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
-                            model.addRow(new Object[]{r.getFecha().toString(), "Recibo",
+                            model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
                                 numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
                                 Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", r});
                         }
@@ -357,13 +366,13 @@ public class ListarComprobantes extends javax.swing.JFrame {
                             if (comprobante instanceof Factura) {
                                 Factura f = (Factura) comprobante;
                                 String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                                model.addRow(new Object[]{f.getFecha().toString(), f.getTipo().toString(),
+                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
                                     numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
                                     Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", f});
                             } else {
                                 Recibo r = (Recibo) comprobante;
                                 String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
-                                model.addRow(new Object[]{r.getFecha().toString(), "Recibo",
+                                model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
                                     numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
                                     Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", r});
                             }
