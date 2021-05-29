@@ -40,7 +40,7 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
         for (int i = 0; i < ListaRec.size(); i++) {
             String numeroComp = ListaRec.get(i).getSerieComprobante() + "-" + ListaRec.get(i).getNroComprobante();
             model.addRow(new Object[]{ListaRec.get(i).getFecha().toString(), "Recibo",
-                numeroComp, ListaRec.get(i).getMoneda().toString(), ListaRec.get(i).getTotal(),"Deshabilitado", ListaRec.get(i)});
+                numeroComp, ListaRec.get(i).getMoneda().toString(), String.valueOf(ListaRec.get(i).getTotal()),"Deshabilitado", ListaRec.get(i)});
         }
     }
 
@@ -68,10 +68,10 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {

@@ -229,6 +229,16 @@ public class AltaRecibo extends javax.swing.JFrame {
                 jCBProveedorItemStateChanged(evt);
             }
         });
+        jCBProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBProveedorActionPerformed(evt);
+            }
+        });
+        jCBProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBProveedorActionPerformed(evt);
+            }
+        });
         jCBProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jCBProveedorKeyPressed(evt);
@@ -404,7 +414,7 @@ public class AltaRecibo extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonCerrarActionPerformed
 
     private void jCBProveedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBProveedorItemStateChanged
-        if (this.vista = false) {
+        if (this.vista == false) {
             DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
             model.setRowCount(0);
             List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
@@ -742,6 +752,10 @@ public class AltaRecibo extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButtonModificarActionPerformed
+
+    private void jCBProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBProveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBProveedorActionPerformed
 
     /**
      * @param args the command line arguments
