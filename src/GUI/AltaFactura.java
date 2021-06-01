@@ -94,14 +94,13 @@ public class AltaFactura extends javax.swing.JFrame {
                     } else {
                         //Tomo la fecha ingresada por el usuario//
                         Date fechaSeleccionada = AltaFactura.this.jDateChooser.getDate();
-                        Calendar c = Calendar.getInstance();
-                        c.setTime(fechaSeleccionada);
+                        LocalDate fechaSeleccionadaLocalDate = new java.sql.Date(fechaSeleccionada.getTime()).toLocalDate();
                         //-------------------------------//
 
                         //Cuando el usuario va a dar de alta una factura se toma
                         //la cotización del día anterior al que seleccionó, por
                         //eso se procede a quitarle un día a la fecha seleccionada.
-                        LocalDate fechaCotizacion = LocalDate.of(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1, c.get(Calendar.DAY_OF_MONTH) - 1);
+                        LocalDate fechaCotizacion = fechaSeleccionadaLocalDate.minusDays(1);
                         
                         //---------------------------------------------------------//
                         if (fechaCotizacion.getDayOfWeek().toString().equals("SUNDAY")) {
@@ -1888,7 +1887,7 @@ public class AltaFactura extends javax.swing.JFrame {
         List<LocalDate> listaFechas = new ArrayList<>();
         listaFechas.add(fechaCotizacion);
         for (int i = 1; i <= 5; i++) {
-            LocalDate fecha = LocalDate.of(fechaCotizacion.getYear(), fechaCotizacion.getMonthValue(), fechaCotizacion.getDayOfMonth() - i);
+            LocalDate fecha = fechaCotizacion.minusDays(i);
             if (fecha != null) {
                 listaFechas.add(fecha);
             }

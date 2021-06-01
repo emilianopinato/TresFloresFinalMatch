@@ -7,14 +7,13 @@ package GUI;
 
 import BD.Conexion;
 import Clases.Factura;
+import Clases.tipoMoneda;
 import java.util.Date;
 import java.util.Iterator;
 import javax.swing.table.DefaultTableModel;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.Chunk;
-import com.itextpdf.text.Image;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Font;
@@ -22,32 +21,20 @@ import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import java.awt.Desktop;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.FillPatternType;
-import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 
 
 /**
@@ -390,12 +377,23 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             while (it.hasNext()) {
                 Factura next = it.next();
                 if (!next.isDeshabilitado()) {
-                    float subTotal = next.getTotal() - next.getIvaBasico() - next.getIvaMinimo();
-                    sumaSubTotal = sumaSubTotal + subTotal;
-                    total = total + next.getTotal();
-                    ivaMinimo = ivaMinimo + next.getIvaMinimo();
-                    ivaBasico = ivaBasico + next.getIvaBasico();
-                    
+                    float subTotal;
+                    if (next.getMoneda().equals(tipoMoneda.US$)) {                       
+                        total = total + (next.getTotal() * next.getCotizacion());
+                        ivaMinimo = ivaMinimo + (next.getIvaMinimo() * next.getCotizacion());
+                        ivaBasico = ivaBasico + (next.getIvaBasico() * next.getCotizacion());
+                        subTotal = (next.getTotal() * next.getCotizacion())
+                                - (next.getIvaMinimo() * next.getCotizacion())
+                                - (next.getIvaBasico() * next.getCotizacion());
+                        sumaSubTotal = sumaSubTotal + subTotal;
+                    } else {
+                        subTotal = next.getTotal() - next.getIvaBasico() - next.getIvaMinimo();
+                        sumaSubTotal = sumaSubTotal + subTotal;
+                        total = total + next.getTotal();
+                        ivaMinimo = ivaMinimo + next.getIvaMinimo();
+                        ivaBasico = ivaBasico + next.getIvaBasico();
+                    }
+
                     //Celda del proveedor//
                     PdfPCell cellProveedor = new PdfPCell();
                     Paragraph p1 = new Paragraph();
@@ -507,17 +505,32 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         float total = 0;
         float ivaMinimo = 0;
         float ivaBasico = 0;
-        float sumaSubTotal = 0;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        float sumaSubTotal = 0; 
+            
+        //Esto es para la moneda original bien nazi.
+        float subTotalMonedaOriginal;
+        float ivaMinimoMonedaOriginal = 0;
+        float ivaBasicoMonedaOriginal = 0;
+        float totalMonedaOriginal = 0;
+        float sumaSubTotalMonedaOriginal = 0;
+        
+        float subTotalMonedaOriginalPesos = 0;
+        float ivaMinimoMonedaOriginalPesos = 0;
+        float ivaBasicoMonedaOriginalPesos = 0;
+        float totalMonedaOriginalPesos = 0;
+        
+        
         DecimalFormat formatoFloat = new DecimalFormat("#.00");
         try {
             HSSFWorkbook book = new HSSFWorkbook();
-            HSSFSheet sheet = book.createSheet("Listado IVA");
-
+            HSSFSheet sheet = book.createSheet("Listado IVA en pesos.");
+            HSSFSheet sheet2 = book.createSheet("Listado IVA moneda original.");
+            
             List<Factura> listaFacturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
 
             //Las cabeceras que van a ir en el excel//
             String[] cabecera = new String[]{"Proveedor", "RUT", "nro Factura", "Fecha", "Subtotal", "IVA Mínimo", "IVA Básico", "Total"};
+            String[] cabecera2 = new String[]{"Proveedor", "RUT", "nro Factura", "Fecha", "Tipo de Moneda", "Cotización", "Subtotal", "IVA Mínimo", "IVA Básico", "Total"};
 
             //Estilos para las cabeceras-----------------------------------------------//
             CellStyle headerStyle = book.createCellStyle();
@@ -540,6 +553,7 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             
             //Creo la fila en la que van los encabezados
             Row filaEncabezados = sheet.createRow(0);
+            Row filaEncabezados2 = sheet2.createRow(0);
 
             //Agrego los encabezados al excel----------------------//
             for (int i = 0; i < cabecera.length; i++) {
@@ -547,23 +561,81 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                 celdaTitulo.setCellStyle(headerStyle);
                 celdaTitulo.setCellValue(cabecera[i]);
             }
+
+            for (int x = 0; x < cabecera2.length; x++) {
+                Cell celdaTitulo2 = filaEncabezados2.createCell(x);
+                celdaTitulo2.setCellStyle(headerStyle);
+                celdaTitulo2.setCellValue(cabecera2[x]);
+            }
+            
             //----------------------------------------------------//
 
             //Convierto los datos que me llegaron como lista a un mapa así se me hace más fácil para iterar-------------//
             Map<Integer, Object[]> datos = new TreeMap<>();
+            
+            Map<Integer, Object[]> datos2 = new TreeMap<>();
+            Map<Integer, Object[]> datos3 = new TreeMap<>();
+            
             int contador = 0;
             for (Factura fact : listaFacturas) {
                 contador++;
-                float subTotal = fact.getTotal() - fact.getIvaBasico() - fact.getIvaMinimo();
-                sumaSubTotal = sumaSubTotal + subTotal;
-                total = total + fact.getTotal();                
-                ivaMinimo = ivaMinimo + fact.getIvaMinimo();
-                ivaBasico = ivaBasico + fact.getIvaBasico();
-                
-                datos.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
-                    fact.getProveedor().getRUT(), fact.getSerieComprobante()+"-"+fact.getNroComprobante(),
-                    fact.getFecha(), subTotal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
-            }
+                float subTotal;
+
+                if (fact.getMoneda().equals(tipoMoneda.US$)) {
+                    total = total + (fact.getTotal() * fact.getCotizacion());
+                    ivaMinimo = ivaMinimo + (fact.getIvaMinimo() * fact.getCotizacion());
+                    ivaBasico = ivaBasico + (fact.getIvaBasico() * fact.getCotizacion());
+                    subTotal = (fact.getTotal() * fact.getCotizacion())
+                            - (fact.getIvaMinimo() * fact.getCotizacion())
+                            - (fact.getIvaBasico() * fact.getCotizacion());
+                    sumaSubTotal = sumaSubTotal + subTotal;
+
+                    datos.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
+                        fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
+                        fact.getFecha(), subTotal, fact.getIvaMinimo() * fact.getCotizacion(),
+                        fact.getIvaBasico() * fact.getCotizacion(), fact.getTotal() * fact.getCotizacion()});
+
+                    //Para la segunda hoja con la moneda original------------------------------------------------//
+                    subTotalMonedaOriginal = fact.getTotal() - fact.getIvaBasico() - fact.getIvaMinimo();
+                    ivaMinimoMonedaOriginal = ivaMinimoMonedaOriginal + fact.getIvaMinimo();
+                    ivaBasicoMonedaOriginal = ivaBasicoMonedaOriginal + fact.getIvaBasico();
+                    totalMonedaOriginal = totalMonedaOriginal + fact.getTotal();
+                    sumaSubTotalMonedaOriginal = sumaSubTotalMonedaOriginal + subTotalMonedaOriginal;
+                    
+                    datos2.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
+                        fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
+                        fact.getFecha(), fact.getMoneda().toString(), fact.getCotizacion(),
+                        subTotalMonedaOriginal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
+                    //------------------------------------------------------------------------------------------//
+
+                } else {
+                    subTotal = fact.getTotal() - fact.getIvaBasico() - fact.getIvaMinimo();
+                    sumaSubTotal = sumaSubTotal + subTotal;
+                    total = total + fact.getTotal();
+                    ivaMinimo = ivaMinimo + fact.getIvaMinimo();
+                    ivaBasico = ivaBasico + fact.getIvaBasico();
+                    
+                    //Para la segunda hoja con moneda original//
+                    subTotalMonedaOriginalPesos = subTotalMonedaOriginalPesos + subTotal;
+                    ivaMinimoMonedaOriginalPesos = ivaMinimoMonedaOriginalPesos + fact.getIvaMinimo();
+                    ivaBasicoMonedaOriginalPesos = ivaBasicoMonedaOriginalPesos + fact.getIvaBasico();
+                    totalMonedaOriginalPesos = totalMonedaOriginalPesos + fact.getTotal();
+                    //----------------------------------------//
+
+                    //Todo en pesitos
+                    datos.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
+                        fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
+                        fact.getFecha(), subTotal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
+
+                    //Para la segunda hoja con la moneda original.
+                    datos3.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
+                        fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
+                        fact.getFecha(), fact.getMoneda().toString(), fact.getCotizacion(),
+                        subTotal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
+                }
+
+            }    
+            
             //----------------------------------------------------------------------------------------------------------//
 
             //Itero sobre datos para escribir en la hoja----------------//
@@ -594,9 +666,8 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                 }
                 shrek = true;
             }
-            //---------------------------------------------------------//
             
-            //Acá agrego la suma de los IVAS básicos y mínimos, así como también la suma de subtotales y totales---//
+            //Acá agrego la suma de los IVAS básicos y mínimos, así como también la suma de subtotales y totales en la hoja 1---//
             int nuevoNumeroRenglon = numeroRenglon + 1;
             Row row = sheet.createRow(nuevoNumeroRenglon++);
             Cell cellSubtotal = row.createCell(6);
@@ -627,6 +698,134 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             cellValorTotal.setCellValue(formatoFloat.format(total));
             //----------------------------------------------------------------------------------------------------//
             
+            Set<Integer> keyset2 = datos3.keySet();
+            int numeroRenglon2 = 1;
+            boolean shrek2 = true;
+            for (int key : keyset2) {
+                Row row1h2 = sheet2.createRow(numeroRenglon2++);
+                Object[] arregloObjetos = datos3.get(key);
+                int numeroCelda = 0;
+                for (Object obj : arregloObjetos) {
+                    Cell cell;
+                    if (shrek2) {
+                        cell = row1h2.createCell(numeroCelda);
+                        shrek2 = false;
+                    } else {
+                        cell = row1h2.createCell(numeroCelda++);
+                    }
+                    if (obj instanceof String) {
+                        cell.setCellValue((String) obj);
+                    } else if (obj instanceof Float) {
+                        cell.setCellValue(formatoFloat.format(obj));
+                    } else if (obj instanceof Date) {
+                        Date date = (Date) obj;
+                        LocalDate lt = new java.sql.Date(date.getTime()).toLocalDate();
+                        cell.setCellValue((String)lt.toString());
+                    }
+                }
+                shrek2 = true;
+            }
+            
+            //Lo mismo para la hoja 2---------------------------------------------------------------------------------//
+            
+            int nuevoNumeroRenglon2 = numeroRenglon2 + 1;
+            Row row1Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
+            Cell cellSubTotalMonedaOriginalPesos = row1Hoja2Pesos.createCell(8);
+            Cell cellValorSubTotalMonedaOriginalPesos = row1Hoja2Pesos.createCell(9);
+            cellSubTotalMonedaOriginalPesos.setCellStyle(headerStyle);
+            cellSubTotalMonedaOriginalPesos.setCellValue("SUBTOTAL: ");
+            cellValorSubTotalMonedaOriginalPesos.setCellValue(formatoFloat.format(subTotalMonedaOriginalPesos));
+            
+            nuevoNumeroRenglon2 += 1;
+            Row row2Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
+            Cell cellIVAMinimoMonedaOriginalPesos = row2Hoja2Pesos.createCell(8);
+            Cell cellValorIVAMinimoMonedaOriginalPesos = row2Hoja2Pesos.createCell(9);
+            cellIVAMinimoMonedaOriginalPesos.setCellStyle(headerStyle);
+            cellIVAMinimoMonedaOriginalPesos.setCellValue("IVA MÍNIMO: ");
+            cellValorIVAMinimoMonedaOriginalPesos.setCellValue(formatoFloat.format(ivaMinimoMonedaOriginalPesos));
+            
+            nuevoNumeroRenglon2 += 1;
+            Row row3Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
+            Cell cellIVABasicoMonedaOriginalPesos = row3Hoja2Pesos.createCell(8);
+            Cell cellValorIVABasicoMonedaOriginalPesos = row3Hoja2Pesos.createCell(9);
+            cellIVABasicoMonedaOriginalPesos.setCellStyle(headerStyle);
+            cellIVABasicoMonedaOriginalPesos.setCellValue("IVA BÁSICO: ");
+            cellValorIVABasicoMonedaOriginalPesos.setCellValue(formatoFloat.format(ivaBasicoMonedaOriginalPesos));
+
+            nuevoNumeroRenglon2 += 1;
+            Row row4Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
+            Cell cellTotalMonedaOriginalPesos = row4Hoja2Pesos.createCell(8);
+            Cell cellValorTotalMonedaOriginalPesos = row4Hoja2Pesos.createCell(9);
+            cellTotalMonedaOriginalPesos.setCellStyle(headerStyle);
+            cellTotalMonedaOriginalPesos.setCellValue("TOTAL: ");
+            cellValorTotalMonedaOriginalPesos.setCellValue(formatoFloat.format(totalMonedaOriginalPesos));
+            
+            //---------------------------------------------------------------------------------------------------//
+                        
+                                           
+            Set<Integer> keyset3 = datos2.keySet();
+            int numeroRenglon3 = nuevoNumeroRenglon2 + 2;
+            boolean shrek3 = true;
+            for (int key : keyset3) {
+                Row row2h2 = sheet2.createRow(numeroRenglon3++);
+                Object[] arregloObjetos = datos2.get(key);
+                int numeroCelda = 0;
+                for (Object obj : arregloObjetos) {
+                    Cell cell;
+                    if (shrek3) {
+                        cell = row2h2.createCell(numeroCelda);
+                        shrek3 = false;
+                    } else {
+                        cell = row2h2.createCell(numeroCelda++);
+                    }
+                    if (obj instanceof String) {
+                        cell.setCellValue((String) obj);
+                    } else if (obj instanceof Float) {
+                        cell.setCellValue(formatoFloat.format(obj));
+                    } else if (obj instanceof Date) {
+                        Date date = (Date) obj;
+                        LocalDate lt = new java.sql.Date(date.getTime()).toLocalDate();
+                        cell.setCellValue((String) lt.toString());
+                    }
+                }
+                shrek3 = true;
+            }
+            
+                     
+            //Lo mismo para la hoja 2-----------------------------------------------------------------------------//
+            int nuevoNumeroHoja2 = numeroRenglon3 + 1;
+            Row row1Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
+            Cell cellSubTotalMonedaOriginal = row1Hoja2.createCell(8);
+            Cell cellValorSubTotalMonedaOriginal = row1Hoja2.createCell(9);
+            cellSubTotalMonedaOriginal.setCellStyle(headerStyle);
+            cellSubTotalMonedaOriginal.setCellValue("SUBTOTAL: ");
+            cellValorSubTotalMonedaOriginal.setCellValue(formatoFloat.format(sumaSubTotalMonedaOriginal));
+            
+            nuevoNumeroHoja2 += 1;
+            Row row2Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
+            Cell cellIVAMinimoMonedaOriginal = row2Hoja2.createCell(8);
+            Cell cellValorIVAMinimoMonedaOriginal = row2Hoja2.createCell(9);
+            cellIVAMinimoMonedaOriginal.setCellStyle(headerStyle);
+            cellIVAMinimoMonedaOriginal.setCellValue("IVA MÍNIMO: ");
+            cellValorIVAMinimoMonedaOriginal.setCellValue(formatoFloat.format(ivaMinimoMonedaOriginal));
+            
+            nuevoNumeroHoja2 += 1;
+            Row row3Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
+            Cell cellIVABasicoMonedaOriginal = row3Hoja2.createCell(8);
+            Cell cellValorIVABasicoMonedaOriginal = row3Hoja2.createCell(9);
+            cellIVABasicoMonedaOriginal.setCellStyle(headerStyle);
+            cellIVABasicoMonedaOriginal.setCellValue("IVA BÁSICO: ");
+            cellValorIVABasicoMonedaOriginal.setCellValue(formatoFloat.format(ivaBasicoMonedaOriginal));
+            
+            nuevoNumeroHoja2 += 1;
+            Row row4Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
+            Cell cellTotalMonedaOriginal = row4Hoja2.createCell(8);
+            Cell cellValorTotalMonedaOriginal = row4Hoja2.createCell(9);
+            cellTotalMonedaOriginal.setCellStyle(headerStyle);
+            cellTotalMonedaOriginal.setCellValue("TOTAL: ");
+            cellValorTotalMonedaOriginal.setCellValue(formatoFloat.format(totalMonedaOriginal));
+            //---------------------------------------------------------------------------------------------------//
+            
             //Esto es para que el tamaño de las columnas se agrande o achique dependiendo del largo del contenido//
             sheet.autoSizeColumn(0);
             sheet.autoSizeColumn(1);
@@ -636,7 +835,20 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             sheet.autoSizeColumn(5);
             sheet.autoSizeColumn(6);
             sheet.autoSizeColumn(7);
+            
+            sheet2.autoSizeColumn(0);
+            sheet2.autoSizeColumn(1);
+            sheet2.autoSizeColumn(2);
+            sheet2.autoSizeColumn(3);
+            sheet2.autoSizeColumn(4);
+            sheet2.autoSizeColumn(5);
+            sheet2.autoSizeColumn(6);
+            sheet2.autoSizeColumn(7);
+            sheet2.autoSizeColumn(8);
+            sheet2.autoSizeColumn(9);
+            
             //---------------------------------------------------------------------------------------------------//
+            
 
             //Volcamos la información a un archivo y después lo mostramos--------//
             String ruta = System.getProperty("user.home") + "/reporte.xls";
@@ -648,7 +860,7 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             //-------------------------------------------------------------------//
 
         } catch (Exception e) {
-
+            System.out.print(e);
         }
 
 
