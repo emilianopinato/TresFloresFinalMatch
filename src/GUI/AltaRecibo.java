@@ -241,6 +241,11 @@ public class AltaRecibo extends javax.swing.JFrame {
                 jCBProveedorActionPerformed(evt);
             }
         });
+        jCBProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBProveedorActionPerformed(evt);
+            }
+        });
         jCBProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jCBProveedorKeyPressed(evt);

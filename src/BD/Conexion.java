@@ -16,6 +16,7 @@ import Clases.IVA;
 import Clases.Proveedor;
 import Clases.Recibo;
 import Clases.Usuario;
+import Clases.tipoComprobante;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -420,7 +421,7 @@ public class Conexion {
         try {
             listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
                     + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
-                    + "AND comprobante.fecha >= :fechaDesde AND recibo.deshabilitado = 0 AND comprobante.fecha <= :fechaHasta ORDER BY comprobante.fecha ASC", Recibo.class)
+                    + "AND comprobante.fecha >= "+ fecha1 +" AND recibo.deshabilitado = 0 AND comprobante.fecha <= "+ fecha2 +" ORDER BY comprobante.fecha ASC", Recibo.class)                   
                     .setParameter("codigo", codigo)
                     .getResultList();
             em.getTransaction().commit();
@@ -626,6 +627,24 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
     
     }
     
+    public List<Factura> ListarNotasCreditos(Proveedor p){
+        EntityManager em = getEntity();
+        List<Factura> listaFacturas = null;
+        em.getTransaction().begin();
+        try{
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.tipo = 3 AND comprobante.proveedor_codigo = :codigo", Factura.class)
+                    .setParameter("codigo", p.getCodigo())
+                    .getResultList();
+            em.getTransaction().commit();
+        }catch(Exception e){
+            em.getTransaction().rollback();
+        }
+        return listaFacturas;
+    }
+    
+    
+    
     public List<Factura> listarFacturasDeshabilitados() {
         EntityManager em = getEntity();
         List<Factura> listaComprobantes = new ArrayList<>();
@@ -660,6 +679,39 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         }
 
         return listaComprobantes;
+    }
+    
+    public List<Factura> ListarFacturasPorFechaSinProveedor(Date fechaDesde, Date fechaHasta) {
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+
+        int anio = Integer.parseInt(getAnioFormato.format(fechaDesde));
+        int mes = Integer.parseInt(getMesFormato.format(fechaDesde));
+        int dia = Integer.parseInt(getDiaFormato.format(fechaDesde));
+
+        int anio2 = Integer.parseInt(getAnioFormato.format(fechaHasta));
+        int mes2 = Integer.parseInt(getMesFormato.format(fechaHasta));
+        int dia2 = Integer.parseInt(getDiaFormato.format(fechaHasta));
+
+        String fecha1 = "'" + anio + "-" + mes + "-" + dia + "'";
+        String fecha2 = "'" + anio2 + "-" + mes2 + "-" + dia2 + "'";
+
+        EntityManager em = getEntity();
+        List<Factura> listaFacturas = null;
+        em.getTransaction().begin();
+        try {
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.*, proveedor.* FROM factura INNER JOIN comprobante ON(factura.serieComprobante = comprobante.serieComprobante "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0) "
+                    + "INNER JOIN proveedor ON (comprobante.proveedor_codigo = proveedor.codigo)"
+                    + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " "
+                    + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)              
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return listaFacturas;
     }
 
 }

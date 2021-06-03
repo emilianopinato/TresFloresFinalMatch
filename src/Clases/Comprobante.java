@@ -35,7 +35,9 @@ public class Comprobante implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date fecha;
     private float total;
-    private float cotizacion;
+    private float cotizacion;   
+    private float ivaMinimo;
+    private float ivaBasico;
     
     //LINKS--------------------------------//
     @ManyToOne
@@ -109,6 +111,22 @@ public class Comprobante implements Serializable {
         this.usuario = usuario;
     }
 
+    public float getIvaMinimo() {
+        return ivaMinimo;
+    }
+
+    public void setIvaMinimo(float ivaMinimo) {
+        this.ivaMinimo = ivaMinimo;
+    }
+
+    public float getIvaBasico() {
+        return ivaBasico;
+    }
+
+    public void setIvaBasico(float ivaBasico) {
+        this.ivaBasico = ivaBasico;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 7;
