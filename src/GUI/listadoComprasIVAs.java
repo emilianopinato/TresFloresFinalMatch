@@ -25,11 +25,12 @@ import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Month;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import javax.swing.JOptionPane;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -80,6 +81,10 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox<>();
+        jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -139,14 +144,50 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             }
         });
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Cierre de mes"));
+
+        jLabel6.setText("Mes:");
+
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Noviembre", "Diciembre" }));
+
+        jButton5.setText("Cerrar mes");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(113, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
+                .addComponent(jButton5)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1188, Short.MAX_VALUE)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addComponent(jLabel2)
@@ -159,30 +200,33 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(18, 18, 18))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jTextField3)
+                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1176, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                            .addComponent(jTextField2))))
-                .addGap(147, 147, 147))
+                        .addComponent(jButton4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2)))
+                .addGap(18, 18, 18))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,19 +239,24 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField2)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jTextField2)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
@@ -275,227 +324,230 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         float ivaMinimo = 0;
         float ivaBasico = 0;
         float sumaSubTotal = 0;
-        
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        DecimalFormat formatoFloat = new DecimalFormat("#.00");
 
-        Document documento = new Document();
-        try{
-            String ruta = System.getProperty("user.home");
-            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Documents/reporteIVA.pdf"));
-            
-            //Imagen dentro del documento.-------------------------//
-            //Image header = Image.getInstance("src/img/header.png");
-            //header.scaleToFit(650,1000);
-            //header.setAlignment(Chunk.ALIGN_CENTER);
-            //-----------------------------------------------------//        
-            
-            //Titulo del documento------------------------------------------------------------------------//
-            Paragraph parrafo = new Paragraph();
-            parrafo.setAlignment(Paragraph.ALIGN_CENTER);
-            
-            Paragraph parrafo2 = new Paragraph();
-            parrafo2.setAlignment(Paragraph.ALIGN_CENTER);
-            
-            //Fecha en que se hizo la consulta//
-            parrafo.setFont(FontFactory.getFont("Tahoma", 20, Font.BOLD, BaseColor.BLACK));                    
-            parrafo.add(sdf.format(fechaHasta) + "\n\n");
-           
-            parrafo2.setFont(FontFactory.getFont("Tahoma", 16, Font.BOLD, BaseColor.BLACK));
-            parrafo2.add("Listado de compras separado por IVA mínimo e IVA básico a cierre de mes. \n\n ");         
-            //--------------------------------------------------------------------------------------------//
-      
-            documento.open();
-            documento.add(parrafo);
-            documento.add(parrafo2);
-            
-            //Columnas que va a tener el PDF---------------------------------------------//
-            PdfPTable tabla = new PdfPTable(6);
-            
-            //Columna del proveedor//
-            PdfPCell cProveedor = new PdfPCell();
-            Paragraph pProveedor = new Paragraph();
-            pProveedor.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
-            pProveedor.setAlignment(Paragraph.ALIGN_CENTER);
-            pProveedor.add("Proveedor");
-            cProveedor.addElement(pProveedor);
-            tabla.addCell(cProveedor);
-            
-            //Columna del RUT del proveedor//
-            PdfPCell cRUTProveedor = new PdfPCell();
-            Paragraph pRUTProveedor = new Paragraph();
-            pRUTProveedor.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
-            pRUTProveedor.setAlignment(Paragraph.ALIGN_CENTER);
-            pRUTProveedor.add("RUT");
-            cRUTProveedor.addElement(pRUTProveedor);
-            tabla.addCell(cRUTProveedor);
-            
-            //Columna del subtotal//
-            PdfPCell cSubTotal = new PdfPCell();
-            Paragraph pSubTotal = new Paragraph();
-            pSubTotal.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
-            pSubTotal.setAlignment(Paragraph.ALIGN_CENTER);
-            pSubTotal.add("Subtotal");          
-            cSubTotal.addElement(pSubTotal);
-            tabla.addCell(cSubTotal);
-            
-            //Columna del IVA minimo//
-            PdfPCell cIVAMinimo = new PdfPCell();
-            Paragraph pIVAMinimo = new Paragraph();
-            pIVAMinimo.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
-            pIVAMinimo.setAlignment(Paragraph.ALIGN_CENTER);
-            pIVAMinimo.add("IVA Mínimo");            
-            cIVAMinimo.addElement(pIVAMinimo);
-            tabla.addCell(cIVAMinimo);
-     
-            //Columna del IVA básico//
-            PdfPCell cIVABasico = new PdfPCell();
-            Paragraph pIVABasico = new Paragraph();
-            pIVABasico.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
-            pIVABasico.setAlignment(Paragraph.ALIGN_CENTER);
-            pIVABasico.add("IVA Básico");           
-            cIVABasico.addElement(pIVABasico);
-            tabla.addCell(cIVABasico);
+        if (fechaDesde == null || fechaHasta == null) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar las fechas correctamente");
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            DecimalFormat formatoFloat = new DecimalFormat("#.00");
 
-            //Columna del total//
-            PdfPCell cTotal = new PdfPCell();
-            Paragraph pTotal = new Paragraph();
-            pTotal.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
-            pTotal.setAlignment(Paragraph.ALIGN_CENTER);
-            pTotal.add("Total");            
-            cTotal.addElement(pTotal);
-            tabla.addCell(cTotal);
-                       
-            tabla.setWidths(new int[]{2,2,1,1,1,1});
-            tabla.setWidthPercentage(100);
-            
-            //---------------------------------------------------------------------------//
-            
-            DefaultTableModel mdl = (DefaultTableModel) jTable1.getModel();
-            Iterator<Factura> it = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta).iterator();
-            mdl.setRowCount(0);
-            while (it.hasNext()) {
-                Factura next = it.next();
-                if (!next.isDeshabilitado()) {
-                    float subTotal;
-                    if (next.getMoneda().equals(tipoMoneda.US$)) {                       
-                        total = total + (next.getTotal() * next.getCotizacion());
-                        ivaMinimo = ivaMinimo + (next.getIvaMinimo() * next.getCotizacion());
-                        ivaBasico = ivaBasico + (next.getIvaBasico() * next.getCotizacion());
-                        subTotal = (next.getTotal() * next.getCotizacion())
-                                - (next.getIvaMinimo() * next.getCotizacion())
-                                - (next.getIvaBasico() * next.getCotizacion());
-                        sumaSubTotal = sumaSubTotal + subTotal;
-                    } else {
-                        subTotal = next.getTotal() - next.getIvaBasico() - next.getIvaMinimo();
-                        sumaSubTotal = sumaSubTotal + subTotal;
-                        total = total + next.getTotal();
-                        ivaMinimo = ivaMinimo + next.getIvaMinimo();
-                        ivaBasico = ivaBasico + next.getIvaBasico();
+            Document documento = new Document();
+            try {
+                String ruta = System.getProperty("user.home");
+                PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/Documents/reporteIVA.pdf"));
+
+                //Imagen dentro del documento.-------------------------//
+                //Image header = Image.getInstance("src/img/header.png");
+                //header.scaleToFit(650,1000);
+                //header.setAlignment(Chunk.ALIGN_CENTER);
+                //-----------------------------------------------------//        
+                //Titulo del documento------------------------------------------------------------------------//
+                Paragraph parrafo = new Paragraph();
+                parrafo.setAlignment(Paragraph.ALIGN_CENTER);
+
+                Paragraph parrafo2 = new Paragraph();
+                parrafo2.setAlignment(Paragraph.ALIGN_CENTER);
+
+                //Fecha en que se hizo la consulta//
+                parrafo.setFont(FontFactory.getFont("Tahoma", 20, Font.BOLD, BaseColor.BLACK));
+                parrafo.add(sdf.format(fechaHasta) + "\n\n");
+
+                parrafo2.setFont(FontFactory.getFont("Tahoma", 16, Font.BOLD, BaseColor.BLACK));
+                parrafo2.add("Listado de compras separado por IVA mínimo e IVA básico a cierre de mes. \n\n ");
+                //--------------------------------------------------------------------------------------------//
+
+                documento.open();
+                documento.add(parrafo);
+                documento.add(parrafo2);
+
+                //Columnas que va a tener el PDF---------------------------------------------//
+                PdfPTable tabla = new PdfPTable(6);
+
+                //Columna del proveedor//
+                PdfPCell cProveedor = new PdfPCell();
+                Paragraph pProveedor = new Paragraph();
+                pProveedor.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
+                pProveedor.setAlignment(Paragraph.ALIGN_CENTER);
+                pProveedor.add("Proveedor");
+                cProveedor.addElement(pProveedor);
+                tabla.addCell(cProveedor);
+
+                //Columna del RUT del proveedor//
+                PdfPCell cRUTProveedor = new PdfPCell();
+                Paragraph pRUTProveedor = new Paragraph();
+                pRUTProveedor.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
+                pRUTProveedor.setAlignment(Paragraph.ALIGN_CENTER);
+                pRUTProveedor.add("RUT");
+                cRUTProveedor.addElement(pRUTProveedor);
+                tabla.addCell(cRUTProveedor);
+
+                //Columna del subtotal//
+                PdfPCell cSubTotal = new PdfPCell();
+                Paragraph pSubTotal = new Paragraph();
+                pSubTotal.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
+                pSubTotal.setAlignment(Paragraph.ALIGN_CENTER);
+                pSubTotal.add("Subtotal");
+                cSubTotal.addElement(pSubTotal);
+                tabla.addCell(cSubTotal);
+
+                //Columna del IVA minimo//
+                PdfPCell cIVAMinimo = new PdfPCell();
+                Paragraph pIVAMinimo = new Paragraph();
+                pIVAMinimo.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
+                pIVAMinimo.setAlignment(Paragraph.ALIGN_CENTER);
+                pIVAMinimo.add("IVA Mínimo");
+                cIVAMinimo.addElement(pIVAMinimo);
+                tabla.addCell(cIVAMinimo);
+
+                //Columna del IVA básico//
+                PdfPCell cIVABasico = new PdfPCell();
+                Paragraph pIVABasico = new Paragraph();
+                pIVABasico.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
+                pIVABasico.setAlignment(Paragraph.ALIGN_CENTER);
+                pIVABasico.add("IVA Básico");
+                cIVABasico.addElement(pIVABasico);
+                tabla.addCell(cIVABasico);
+
+                //Columna del total//
+                PdfPCell cTotal = new PdfPCell();
+                Paragraph pTotal = new Paragraph();
+                pTotal.setFont(FontFactory.getFont("Arial", 10, Font.BOLD, BaseColor.BLACK));
+                pTotal.setAlignment(Paragraph.ALIGN_CENTER);
+                pTotal.add("Total");
+                cTotal.addElement(pTotal);
+                tabla.addCell(cTotal);
+
+                tabla.setWidths(new int[]{2, 2, 1, 1, 1, 1});
+                tabla.setWidthPercentage(100);
+
+                //---------------------------------------------------------------------------//
+                DefaultTableModel mdl = (DefaultTableModel) jTable1.getModel();
+                Iterator<Factura> it = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta).iterator();
+                mdl.setRowCount(0);
+                while (it.hasNext()) {
+                    Factura next = it.next();
+                    if (!next.isDeshabilitado()) {
+                        float subTotal;
+                        if (next.getMoneda().equals(tipoMoneda.US$)) {
+                            total = total + (next.getTotal() * next.getCotizacion());
+                            ivaMinimo = ivaMinimo + (next.getIvaMinimo() * next.getCotizacion());
+                            ivaBasico = ivaBasico + (next.getIvaBasico() * next.getCotizacion());
+                            subTotal = (next.getTotal() * next.getCotizacion())
+                                    - (next.getIvaMinimo() * next.getCotizacion())
+                                    - (next.getIvaBasico() * next.getCotizacion());
+                            sumaSubTotal = sumaSubTotal + subTotal;
+                        } else {
+                            subTotal = next.getTotal() - next.getIvaBasico() - next.getIvaMinimo();
+                            sumaSubTotal = sumaSubTotal + subTotal;
+                            total = total + next.getTotal();
+                            ivaMinimo = ivaMinimo + next.getIvaMinimo();
+                            ivaBasico = ivaBasico + next.getIvaBasico();
+                        }
+
+                        //Celda del proveedor//
+                        PdfPCell cellProveedor = new PdfPCell();
+                        Paragraph p1 = new Paragraph();
+                        p1.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
+                        p1.add(next.getProveedor().getRazonSocial());
+                        cellProveedor.addElement(p1);
+
+                        //Celda del RUT del proveedor//
+                        PdfPCell cellRUTProveedor = new PdfPCell();
+                        Paragraph p2 = new Paragraph();
+                        p2.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
+                        p2.add(next.getProveedor().getRUT());
+                        cellRUTProveedor.addElement(p2);
+
+                        //Celda del subtotal//
+                        PdfPCell cellSubTotal = new PdfPCell();
+                        Paragraph p3 = new Paragraph();
+                        p3.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
+                        p3.add(String.valueOf(formatoFloat.format(subTotal)));
+                        p3.setAlignment(Paragraph.ALIGN_RIGHT);
+                        cellSubTotal.addElement(p3);
+
+                        //Celda del IVA minimo//
+                        PdfPCell cellIvaMinimo = new PdfPCell();
+                        Paragraph p4 = new Paragraph();
+                        p4.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
+                        p4.add(String.valueOf(formatoFloat.format(next.getIvaMinimo() * next.getCotizacion())));
+                        p4.setAlignment(Paragraph.ALIGN_RIGHT);
+                        cellIvaMinimo.addElement(p4);
+
+                        //Celda del IVA básico//
+                        PdfPCell cellIvaBasico = new PdfPCell();
+                        Paragraph p5 = new Paragraph();
+                        p5.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
+                        p5.add(String.valueOf(formatoFloat.format(next.getIvaBasico() * next.getCotizacion())));
+                        p5.setAlignment(Paragraph.ALIGN_RIGHT);
+                        cellIvaBasico.addElement(p4);
+
+                        //Celda del total//
+                        PdfPCell cellTotal = new PdfPCell();
+                        Paragraph p6 = new Paragraph();
+                        p6.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
+                        p6.add(String.valueOf(formatoFloat.format(next.getTotal() * next.getCotizacion())));
+                        p6.setAlignment(Paragraph.ALIGN_RIGHT);
+                        cellTotal.addElement(p6);
+
+                        tabla.addCell(cellProveedor);
+                        tabla.addCell(cellRUTProveedor);
+                        tabla.addCell(cellSubTotal);
+                        tabla.addCell(cellIvaMinimo);
+                        tabla.addCell(cellIvaBasico);
+                        tabla.addCell(cellTotal);
                     }
 
-                    //Celda del proveedor//
-                    PdfPCell cellProveedor = new PdfPCell();
-                    Paragraph p1 = new Paragraph();
-                    p1.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
-                    p1.add(next.getProveedor().getRazonSocial());                  
-                    cellProveedor.addElement(p1);
-                    
-                    //Celda del RUT del proveedor//
-                    PdfPCell cellRUTProveedor = new PdfPCell();
-                    Paragraph p2 = new Paragraph();
-                    p2.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
-                    p2.add(next.getProveedor().getRUT());               
-                    cellRUTProveedor.addElement(p2);
-                    
-                    //Celda del subtotal//
-                    PdfPCell cellSubTotal = new PdfPCell();
-                    Paragraph p3 = new Paragraph();
-                    p3.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
-                    p3.add(String.valueOf(formatoFloat.format(subTotal)));
-                    p3.setAlignment(Paragraph.ALIGN_RIGHT);                   
-                    cellSubTotal.addElement(p3);
-                    
-                    //Celda del IVA minimo//
-                    PdfPCell cellIvaMinimo = new PdfPCell();
-                    Paragraph p4 = new Paragraph();
-                    p4.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
-                    p4.add(String.valueOf(formatoFloat.format(next.getIvaMinimo())));
-                    p4.setAlignment(Paragraph.ALIGN_RIGHT);
-                    cellIvaMinimo.addElement(p4);
-                    
-                    //Celda del IVA básico//
-                    PdfPCell cellIvaBasico = new PdfPCell();
-                    Paragraph p5 = new Paragraph();
-                    p5.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
-                    p5.add(String.valueOf(formatoFloat.format(next.getIvaBasico())));
-                    p5.setAlignment(Paragraph.ALIGN_RIGHT);
-                    cellIvaBasico.addElement(p4);
-                    
-                    //Celda del total//
-                    PdfPCell cellTotal = new PdfPCell();
-                    Paragraph p6 = new Paragraph();
-                    p6.setFont(FontFactory.getFont("Arial", 9, BaseColor.BLACK));
-                    p6.add(String.valueOf(formatoFloat.format(next.getTotal())));
-                    p6.setAlignment(Paragraph.ALIGN_RIGHT);
-                    cellTotal.addElement(p6);
-                    
-                    tabla.addCell(cellProveedor);
-                    tabla.addCell(cellRUTProveedor);
-                    tabla.addCell(cellSubTotal);
-                    tabla.addCell(cellIvaMinimo);
-                    tabla.addCell(cellIvaBasico);
-                    tabla.addCell(cellTotal);                    
                 }
-                
-            }
-            
-            documento.add(tabla);
-                        
-            //Agrego TOTAL y SUMA DE IVAS//
-            
-            //Agrego un espacio entre el final de la tabla y el resto//
-            Paragraph parrafo3 = new Paragraph();
-            parrafo3.add("\n");
-            documento.add(parrafo3);
-            
-            //Ahora agrego los nuevos párrafos con los datos del TOTAl y demás.
-            
-            //Párrafo del SUBTOTAL//
-            Paragraph parrafo4 = new Paragraph();
-            parrafo4.setAlignment(Paragraph.ALIGN_RIGHT);
-            parrafo4.setFont(FontFactory.getFont("Arial", 10, BaseColor.BLACK));
-            parrafo4.add("SUBTOTAL: " + String.valueOf(formatoFloat.format(sumaSubTotal)) + "\n");
-            documento.add(parrafo4);
-            
-            //Párrafo del IVA MÍNIMO//
-            Paragraph parrafo5 = new Paragraph();
-            parrafo5.setAlignment(Paragraph.ALIGN_RIGHT);
-            parrafo5.setFont(FontFactory.getFont("Arial", 10, BaseColor.BLACK));
-            parrafo5.add("IVA MÍNIMO: " + String.valueOf(formatoFloat.format(ivaMinimo)) + "\n");
-            documento.add(parrafo5);
-            
-            //Párrafo del IVA BÁSICO
-            Paragraph parrafo6 = new Paragraph();
-            parrafo6.setAlignment(Paragraph.ALIGN_RIGHT);
-            parrafo6.setFont(FontFactory.getFont("Arial", 10, BaseColor.BLACK));
-            parrafo6.add("IVA BÁSICO: " + String.valueOf(formatoFloat.format(ivaBasico)) + "\n");
-            documento.add(parrafo6);
-            
-            //Párrafo del TOTAL.
-            Paragraph parrafo7 = new Paragraph();
-            parrafo7.setAlignment(Paragraph.ALIGN_RIGHT);
-            parrafo7.setFont(FontFactory.getFont("Arial", 10, BaseColor.BLACK));
-            parrafo7.add("TOTAL: " + String.valueOf(formatoFloat.format(total)) + "\n");
-            documento.add(parrafo7);
-            
-            documento.close();
-            JOptionPane.showMessageDialog(null, "Reporte creado.");
 
-        } catch (Exception e) {
+                documento.add(tabla);
+
+                //Agrego TOTAL y SUMA DE IVAS//
+                //Agrego un espacio entre el final de la tabla y el resto//
+                Paragraph parrafo3 = new Paragraph();
+                parrafo3.add("\n");
+                documento.add(parrafo3);
+
+                //Ahora agrego los nuevos párrafos con los datos del TOTAl y demás.
+                //Párrafo del SUBTOTAL//
+                Paragraph parrafo4 = new Paragraph();
+                parrafo4.setAlignment(Paragraph.ALIGN_RIGHT);
+                parrafo4.setFont(FontFactory.getFont("Arial", 10, BaseColor.BLACK));
+                parrafo4.add("SUBTOTAL: " + String.valueOf(formatoFloat.format(sumaSubTotal)) + "\n");
+                documento.add(parrafo4);
+
+                //Párrafo del IVA MÍNIMO//
+                Paragraph parrafo5 = new Paragraph();
+                parrafo5.setAlignment(Paragraph.ALIGN_RIGHT);
+                parrafo5.setFont(FontFactory.getFont("Arial", 10, BaseColor.BLACK));
+                parrafo5.add("IVA MÍNIMO: " + String.valueOf(formatoFloat.format(ivaMinimo)) + "\n");
+                documento.add(parrafo5);
+
+                //Párrafo del IVA BÁSICO
+                Paragraph parrafo6 = new Paragraph();
+                parrafo6.setAlignment(Paragraph.ALIGN_RIGHT);
+                parrafo6.setFont(FontFactory.getFont("Arial", 10, BaseColor.BLACK));
+                parrafo6.add("IVA BÁSICO: " + String.valueOf(formatoFloat.format(ivaBasico)) + "\n");
+                documento.add(parrafo6);
+
+                //Párrafo del TOTAL.
+                Paragraph parrafo7 = new Paragraph();
+                parrafo7.setAlignment(Paragraph.ALIGN_RIGHT);
+                parrafo7.setFont(FontFactory.getFont("Arial", 10, BaseColor.BLACK));
+                parrafo7.add("TOTAL: " + String.valueOf(formatoFloat.format(total)) + "\n");
+                documento.add(parrafo7);
+
+                documento.close();
+
+                File objFile = new File(ruta + "/Documents/reporteIVA.pdf");
+                Desktop.getDesktop().open(objFile);
+
+            } catch (Exception e) {
+
+            }
 
         }
-        
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -505,367 +557,482 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         float total = 0;
         float ivaMinimo = 0;
         float ivaBasico = 0;
-        float sumaSubTotal = 0; 
-            
-        //Esto es para la moneda original bien nazi.
-        float subTotalMonedaOriginal;
-        float ivaMinimoMonedaOriginal = 0;
-        float ivaBasicoMonedaOriginal = 0;
-        float totalMonedaOriginal = 0;
-        float sumaSubTotalMonedaOriginal = 0;
-        
-        float subTotalMonedaOriginalPesos = 0;
-        float ivaMinimoMonedaOriginalPesos = 0;
-        float ivaBasicoMonedaOriginalPesos = 0;
-        float totalMonedaOriginalPesos = 0;
-        
-        
-        DecimalFormat formatoFloat = new DecimalFormat("#.00");
-        try {
-            HSSFWorkbook book = new HSSFWorkbook();
-            HSSFSheet sheet = book.createSheet("Listado IVA en pesos.");
-            HSSFSheet sheet2 = book.createSheet("Listado IVA moneda original.");
-            
-            List<Factura> listaFacturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
+        float sumaSubTotal = 0;
 
-            //Las cabeceras que van a ir en el excel//
-            String[] cabecera = new String[]{"Proveedor", "RUT", "nro Factura", "Fecha", "Subtotal", "IVA Mínimo", "IVA Básico", "Total"};
-            String[] cabecera2 = new String[]{"Proveedor", "RUT", "nro Factura", "Fecha", "Tipo de Moneda", "Cotización", "Subtotal", "IVA Mínimo", "IVA Básico", "Total"};
+        if (fechaDesde == null || fechaHasta == null) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar las fechas correctamente");
+        } else {
+            //Esto es para la moneda original bien nazi.
+            float subTotalMonedaOriginal;
+            float ivaMinimoMonedaOriginal = 0;
+            float ivaBasicoMonedaOriginal = 0;
+            float totalMonedaOriginal = 0;
+            float sumaSubTotalMonedaOriginal = 0;
 
-            //Estilos para las cabeceras-----------------------------------------------//
-            CellStyle headerStyle = book.createCellStyle();
-            //headerStyle.setFillBackgroundColor(IndexedColors.BLACK.getIndex());
-            //headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-            //headerStyle.setBorderBottom(BorderStyle.THIN);
-            //headerStyle.setBorderLeft(BorderStyle.THIN);
-            //headerStyle.setBorderRight(BorderStyle.THIN);
-            //headerStyle.setBorderTop(BorderStyle.THIN);
-            //-----------------------------------------------------------------------//
-            
-            //Fuente para las cabeceras-------------------------------//
-            org.apache.poi.ss.usermodel.Font font = book.createFont();
-            font.setFontName("Arial");
-            font.setBold(true);
-            //font.setColor(IndexedColors.WHITE.getIndex());
-            font.setFontHeightInPoints((short) 10);
-            headerStyle.setFont(font);
-            //-------------------------------------------------------//
-            
-            //Creo la fila en la que van los encabezados
-            Row filaEncabezados = sheet.createRow(0);
-            Row filaEncabezados2 = sheet2.createRow(0);
+            float subTotalMonedaOriginalPesos = 0;
+            float ivaMinimoMonedaOriginalPesos = 0;
+            float ivaBasicoMonedaOriginalPesos = 0;
+            float totalMonedaOriginalPesos = 0;
 
-            //Agrego los encabezados al excel----------------------//
-            for (int i = 0; i < cabecera.length; i++) {
-                Cell celdaTitulo = filaEncabezados.createCell(i);
-                celdaTitulo.setCellStyle(headerStyle);
-                celdaTitulo.setCellValue(cabecera[i]);
-            }
+            DecimalFormat formatoFloat = new DecimalFormat("#.00");
+            try {
+                HSSFWorkbook book = new HSSFWorkbook();
+                HSSFSheet sheet = book.createSheet("Listado IVA en pesos.");
+                HSSFSheet sheet2 = book.createSheet("Listado IVA moneda original.");
 
-            for (int x = 0; x < cabecera2.length; x++) {
-                Cell celdaTitulo2 = filaEncabezados2.createCell(x);
-                celdaTitulo2.setCellStyle(headerStyle);
-                celdaTitulo2.setCellValue(cabecera2[x]);
-            }
-            
-            //----------------------------------------------------//
+                List<Factura> listaFacturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
 
-            //Convierto los datos que me llegaron como lista a un mapa así se me hace más fácil para iterar-------------//
-            Map<Integer, Object[]> datos = new TreeMap<>();
-            
-            Map<Integer, Object[]> datos2 = new TreeMap<>();
-            Map<Integer, Object[]> datos3 = new TreeMap<>();
-            
-            int contador = 0;
-            for (Factura fact : listaFacturas) {
-                contador++;
-                float subTotal;
+                //Las cabeceras que van a ir en el excel//
+                String[] cabecera = new String[]{"Proveedor", "RUT", "nro Factura", "Fecha", "Subtotal", "IVA Mínimo", "IVA Básico", "Total"};
+                String[] cabecera2 = new String[]{"Proveedor", "RUT", "nro Factura", "Fecha", "Tipo de Moneda", "Cotización", "Subtotal", "IVA Mínimo", "IVA Básico", "Total"};
 
-                if (fact.getMoneda().equals(tipoMoneda.US$)) {
-                    total = total + (fact.getTotal() * fact.getCotizacion());
-                    ivaMinimo = ivaMinimo + (fact.getIvaMinimo() * fact.getCotizacion());
-                    ivaBasico = ivaBasico + (fact.getIvaBasico() * fact.getCotizacion());
-                    subTotal = (fact.getTotal() * fact.getCotizacion())
-                            - (fact.getIvaMinimo() * fact.getCotizacion())
-                            - (fact.getIvaBasico() * fact.getCotizacion());
-                    sumaSubTotal = sumaSubTotal + subTotal;
+                //Estilos para las cabeceras-----------------------------------------------//
+                CellStyle headerStyle = book.createCellStyle();
+                //headerStyle.setFillBackgroundColor(IndexedColors.BLACK.getIndex());
+                //headerStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                //headerStyle.setBorderBottom(BorderStyle.THIN);
+                //headerStyle.setBorderLeft(BorderStyle.THIN);
+                //headerStyle.setBorderRight(BorderStyle.THIN);
+                //headerStyle.setBorderTop(BorderStyle.THIN);
+                //-----------------------------------------------------------------------//
 
-                    datos.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
-                        fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
-                        fact.getFecha(), subTotal, fact.getIvaMinimo() * fact.getCotizacion(),
-                        fact.getIvaBasico() * fact.getCotizacion(), fact.getTotal() * fact.getCotizacion()});
+                //Fuente para las cabeceras-------------------------------//
+                org.apache.poi.ss.usermodel.Font font = book.createFont();
+                font.setFontName("Arial");
+                font.setBold(true);
+                //font.setColor(IndexedColors.WHITE.getIndex());
+                font.setFontHeightInPoints((short) 10);
+                headerStyle.setFont(font);
+                //-------------------------------------------------------//
 
-                    //Para la segunda hoja con la moneda original------------------------------------------------//
-                    subTotalMonedaOriginal = fact.getTotal() - fact.getIvaBasico() - fact.getIvaMinimo();
-                    ivaMinimoMonedaOriginal = ivaMinimoMonedaOriginal + fact.getIvaMinimo();
-                    ivaBasicoMonedaOriginal = ivaBasicoMonedaOriginal + fact.getIvaBasico();
-                    totalMonedaOriginal = totalMonedaOriginal + fact.getTotal();
-                    sumaSubTotalMonedaOriginal = sumaSubTotalMonedaOriginal + subTotalMonedaOriginal;
-                    
-                    datos2.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
-                        fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
-                        fact.getFecha(), fact.getMoneda().toString(), fact.getCotizacion(),
-                        subTotalMonedaOriginal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
-                    //------------------------------------------------------------------------------------------//
+                //Creo la fila en la que van los encabezados
+                Row filaEncabezados = sheet.createRow(0);
+                Row filaEncabezados2 = sheet2.createRow(0);
 
-                } else {
-                    subTotal = fact.getTotal() - fact.getIvaBasico() - fact.getIvaMinimo();
-                    sumaSubTotal = sumaSubTotal + subTotal;
-                    total = total + fact.getTotal();
-                    ivaMinimo = ivaMinimo + fact.getIvaMinimo();
-                    ivaBasico = ivaBasico + fact.getIvaBasico();
-                    
-                    //Para la segunda hoja con moneda original//
-                    subTotalMonedaOriginalPesos = subTotalMonedaOriginalPesos + subTotal;
-                    ivaMinimoMonedaOriginalPesos = ivaMinimoMonedaOriginalPesos + fact.getIvaMinimo();
-                    ivaBasicoMonedaOriginalPesos = ivaBasicoMonedaOriginalPesos + fact.getIvaBasico();
-                    totalMonedaOriginalPesos = totalMonedaOriginalPesos + fact.getTotal();
-                    //----------------------------------------//
-
-                    //Todo en pesitos
-                    datos.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
-                        fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
-                        fact.getFecha(), subTotal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
-
-                    //Para la segunda hoja con la moneda original.
-                    datos3.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
-                        fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
-                        fact.getFecha(), fact.getMoneda().toString(), fact.getCotizacion(),
-                        subTotal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
+                //Agrego los encabezados al excel----------------------//
+                for (int i = 0; i < cabecera.length; i++) {
+                    Cell celdaTitulo = filaEncabezados.createCell(i);
+                    celdaTitulo.setCellStyle(headerStyle);
+                    celdaTitulo.setCellValue(cabecera[i]);
                 }
 
-            }    
-            
-            //----------------------------------------------------------------------------------------------------------//
+                for (int x = 0; x < cabecera2.length; x++) {
+                    Cell celdaTitulo2 = filaEncabezados2.createCell(x);
+                    celdaTitulo2.setCellStyle(headerStyle);
+                    celdaTitulo2.setCellValue(cabecera2[x]);
+                }
 
-            //Itero sobre datos para escribir en la hoja----------------//
-            Set<Integer> keyset = datos.keySet();
-            int numeroRenglon = 1;
-            boolean shrek = true;
-            for (int key : keyset) {
-                Row row = sheet.createRow(numeroRenglon++);
-                Object[] arregloObjetos = datos.get(key);
-                int numeroCelda = 0;
-                for (Object obj : arregloObjetos) {
-                    Cell cell;
-                    if (shrek) {
-                        cell = row.createCell(numeroCelda);
-                        shrek = false;
+                //----------------------------------------------------//
+                //Convierto los datos que me llegaron como lista a un mapa así se me hace más fácil para iterar-------------//
+                Map<Integer, Object[]> datos = new TreeMap<>();
+
+                Map<Integer, Object[]> datos2 = new TreeMap<>();
+                Map<Integer, Object[]> datos3 = new TreeMap<>();
+
+                int contador = 0;
+                for (Factura fact : listaFacturas) {
+                    contador++;
+                    float subTotal;
+
+                    if (fact.getMoneda().equals(tipoMoneda.US$)) {
+                        total = total + (fact.getTotal() * fact.getCotizacion());
+                        ivaMinimo = ivaMinimo + (fact.getIvaMinimo() * fact.getCotizacion());
+                        ivaBasico = ivaBasico + (fact.getIvaBasico() * fact.getCotizacion());
+                        subTotal = (fact.getTotal() * fact.getCotizacion())
+                                - (fact.getIvaMinimo() * fact.getCotizacion())
+                                - (fact.getIvaBasico() * fact.getCotizacion());
+                        sumaSubTotal = sumaSubTotal + subTotal;
+
+                        datos.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
+                            fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
+                            fact.getFecha(), subTotal, fact.getIvaMinimo() * fact.getCotizacion(),
+                            fact.getIvaBasico() * fact.getCotizacion(), fact.getTotal() * fact.getCotizacion()});
+
+                        //Para la segunda hoja con la moneda original------------------------------------------------//
+                        subTotalMonedaOriginal = fact.getTotal() - fact.getIvaBasico() - fact.getIvaMinimo();
+                        ivaMinimoMonedaOriginal = ivaMinimoMonedaOriginal + fact.getIvaMinimo();
+                        ivaBasicoMonedaOriginal = ivaBasicoMonedaOriginal + fact.getIvaBasico();
+                        totalMonedaOriginal = totalMonedaOriginal + fact.getTotal();
+                        sumaSubTotalMonedaOriginal = sumaSubTotalMonedaOriginal + subTotalMonedaOriginal;
+
+                        datos2.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
+                            fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
+                            fact.getFecha(), fact.getMoneda().toString(), fact.getCotizacion(),
+                            subTotalMonedaOriginal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
+                        //------------------------------------------------------------------------------------------//
+
                     } else {
-                        cell = row.createCell(numeroCelda++);
-                    }
-                    if (obj instanceof String) {
-                        cell.setCellValue((String) obj);
-                    } else if (obj instanceof Float) {
-                        cell.setCellValue(formatoFloat.format(obj));
-                    } else if (obj instanceof Date) {
-                        Date date = (Date) obj;
-                        LocalDate lt = new java.sql.Date(date.getTime()).toLocalDate();
-                        cell.setCellValue((String)lt.toString());
-                    }
-                }
-                shrek = true;
-            }
-            
-            //Acá agrego la suma de los IVAS básicos y mínimos, así como también la suma de subtotales y totales en la hoja 1---//
-            int nuevoNumeroRenglon = numeroRenglon + 1;
-            Row row = sheet.createRow(nuevoNumeroRenglon++);
-            Cell cellSubtotal = row.createCell(6);
-            Cell cellValorSubtotal = row.createCell(7);
-            cellSubtotal.setCellStyle(headerStyle);
-            cellSubtotal.setCellValue("SUBTOTAL: ");
-            cellValorSubtotal.setCellValue(formatoFloat.format(sumaSubTotal));
-                       
-            Row row2 = sheet.createRow(nuevoNumeroRenglon++);
-            Cell cellIVAMinimo = row2.createCell(6);
-            cellIVAMinimo.setCellStyle(headerStyle);
-            cellIVAMinimo.setCellValue("IVA MÍNIMO: ");
-            Cell cellValorIVAMinimo = row2.createCell(7);
-            cellValorIVAMinimo.setCellValue(formatoFloat.format(ivaMinimo));
-            
-            Row row3 = sheet.createRow(nuevoNumeroRenglon++);
-            Cell cellIVABasico = row3.createCell(6);
-            cellIVABasico.setCellStyle(headerStyle);
-            cellIVABasico.setCellValue("IVA BÁSICO: ");
-            Cell cellValorIVABasico = row3.createCell(7);
-            cellValorIVABasico.setCellValue(formatoFloat.format(ivaBasico));
-            
-            Row row4 = sheet.createRow(nuevoNumeroRenglon++);
-            Cell cellTotal = row4.createCell(6);
-            cellTotal.setCellStyle(headerStyle);
-            cellTotal.setCellValue("TOTAL: ");
-            Cell cellValorTotal = row4.createCell(7);
-            cellValorTotal.setCellValue(formatoFloat.format(total));
-            //----------------------------------------------------------------------------------------------------//
-            
-            Set<Integer> keyset2 = datos3.keySet();
-            int numeroRenglon2 = 1;
-            boolean shrek2 = true;
-            for (int key : keyset2) {
-                Row row1h2 = sheet2.createRow(numeroRenglon2++);
-                Object[] arregloObjetos = datos3.get(key);
-                int numeroCelda = 0;
-                for (Object obj : arregloObjetos) {
-                    Cell cell;
-                    if (shrek2) {
-                        cell = row1h2.createCell(numeroCelda);
-                        shrek2 = false;
-                    } else {
-                        cell = row1h2.createCell(numeroCelda++);
-                    }
-                    if (obj instanceof String) {
-                        cell.setCellValue((String) obj);
-                    } else if (obj instanceof Float) {
-                        cell.setCellValue(formatoFloat.format(obj));
-                    } else if (obj instanceof Date) {
-                        Date date = (Date) obj;
-                        LocalDate lt = new java.sql.Date(date.getTime()).toLocalDate();
-                        cell.setCellValue((String)lt.toString());
-                    }
-                }
-                shrek2 = true;
-            }
-            
-            //Lo mismo para la hoja 2---------------------------------------------------------------------------------//
-            
-            int nuevoNumeroRenglon2 = numeroRenglon2 + 1;
-            Row row1Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
-            Cell cellSubTotalMonedaOriginalPesos = row1Hoja2Pesos.createCell(8);
-            Cell cellValorSubTotalMonedaOriginalPesos = row1Hoja2Pesos.createCell(9);
-            cellSubTotalMonedaOriginalPesos.setCellStyle(headerStyle);
-            cellSubTotalMonedaOriginalPesos.setCellValue("SUBTOTAL: ");
-            cellValorSubTotalMonedaOriginalPesos.setCellValue(formatoFloat.format(subTotalMonedaOriginalPesos));
-            
-            nuevoNumeroRenglon2 += 1;
-            Row row2Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
-            Cell cellIVAMinimoMonedaOriginalPesos = row2Hoja2Pesos.createCell(8);
-            Cell cellValorIVAMinimoMonedaOriginalPesos = row2Hoja2Pesos.createCell(9);
-            cellIVAMinimoMonedaOriginalPesos.setCellStyle(headerStyle);
-            cellIVAMinimoMonedaOriginalPesos.setCellValue("IVA MÍNIMO: ");
-            cellValorIVAMinimoMonedaOriginalPesos.setCellValue(formatoFloat.format(ivaMinimoMonedaOriginalPesos));
-            
-            nuevoNumeroRenglon2 += 1;
-            Row row3Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
-            Cell cellIVABasicoMonedaOriginalPesos = row3Hoja2Pesos.createCell(8);
-            Cell cellValorIVABasicoMonedaOriginalPesos = row3Hoja2Pesos.createCell(9);
-            cellIVABasicoMonedaOriginalPesos.setCellStyle(headerStyle);
-            cellIVABasicoMonedaOriginalPesos.setCellValue("IVA BÁSICO: ");
-            cellValorIVABasicoMonedaOriginalPesos.setCellValue(formatoFloat.format(ivaBasicoMonedaOriginalPesos));
+                        subTotal = fact.getTotal() - fact.getIvaBasico() - fact.getIvaMinimo();
+                        sumaSubTotal = sumaSubTotal + subTotal;
+                        total = total + fact.getTotal();
+                        ivaMinimo = ivaMinimo + fact.getIvaMinimo();
+                        ivaBasico = ivaBasico + fact.getIvaBasico();
 
-            nuevoNumeroRenglon2 += 1;
-            Row row4Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
-            Cell cellTotalMonedaOriginalPesos = row4Hoja2Pesos.createCell(8);
-            Cell cellValorTotalMonedaOriginalPesos = row4Hoja2Pesos.createCell(9);
-            cellTotalMonedaOriginalPesos.setCellStyle(headerStyle);
-            cellTotalMonedaOriginalPesos.setCellValue("TOTAL: ");
-            cellValorTotalMonedaOriginalPesos.setCellValue(formatoFloat.format(totalMonedaOriginalPesos));
-            
-            //---------------------------------------------------------------------------------------------------//
-                        
-                                           
-            Set<Integer> keyset3 = datos2.keySet();
-            int numeroRenglon3 = nuevoNumeroRenglon2 + 2;
-            boolean shrek3 = true;
-            for (int key : keyset3) {
-                Row row2h2 = sheet2.createRow(numeroRenglon3++);
-                Object[] arregloObjetos = datos2.get(key);
-                int numeroCelda = 0;
-                for (Object obj : arregloObjetos) {
-                    Cell cell;
-                    if (shrek3) {
-                        cell = row2h2.createCell(numeroCelda);
-                        shrek3 = false;
-                    } else {
-                        cell = row2h2.createCell(numeroCelda++);
+                        //Para la segunda hoja con moneda original//
+                        subTotalMonedaOriginalPesos = subTotalMonedaOriginalPesos + subTotal;
+                        ivaMinimoMonedaOriginalPesos = ivaMinimoMonedaOriginalPesos + fact.getIvaMinimo();
+                        ivaBasicoMonedaOriginalPesos = ivaBasicoMonedaOriginalPesos + fact.getIvaBasico();
+                        totalMonedaOriginalPesos = totalMonedaOriginalPesos + fact.getTotal();
+                        //----------------------------------------//
+
+                        //Todo en pesitos
+                        datos.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
+                            fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
+                            fact.getFecha(), subTotal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
+
+                        //Para la segunda hoja con la moneda original.
+                        datos3.put(contador, new Object[]{contador, fact.getProveedor().getRazonSocial(),
+                            fact.getProveedor().getRUT(), fact.getSerieComprobante() + "-" + fact.getNroComprobante(),
+                            fact.getFecha(), fact.getMoneda().toString(), fact.getCotizacion(),
+                            subTotal, fact.getIvaMinimo(), fact.getIvaBasico(), fact.getTotal()});
                     }
-                    if (obj instanceof String) {
-                        cell.setCellValue((String) obj);
-                    } else if (obj instanceof Float) {
-                        cell.setCellValue(formatoFloat.format(obj));
-                    } else if (obj instanceof Date) {
-                        Date date = (Date) obj;
-                        LocalDate lt = new java.sql.Date(date.getTime()).toLocalDate();
-                        cell.setCellValue((String) lt.toString());
-                    }
+
                 }
-                shrek3 = true;
-            }
-            
-                     
-            //Lo mismo para la hoja 2-----------------------------------------------------------------------------//
-            int nuevoNumeroHoja2 = numeroRenglon3 + 1;
-            Row row1Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
-            Cell cellSubTotalMonedaOriginal = row1Hoja2.createCell(8);
-            Cell cellValorSubTotalMonedaOriginal = row1Hoja2.createCell(9);
-            cellSubTotalMonedaOriginal.setCellStyle(headerStyle);
-            cellSubTotalMonedaOriginal.setCellValue("SUBTOTAL: ");
-            cellValorSubTotalMonedaOriginal.setCellValue(formatoFloat.format(sumaSubTotalMonedaOriginal));
-            
-            nuevoNumeroHoja2 += 1;
-            Row row2Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
-            Cell cellIVAMinimoMonedaOriginal = row2Hoja2.createCell(8);
-            Cell cellValorIVAMinimoMonedaOriginal = row2Hoja2.createCell(9);
-            cellIVAMinimoMonedaOriginal.setCellStyle(headerStyle);
-            cellIVAMinimoMonedaOriginal.setCellValue("IVA MÍNIMO: ");
-            cellValorIVAMinimoMonedaOriginal.setCellValue(formatoFloat.format(ivaMinimoMonedaOriginal));
-            
-            nuevoNumeroHoja2 += 1;
-            Row row3Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
-            Cell cellIVABasicoMonedaOriginal = row3Hoja2.createCell(8);
-            Cell cellValorIVABasicoMonedaOriginal = row3Hoja2.createCell(9);
-            cellIVABasicoMonedaOriginal.setCellStyle(headerStyle);
-            cellIVABasicoMonedaOriginal.setCellValue("IVA BÁSICO: ");
-            cellValorIVABasicoMonedaOriginal.setCellValue(formatoFloat.format(ivaBasicoMonedaOriginal));
-            
-            nuevoNumeroHoja2 += 1;
-            Row row4Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
-            Cell cellTotalMonedaOriginal = row4Hoja2.createCell(8);
-            Cell cellValorTotalMonedaOriginal = row4Hoja2.createCell(9);
-            cellTotalMonedaOriginal.setCellStyle(headerStyle);
-            cellTotalMonedaOriginal.setCellValue("TOTAL: ");
-            cellValorTotalMonedaOriginal.setCellValue(formatoFloat.format(totalMonedaOriginal));
-            //---------------------------------------------------------------------------------------------------//
-            
-            //Esto es para que el tamaño de las columnas se agrande o achique dependiendo del largo del contenido//
-            sheet.autoSizeColumn(0);
-            sheet.autoSizeColumn(1);
-            sheet.autoSizeColumn(2);
-            sheet.autoSizeColumn(3);
-            sheet.autoSizeColumn(4);
-            sheet.autoSizeColumn(5);
-            sheet.autoSizeColumn(6);
-            sheet.autoSizeColumn(7);
-            
-            sheet2.autoSizeColumn(0);
-            sheet2.autoSizeColumn(1);
-            sheet2.autoSizeColumn(2);
-            sheet2.autoSizeColumn(3);
-            sheet2.autoSizeColumn(4);
-            sheet2.autoSizeColumn(5);
-            sheet2.autoSizeColumn(6);
-            sheet2.autoSizeColumn(7);
-            sheet2.autoSizeColumn(8);
-            sheet2.autoSizeColumn(9);
-            
-            //---------------------------------------------------------------------------------------------------//
-            
 
-            //Volcamos la información a un archivo y después lo mostramos--------//
-            String ruta = System.getProperty("user.home") + "/reporte.xls";
-            File objFile = new File(ruta);
-            try (FileOutputStream archivoSalida = new FileOutputStream(objFile)) {
-                book.write(archivoSalida);
-            }
-            Desktop.getDesktop().open(objFile);
-            //-------------------------------------------------------------------//
+                //----------------------------------------------------------------------------------------------------------//
+                //Itero sobre datos para escribir en la hoja----------------//
+                Set<Integer> keyset = datos.keySet();
+                int numeroRenglon = 1;
+                boolean shrek = true;
+                for (int key : keyset) {
+                    Row row = sheet.createRow(numeroRenglon++);
+                    Object[] arregloObjetos = datos.get(key);
+                    int numeroCelda = 0;
+                    for (Object obj : arregloObjetos) {
+                        Cell cell;
+                        if (shrek) {
+                            cell = row.createCell(numeroCelda);
+                            shrek = false;
+                        } else {
+                            cell = row.createCell(numeroCelda++);
+                        }
+                        if (obj instanceof String) {
+                            cell.setCellValue((String) obj);
+                        } else if (obj instanceof Float) {
+                            cell.setCellValue(formatoFloat.format(obj));
+                        } else if (obj instanceof Date) {
+                            Date date = (Date) obj;
+                            LocalDate lt = new java.sql.Date(date.getTime()).toLocalDate();
+                            cell.setCellValue((String) lt.toString());
+                        }
+                    }
+                    shrek = true;
+                }
 
-        } catch (Exception e) {
-            System.out.print(e);
+                //Acá agrego la suma de los IVAS básicos y mínimos, así como también la suma de subtotales y totales en la hoja 1---//
+                int nuevoNumeroRenglon = numeroRenglon + 1;
+                Row row = sheet.createRow(nuevoNumeroRenglon++);
+                Cell cellSubtotal = row.createCell(6);
+                Cell cellValorSubtotal = row.createCell(7);
+                cellSubtotal.setCellStyle(headerStyle);
+                cellSubtotal.setCellValue("SUBTOTAL: ");
+                cellValorSubtotal.setCellValue(formatoFloat.format(sumaSubTotal));
+
+                Row row2 = sheet.createRow(nuevoNumeroRenglon++);
+                Cell cellIVAMinimo = row2.createCell(6);
+                cellIVAMinimo.setCellStyle(headerStyle);
+                cellIVAMinimo.setCellValue("IVA MÍNIMO: ");
+                Cell cellValorIVAMinimo = row2.createCell(7);
+                cellValorIVAMinimo.setCellValue(formatoFloat.format(ivaMinimo));
+
+                Row row3 = sheet.createRow(nuevoNumeroRenglon++);
+                Cell cellIVABasico = row3.createCell(6);
+                cellIVABasico.setCellStyle(headerStyle);
+                cellIVABasico.setCellValue("IVA BÁSICO: ");
+                Cell cellValorIVABasico = row3.createCell(7);
+                cellValorIVABasico.setCellValue(formatoFloat.format(ivaBasico));
+
+                Row row4 = sheet.createRow(nuevoNumeroRenglon++);
+                Cell cellTotal = row4.createCell(6);
+                cellTotal.setCellStyle(headerStyle);
+                cellTotal.setCellValue("TOTAL: ");
+                Cell cellValorTotal = row4.createCell(7);
+                cellValorTotal.setCellValue(formatoFloat.format(total));
+                //----------------------------------------------------------------------------------------------------//
+
+                Set<Integer> keyset2 = datos3.keySet();
+                int numeroRenglon2 = 1;
+                boolean shrek2 = true;
+                for (int key : keyset2) {
+                    Row row1h2 = sheet2.createRow(numeroRenglon2++);
+                    Object[] arregloObjetos = datos3.get(key);
+                    int numeroCelda = 0;
+                    for (Object obj : arregloObjetos) {
+                        Cell cell;
+                        if (shrek2) {
+                            cell = row1h2.createCell(numeroCelda);
+                            shrek2 = false;
+                        } else {
+                            cell = row1h2.createCell(numeroCelda++);
+                        }
+                        if (obj instanceof String) {
+                            cell.setCellValue((String) obj);
+                        } else if (obj instanceof Float) {
+                            cell.setCellValue(formatoFloat.format(obj));
+                        } else if (obj instanceof Date) {
+                            Date date = (Date) obj;
+                            LocalDate lt = new java.sql.Date(date.getTime()).toLocalDate();
+                            cell.setCellValue((String) lt.toString());
+                        }
+                    }
+                    shrek2 = true;
+                }
+
+                //Lo mismo para la hoja 2---------------------------------------------------------------------------------//
+                int nuevoNumeroRenglon2 = numeroRenglon2 + 1;
+                Row row1Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
+                Cell cellSubTotalMonedaOriginalPesos = row1Hoja2Pesos.createCell(8);
+                Cell cellValorSubTotalMonedaOriginalPesos = row1Hoja2Pesos.createCell(9);
+                cellSubTotalMonedaOriginalPesos.setCellStyle(headerStyle);
+                cellSubTotalMonedaOriginalPesos.setCellValue("SUBTOTAL: ");
+                cellValorSubTotalMonedaOriginalPesos.setCellValue(formatoFloat.format(subTotalMonedaOriginalPesos));
+
+                nuevoNumeroRenglon2 += 1;
+                Row row2Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
+                Cell cellIVAMinimoMonedaOriginalPesos = row2Hoja2Pesos.createCell(8);
+                Cell cellValorIVAMinimoMonedaOriginalPesos = row2Hoja2Pesos.createCell(9);
+                cellIVAMinimoMonedaOriginalPesos.setCellStyle(headerStyle);
+                cellIVAMinimoMonedaOriginalPesos.setCellValue("IVA MÍNIMO: ");
+                cellValorIVAMinimoMonedaOriginalPesos.setCellValue(formatoFloat.format(ivaMinimoMonedaOriginalPesos));
+
+                nuevoNumeroRenglon2 += 1;
+                Row row3Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
+                Cell cellIVABasicoMonedaOriginalPesos = row3Hoja2Pesos.createCell(8);
+                Cell cellValorIVABasicoMonedaOriginalPesos = row3Hoja2Pesos.createCell(9);
+                cellIVABasicoMonedaOriginalPesos.setCellStyle(headerStyle);
+                cellIVABasicoMonedaOriginalPesos.setCellValue("IVA BÁSICO: ");
+                cellValorIVABasicoMonedaOriginalPesos.setCellValue(formatoFloat.format(ivaBasicoMonedaOriginalPesos));
+
+                nuevoNumeroRenglon2 += 1;
+                Row row4Hoja2Pesos = sheet2.createRow(nuevoNumeroRenglon2);
+                Cell cellTotalMonedaOriginalPesos = row4Hoja2Pesos.createCell(8);
+                Cell cellValorTotalMonedaOriginalPesos = row4Hoja2Pesos.createCell(9);
+                cellTotalMonedaOriginalPesos.setCellStyle(headerStyle);
+                cellTotalMonedaOriginalPesos.setCellValue("TOTAL: ");
+                cellValorTotalMonedaOriginalPesos.setCellValue(formatoFloat.format(totalMonedaOriginalPesos));
+
+                //---------------------------------------------------------------------------------------------------//
+                Set<Integer> keyset3 = datos2.keySet();
+                int numeroRenglon3 = nuevoNumeroRenglon2 + 2;
+                boolean shrek3 = true;
+                for (int key : keyset3) {
+                    Row row2h2 = sheet2.createRow(numeroRenglon3++);
+                    Object[] arregloObjetos = datos2.get(key);
+                    int numeroCelda = 0;
+                    for (Object obj : arregloObjetos) {
+                        Cell cell;
+                        if (shrek3) {
+                            cell = row2h2.createCell(numeroCelda);
+                            shrek3 = false;
+                        } else {
+                            cell = row2h2.createCell(numeroCelda++);
+                        }
+                        if (obj instanceof String) {
+                            cell.setCellValue((String) obj);
+                        } else if (obj instanceof Float) {
+                            cell.setCellValue(formatoFloat.format(obj));
+                        } else if (obj instanceof Date) {
+                            Date date = (Date) obj;
+                            LocalDate lt = new java.sql.Date(date.getTime()).toLocalDate();
+                            cell.setCellValue((String) lt.toString());
+                        }
+                    }
+                    shrek3 = true;
+                }
+
+                //Lo mismo para la hoja 2-----------------------------------------------------------------------------//
+                int nuevoNumeroHoja2 = numeroRenglon3 + 1;
+                Row row1Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
+                Cell cellSubTotalMonedaOriginal = row1Hoja2.createCell(8);
+                Cell cellValorSubTotalMonedaOriginal = row1Hoja2.createCell(9);
+                cellSubTotalMonedaOriginal.setCellStyle(headerStyle);
+                cellSubTotalMonedaOriginal.setCellValue("SUBTOTAL: ");
+                cellValorSubTotalMonedaOriginal.setCellValue(formatoFloat.format(sumaSubTotalMonedaOriginal));
+
+                nuevoNumeroHoja2 += 1;
+                Row row2Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
+                Cell cellIVAMinimoMonedaOriginal = row2Hoja2.createCell(8);
+                Cell cellValorIVAMinimoMonedaOriginal = row2Hoja2.createCell(9);
+                cellIVAMinimoMonedaOriginal.setCellStyle(headerStyle);
+                cellIVAMinimoMonedaOriginal.setCellValue("IVA MÍNIMO: ");
+                cellValorIVAMinimoMonedaOriginal.setCellValue(formatoFloat.format(ivaMinimoMonedaOriginal));
+
+                nuevoNumeroHoja2 += 1;
+                Row row3Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
+                Cell cellIVABasicoMonedaOriginal = row3Hoja2.createCell(8);
+                Cell cellValorIVABasicoMonedaOriginal = row3Hoja2.createCell(9);
+                cellIVABasicoMonedaOriginal.setCellStyle(headerStyle);
+                cellIVABasicoMonedaOriginal.setCellValue("IVA BÁSICO: ");
+                cellValorIVABasicoMonedaOriginal.setCellValue(formatoFloat.format(ivaBasicoMonedaOriginal));
+
+                nuevoNumeroHoja2 += 1;
+                Row row4Hoja2 = sheet2.createRow(nuevoNumeroHoja2);
+                Cell cellTotalMonedaOriginal = row4Hoja2.createCell(8);
+                Cell cellValorTotalMonedaOriginal = row4Hoja2.createCell(9);
+                cellTotalMonedaOriginal.setCellStyle(headerStyle);
+                cellTotalMonedaOriginal.setCellValue("TOTAL: ");
+                cellValorTotalMonedaOriginal.setCellValue(formatoFloat.format(totalMonedaOriginal));
+                //---------------------------------------------------------------------------------------------------//
+
+                //Esto es para que el tamaño de las columnas se agrande o achique dependiendo del largo del contenido//
+                sheet.autoSizeColumn(0);
+                sheet.autoSizeColumn(1);
+                sheet.autoSizeColumn(2);
+                sheet.autoSizeColumn(3);
+                sheet.autoSizeColumn(4);
+                sheet.autoSizeColumn(5);
+                sheet.autoSizeColumn(6);
+                sheet.autoSizeColumn(7);
+
+                sheet2.autoSizeColumn(0);
+                sheet2.autoSizeColumn(1);
+                sheet2.autoSizeColumn(2);
+                sheet2.autoSizeColumn(3);
+                sheet2.autoSizeColumn(4);
+                sheet2.autoSizeColumn(5);
+                sheet2.autoSizeColumn(6);
+                sheet2.autoSizeColumn(7);
+                sheet2.autoSizeColumn(8);
+                sheet2.autoSizeColumn(9);
+
+                //---------------------------------------------------------------------------------------------------//
+                //Volcamos la información a un archivo y después lo mostramos--------//
+                String ruta = System.getProperty("user.home") + "/reporte.xls";
+                File objFile = new File(ruta);
+                try (FileOutputStream archivoSalida = new FileOutputStream(objFile)) {
+                    book.write(archivoSalida);
+                }
+                Desktop.getDesktop().open(objFile);
+                //-------------------------------------------------------------------//
+
+            } catch (Exception e) {
+                System.out.print(e);
+            }
+
         }
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+        
+        //Traigo el mes seleccionado en el combo.
+        String mesSeleccionado = jComboBox1.getSelectedItem().toString();
+        
+        if(mesSeleccionado != null){
+            //Traigo la fecha actual.
+            LocalDate fechaActual = LocalDate.now();
+            
+            //Comparo los meses.
+            String mesFechaActual = fechaActual.getMonth().name();
+            String mesActual = "";
+            
+            if("JANUARY".equals(mesFechaActual)){
+                mesActual = "Enero";
+            }else if("FEBRUARY".equals(mesFechaActual)){
+                mesActual = "Febrero";
+            }else if("MARCH".equals(mesFechaActual)){
+                mesActual = "Marzo";
+            }else if("APRIL".equals(mesFechaActual)){
+                mesActual = "Abril";
+            }else if("MAY".equals(mesFechaActual)){
+                mesActual = "Mayo";
+            }else if("JUNE".equals(mesFechaActual)){
+                mesActual = "Junio";
+            }else if("JULY".equals(mesFechaActual)){
+                mesActual = "Julio";
+            }else if("AUGUST".equals(mesFechaActual)){
+                mesActual = "Agosto";
+            }else if("SEPTEMBER".equals(mesFechaActual)){
+                mesActual = "Septiembre";
+            }else if("OCTOBER".equals(mesFechaActual)){
+                mesActual = "Octubre";
+            }else if("NOVEMBER".equals(mesFechaActual)){
+                mesActual = "Noviembre";
+            }else if("DECEMBER".equals(mesFechaActual)){
+                mesActual = "Diciembre";
+            }
+            
+            if (mesSeleccionado.equals(mesActual)) {
+                int diaDelMes = fechaActual.getDayOfMonth();
+                int ultimoDiaMes = fechaActual.lengthOfMonth();
+
+                //Si es el último día del mes ahí si tendría que poder cerrar sin problemas
+                if (diaDelMes == ultimoDiaMes) {
+                    boolean exito = cerrarMes(mesSeleccionado);
+                    //Cierra el mes
+                    //Alerta de que cerró bien etc.
+                } else {
+                    int input = javax.swing.JOptionPane.showConfirmDialog(null, "El mes de " + mesActual.toLowerCase()
+                            + "no ha llegado a su fin, ¿Desea cerrar este mes de todas formas?",
+                            "Seleccione una opción",
+                            javax.swing.JOptionPane.YES_NO_OPTION);
+
+                    if (input == 0) {
+                        //Acá cierra igual a pesar de que no sea fin de mes.
+                        
+                    }
+                }
+                
+                
+
+            }
+
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
+    
+    private boolean cerrarMes(String mesSeleccionado) {
+        LocalDate fechaACerrar = null;
+        LocalDate fechaActual = LocalDate.now();
+
+        if (mesSeleccionado.equals("Enero")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 1, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth()); //31
+        } else if (mesSeleccionado.equals("Febrero")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 2, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Marzo")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 3, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Abril")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 4, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Mayo")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 5, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Junio")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 6, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Julio")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 7, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Agosto")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 8, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Septiembre")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 9, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Octubre")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 10, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Noviembre")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 11, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        } else if (mesSeleccionado.equals("Diciembre")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 12, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+        }
+        
+        if (fechaACerrar != null) {
+            LocalDate fechaDesde;
+            LocalDate fechaHasta;
+            //List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
+        }
+
+        return false;
+    }
+    
     /**
      * @param args the command line arguments
      */
@@ -906,6 +1073,8 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JComboBox<String> jComboBox1;
     private com.toedter.calendar.JDateChooser jDateChooserDesde;
     private com.toedter.calendar.JDateChooser jDateChooserHasta;
     private javax.swing.JLabel jLabel1;
@@ -913,10 +1082,14 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
+
+
 }

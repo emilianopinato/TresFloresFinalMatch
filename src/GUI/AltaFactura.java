@@ -269,7 +269,7 @@ public class AltaFactura extends javax.swing.JFrame {
                         precioCotizacion = cotizacion.getImporte();
                     } else {
                         int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización,"
-                                + "esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una"
+                                + "esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una "
                                 + "nueva", "Seleccione una opción",
                                 javax.swing.JOptionPane.YES_NO_OPTION);
                         if (input == 0) {

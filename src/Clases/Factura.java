@@ -21,6 +21,8 @@ public class Factura extends Comprobante implements Serializable {
     private float Pendiente;
 
     private boolean deshabilitado;
+    private boolean cerrada;
+    
     //LINKS-------------------------//
       
     @OneToMany(mappedBy = "factura",cascade = CascadeType.ALL, orphanRemoval = true)
