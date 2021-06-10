@@ -133,10 +133,10 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jCBMoneda" min="-2" pref="63" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
-                                          <Component id="labelCotizacion" min="-2" pref="150" max="-2" attributes="0"/>
+                                          <Component id="labelCotizacion" min="-2" pref="272" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="227" max="32767" attributes="0"/>
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="jLabel6" min="-2" pref="97" max="-2" attributes="0"/>
                                       <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
@@ -551,6 +551,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextSubTotal">
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextTOTAL">
         </Component>
@@ -560,6 +563,12 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="jTextIVAbasico">
+          <Properties>
+            <Property name="toolTipText" type="java.lang.String" value=""/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jTextIVAbasicoActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JCheckBox" name="jCheckBoxIvaInc">
           <Properties>

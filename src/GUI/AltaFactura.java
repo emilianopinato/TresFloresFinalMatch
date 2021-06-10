@@ -20,11 +20,14 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -140,7 +143,10 @@ public class AltaFactura extends javax.swing.JFrame {
                                 modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
                                 mC.setLocationRelativeTo(null);
                                 mC.setVisible(true);
-                            }
+                            }else{
+                                precioCotizacion = 0;
+                                AltaFactura.this.labelCotizacion.setText("No existe cotización para la fecha seleccionada.");
+                            }                                
                         }
                         banderita = false;
                     }
@@ -268,9 +274,9 @@ public class AltaFactura extends javax.swing.JFrame {
                         AltaFactura.this.labelCotizacion.setText("La cotización es: " + cotizacion.getImporte());
                         precioCotizacion = cotizacion.getImporte();
                     } else {
-                        int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización,"
-                                + "esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una "
-                                + "nueva", "Seleccione una opción",
+                        int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización, "
+                                + " esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una "
+                                + " nueva", "Seleccione una opción",
                                 javax.swing.JOptionPane.YES_NO_OPTION);
                         if (input == 0) {
                             modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
@@ -558,6 +564,13 @@ public class AltaFactura extends javax.swing.JFrame {
 
         jLabel16.setText("IVA Basico");
 
+        jTextIVAbasico.setToolTipText("");
+        jTextIVAbasico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextIVAbasicoActionPerformed(evt);
+            }
+        });
+
         jCheckBoxIvaInc.setText("Precio unitario con IVA incluido");
         jCheckBoxIvaInc.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -712,8 +725,8 @@ public class AltaFactura extends javax.swing.JFrame {
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jCBMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(labelCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(labelCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7))
@@ -881,7 +894,10 @@ public class AltaFactura extends javax.swing.JFrame {
         fac.setIvaBasico(Float.parseFloat(jTextIVAbasico.getText()));
         fac.setIvaMinimo(Float.parseFloat(jTextIVAminimo.getText()));
         fac.setDeshabilitado(false);
-        if (this.jTextSerie.getText().isEmpty()) {
+        if(this.precioCotizacion==0 && this.jCBMoneda.getSelectedItem() == tipoMoneda.US$){
+            javax.swing.JOptionPane.showMessageDialog(null, "Está intentando ingresar una factura en dolares que no tiene cotización. "
+                    + "Seleccione otra fecha y vuelva a intentarlo.");
+        }else if (this.jTextSerie.getText().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la serie del numero de factura.");
         } else if (this.jTextNumeroFact.getText().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el numero de factura.");
@@ -1111,10 +1127,39 @@ public class AltaFactura extends javax.swing.JFrame {
             }
             if (f) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Factura fue ingresada exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                //limpia cacillas y actualiza, para seguir ingresando mas facturas
+                this.jTextSerie.setText("");
+                this.jTextNumeroFact.setText("");
+                this.jDateChooser.setDate(new Date());
+                this.jCBMoneda.setSelectedIndex(0);
+                this.jCBTipoComprobante.setSelectedIndex(0);
+                
+                this.jTextArticulo.setText("");
+                this.jTextCantidad.setText("");
+                this.jTextUnitario.setText("");
+                this.jTextDescuento.setText("");
+                this.jTextSubTotalArt.setText("");
+                
+                DefaultTableModel model = (DefaultTableModel) this.jTableArticulos.getModel();
+                model.setRowCount(0);                
+                
+                this.ListaArticulo.clear();
+                this.articulo_seleccionado = null;
+
+                Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
+                this.jTextRut.setText(p.getRUT());
+                this.jTextDireccion.setText(p.getDireccion());
+                if (p.isTipoFacturacion()) {
+                    this.jCheckBoxIvaInc.setSelected(true);
+                    this.CalcularTotales_conIVA_inc();
+                } else {
+                    this.jCheckBoxIvaInc.setSelected(false);
+                    this.CalcularTotales_sinIVA_inc();
+                }
+                
             } else {
                 javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
-
         }
     }//GEN-LAST:event_jButtonIngresarActionPerformed
 
@@ -1828,8 +1873,17 @@ public class AltaFactura extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextNumeroFactKeyTyped
 
+    private void jTextIVAbasicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextIVAbasicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextIVAbasicoActionPerformed
+
     private void CalcularTotales_sinIVA_inc() {
-        DecimalFormat formatoFloat = new DecimalFormat("#.00");
+        //DecimalFormat formatoFloat = new DecimalFormat("#.00");
+        Locale currentLocale = getLocale();
+        DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+        unusualSymbols.setDecimalSeparator('.');
+        String strange = "#.00";
+        DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
         float subtotal = 0, iva_minimo = 0, iva_basico = 0, total = 0;
 
         DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
@@ -1856,7 +1910,12 @@ public class AltaFactura extends javax.swing.JFrame {
     }
 
     private void CalcularTotales_conIVA_inc() {
-        DecimalFormat formatoFloat = new DecimalFormat("#.00");
+        //DecimalFormat formatoFloat = new DecimalFormat("#.00");
+        Locale currentLocale = getLocale();
+        DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+        unusualSymbols.setDecimalSeparator('.');
+        String strange = "#.00";
+        DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
         float subtotal = 0, iva_minimo = 0, iva_basico = 0, total = 0;
 
         //Subtotal excento, basico y minimo.

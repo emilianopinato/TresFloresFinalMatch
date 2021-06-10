@@ -28,6 +28,7 @@ public class AltaRecibo extends javax.swing.JFrame {
 
     boolean vista = false;
     Recibo r;
+    float importerecordado = 0;
 
     /**
      * Creates new form AltaRecibo
@@ -52,13 +53,25 @@ public class AltaRecibo extends javax.swing.JFrame {
 
         DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
         model.setRowCount(0);
-        List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
-        for (int i = 0; i < ListaFactCredit.size(); i++) {
-            String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
-            model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
-                numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+            List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+            for (int i = 0; i < ListaFactCredit.size(); i++) {
+                if (ListaFactCredit.get(i).getMoneda() == tipoMoneda.$U) {
+                    String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                    model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                        numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                }
+            }
+        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+            List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+            for (int i = 0; i < ListaFactCredit.size(); i++) {
+                if (ListaFactCredit.get(i).getMoneda() == tipoMoneda.US$) {
+                    String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                    model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                        numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                }
+            }
         }
-
     }
 
     public AltaRecibo(Recibo rec) {
@@ -165,6 +178,11 @@ public class AltaRecibo extends javax.swing.JFrame {
 
         jLabel4.setText("Importe");
 
+        jTextImporte.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextImporteFocusLost(evt);
+            }
+        });
         jTextImporte.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextImporteKeyPressed(evt);
@@ -231,14 +249,15 @@ public class AltaRecibo extends javax.swing.JFrame {
 
         jLabel6.setText("Moneda");
 
+        jCBMoneda.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCBMonedaItemStateChanged(evt);
+            }
+        });
+
         jCBProveedor.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jCBProveedorItemStateChanged(evt);
-            }
-        });
-        jCBProveedor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCBProveedorActionPerformed(evt);
             }
         });
         jCBProveedor.addActionListener(new java.awt.event.ActionListener() {
@@ -447,9 +466,9 @@ public class AltaRecibo extends javax.swing.JFrame {
             }
             saldos = saldos + saldo;
         }
-        if(saldos > Float.parseFloat(this.jTextImporte.getText())){
-            javax.swing.JOptionPane.showMessageDialog(null, "No se puede asignar mas de lo ingresado en el importe.");
-        }else if (saldomayorpendiente) {
+        if (this.jTextImporte.getText().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Es necesario ingresar el importe total del recibo");
+        } else if (saldomayorpendiente) {
             javax.swing.JOptionPane.showMessageDialog(null, "La entrega debe ser igual o menor al importe pendiente de la factura.");
         } else if (this.jTextSerie.getText().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la serie.");
@@ -457,20 +476,22 @@ public class AltaRecibo extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el numero del recibo.");
         } else if (this.jDateChooser.getDate() == null) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la fecha del recibo.");
-        } else if (this.jTextImporte.getText().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Es necesario ingresar el importe total del recibo");
+        } else if(saldos > Float.parseFloat(this.jTextImporte.getText())){
+            javax.swing.JOptionPane.showMessageDialog(null, "No se puede asignar mas de lo ingresado en el importe.");
         } else {
             List<F_R> listaf_r = new ArrayList<F_R>();
             int facturas_linkeadas = 0;
+            float saldototal = 0;
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 String s = modelo.getValueAt(i, 4).toString();
                 float saldo = Float.parseFloat(s);
                 if (saldo > 0) {
                     facturas_linkeadas++;
+                    saldototal = saldo + saldototal;
                 }
             }
-            if (facturas_linkeadas == 0) {
-                int resp = JOptionPane.showConfirmDialog(this, "No ha asignado ninguna factura al recibo ¿Continuar igualmente?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (facturas_linkeadas == 0 || saldototal < Float.parseFloat(this.jTextImporte.getText())) {
+                int resp = JOptionPane.showConfirmDialog(this, "El saldo de las facturas es menor al importe total ¿Continuar igualmente?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (resp == 0) {
                     Recibo rec = new Recibo();
                     rec.setFecha(this.jDateChooser.getDate());
@@ -516,7 +537,35 @@ public class AltaRecibo extends javax.swing.JFrame {
                     }
                     if (recibo) {
                         javax.swing.JOptionPane.showMessageDialog(null, "Recibo ingreado correctamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                        this.dispose();
+                        this.jTextSerie.setText("");
+                        this.jTextNumero.setText("");
+                        this.jTextComentario.setText("");
+                        this.jTextImporte.setText("");
+                        this.jDateChooser.setDate(new Date());
+                        this.jCBMoneda.setSelectedIndex(0);
+
+                        DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
+                        model.setRowCount(0);
+                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                            List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+                            for (int i = 0; i < ListaFactCredit.size(); i++) {
+                                if (ListaFactCredit.get(i).getMoneda() == tipoMoneda.$U) {
+                                    String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                                    model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                                        numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                                }
+                            }
+                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                            List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+                            for (int i = 0; i < ListaFactCredit.size(); i++) {
+                                if (ListaFactCredit.get(i).getMoneda() == tipoMoneda.US$) {
+                                    String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                                    model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                                        numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                                }
+                            }
+                        }
+                        //this.dispose();
                     } else {
                         javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     }
@@ -575,11 +624,24 @@ public class AltaRecibo extends javax.swing.JFrame {
 
                     DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
                     model.setRowCount(0);
-                    List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
-                    for (int i = 0; i < ListaFactCredit.size(); i++) {
-                        String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
-                        model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
-                            numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                    if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                        List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+                        for (int i = 0; i < ListaFactCredit.size(); i++) {
+                            if (ListaFactCredit.get(i).getMoneda() == tipoMoneda.$U) {
+                                String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                                model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                                    numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                            }
+                        }
+                    } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                        List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+                        for (int i = 0; i < ListaFactCredit.size(); i++) {
+                            if (ListaFactCredit.get(i).getMoneda() == tipoMoneda.US$) {
+                                String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                                model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                                    numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                            }
+                        }
                     }
                     //this.dispose();
                 } else {
@@ -696,6 +758,9 @@ public class AltaRecibo extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableFacturasKeyPressed
 
     private void jButtonCerrarModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarModActionPerformed
+        if(this.jTableFacturas.isEditing()){
+            this.jTableFacturas.getCellEditor().stopCellEditing();
+        }
         this.jTextSerie.setEditable(false);
         this.jTextNumero.setEditable(false);
         this.jTextImporte.setEditable(false);
@@ -772,15 +837,17 @@ public class AltaRecibo extends javax.swing.JFrame {
         } else {
 
             int facturas_linkeadas = 0;
+            float saldototal = 0;
             for (int i = 0; i < modelo.getRowCount(); i++) {
                 String s = modelo.getValueAt(i, 4).toString();
                 float saldo = Float.parseFloat(s);
                 if (saldo > 0) {
                     facturas_linkeadas++;
+                    saldototal = saldo + saldototal;
                 }
             }
-            if (facturas_linkeadas == 0) {
-                int resp = JOptionPane.showConfirmDialog(this, "No ha asignado ninguna factura al recibo ¿Continuar igualmente?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (facturas_linkeadas == 0 || saldototal < Float.parseFloat(this.jTextImporte.getText())) {
+                int resp = JOptionPane.showConfirmDialog(this, "El saldo de las facturas es menor al importe total ¿Continuar igualmente?", "Confirmar", JOptionPane.YES_NO_OPTION);
                 if (resp == 0) {
 
                     rec.setFecha(this.jDateChooser.getDate());
@@ -892,6 +959,58 @@ public class AltaRecibo extends javax.swing.JFrame {
         String cadena = (this.jTextSerie.getText()).toUpperCase();
         this.jTextSerie.setText(cadena);
     }//GEN-LAST:event_jTextSerieFocusLost
+
+    private void jCBMonedaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBMonedaItemStateChanged
+        DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
+        model.setRowCount(0);
+        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+            List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+            for (int i = 0; i < ListaFactCredit.size(); i++) {
+                if (ListaFactCredit.get(i).getMoneda() == tipoMoneda.$U) {
+                    String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                    model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                        numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                }
+            }
+        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+            List<Factura> ListaFactCredit = Conexion.getInstance().ListarFacturasCredito((Proveedor) this.jCBProveedor.getSelectedItem());
+            for (int i = 0; i < ListaFactCredit.size(); i++) {
+                if (ListaFactCredit.get(i).getMoneda() == tipoMoneda.US$) {
+                    String numeroComp = ListaFactCredit.get(i).getSerieComprobante() + "-" + ListaFactCredit.get(i).getNroComprobante();
+                    model.addRow(new Object[]{ListaFactCredit.get(i).getFecha().toString(),
+                        numeroComp, ListaFactCredit.get(i).getTotal(), ListaFactCredit.get(i).getPendiente(), 0, ListaFactCredit.get(i)});
+                }
+            }
+        }
+    }//GEN-LAST:event_jCBMonedaItemStateChanged
+
+    private void jTextImporteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextImporteFocusLost
+        float importe = 0;
+        DefaultTableModel modelo = (DefaultTableModel) this.jTableFacturas.getModel();
+        
+        if (this.jTextImporte.getText() != null && this.jTextImporte.getText() != "") {
+            importe = Float.parseFloat(this.jTextImporte.getText());
+            if (importe != this.importerecordado) {
+                this.importerecordado=importe;
+                for (int i = 0; i < modelo.getRowCount(); i++) {
+                    this.jTableFacturas.setValueAt(0, i, 4);
+                }
+                for (int i = 0; i < modelo.getRowCount(); i++) {
+                    if (importe > 0) {
+                        String p = modelo.getValueAt(i, 3).toString();
+                        float pendiente = Float.parseFloat(p);
+                        if (importe >= pendiente) {
+                            this.jTableFacturas.setValueAt(pendiente, i, 4);
+                            importe = importe - pendiente;
+                        } else {
+                            this.jTableFacturas.setValueAt(importe, i, 4);
+                            importe = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_jTextImporteFocusLost
 
     /**
      * @param args the command line arguments
