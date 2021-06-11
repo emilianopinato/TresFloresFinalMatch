@@ -19,11 +19,15 @@ import Clases.tipoMoneda;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -139,7 +143,10 @@ public class AltaFactura extends javax.swing.JFrame {
                                 modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
                                 mC.setLocationRelativeTo(null);
                                 mC.setVisible(true);
-                            }
+                            }else{
+                                precioCotizacion = 0;
+                                AltaFactura.this.labelCotizacion.setText("No existe cotización para la fecha seleccionada.");
+                            }                                
                         }
                         banderita = false;
                     }
@@ -267,9 +274,9 @@ public class AltaFactura extends javax.swing.JFrame {
                         AltaFactura.this.labelCotizacion.setText("La cotización es: " + cotizacion.getImporte());
                         precioCotizacion = cotizacion.getImporte();
                     } else {
-                        int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización,"
-                                + "esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una "
-                                + "nueva", "Seleccione una opción",
+                        int input = javax.swing.JOptionPane.showConfirmDialog(null, "No se ha encontrado ninguna cotización, "
+                                + " esto puede ser debido a algún feriado. Seleccione la cotización correspondiente o cree una "
+                                + " nueva", "Seleccione una opción",
                                 javax.swing.JOptionPane.YES_NO_OPTION);
                         if (input == 0) {
                             modificarCotización mC = new modificarCotización(fechaCotizacion, AltaFactura.this);
@@ -490,7 +497,7 @@ public class AltaFactura extends javax.swing.JFrame {
         jPanelSetArticuloLayout.setHorizontalGroup(
             jPanelSetArticuloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelSetArticuloLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(13, 13, 13)
                 .addGroup(jPanelSetArticuloLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(jTextArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 505, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -556,6 +563,13 @@ public class AltaFactura extends javax.swing.JFrame {
         jLabel15.setText("Total");
 
         jLabel16.setText("IVA Basico");
+
+        jTextIVAbasico.setToolTipText("");
+        jTextIVAbasico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextIVAbasicoActionPerformed(evt);
+            }
+        });
 
         jCheckBoxIvaInc.setText("Precio unitario con IVA incluido");
         jCheckBoxIvaInc.addItemListener(new java.awt.event.ItemListener() {
@@ -685,39 +699,7 @@ public class AltaFactura extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(613, 613, 613)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(17, 17, 17)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jLabel15)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jTextTOTAL, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                        .addComponent(jLabel16)
-                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                                        .addComponent(jLabel14)
-                                                        .addGap(4, 4, 4)))
-                                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(jTextIVAminimo)
-                                                    .addComponent(jTextIVAbasico, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                                .addComponent(jButtonIngresar)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(jButtonCerrar))))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(28, 28, 28)
-                                        .addComponent(jLabel13)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jCheckBoxIvaInc))
+                        .addComponent(jCheckBoxIvaInc)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -740,10 +722,11 @@ public class AltaFactura extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jDateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jCBMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(labelCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jCBMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(labelCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7))
@@ -756,10 +739,41 @@ public class AltaFactura extends javax.swing.JFrame {
                                     .addComponent(jCBTipoComprobante, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(14, 14, 14))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanelSetArticulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(9, 9, 9))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanelSetArticulo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                            .addComponent(jScrollPane1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 580, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jLabel15)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jTextTOTAL, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel16)
+                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                                                .addGroup(jPanel1Layout.createSequentialGroup()
+                                                    .addComponent(jLabel14)
+                                                    .addGap(4, 4, 4)))
+                                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jTextIVAminimo)
+                                                .addComponent(jTextIVAbasico, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                            .addComponent(jButtonIngresar)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jButtonCerrar)))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(11, 11, 11)
+                                        .addComponent(jLabel13)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(13, 13, 13))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -857,14 +871,14 @@ public class AltaFactura extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(31, 31, 31))
+                .addGap(13, 13, 13))
         );
 
         pack();
@@ -880,7 +894,10 @@ public class AltaFactura extends javax.swing.JFrame {
         fac.setIvaBasico(Float.parseFloat(jTextIVAbasico.getText()));
         fac.setIvaMinimo(Float.parseFloat(jTextIVAminimo.getText()));
         fac.setDeshabilitado(false);
-        if (this.jTextSerie.getText().isEmpty()) {
+        if(this.precioCotizacion==0 && this.jCBMoneda.getSelectedItem() == tipoMoneda.US$){
+            javax.swing.JOptionPane.showMessageDialog(null, "Está intentando ingresar una factura en dolares que no tiene cotización. "
+                    + "Seleccione otra fecha y vuelva a intentarlo.");
+        }else if (this.jTextSerie.getText().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la serie del numero de factura.");
         } else if (this.jTextNumeroFact.getText().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el numero de factura.");
@@ -1110,10 +1127,39 @@ public class AltaFactura extends javax.swing.JFrame {
             }
             if (f) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Factura fue ingresada exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                //limpia cacillas y actualiza, para seguir ingresando mas facturas
+                this.jTextSerie.setText("");
+                this.jTextNumeroFact.setText("");
+                this.jDateChooser.setDate(new Date());
+                this.jCBMoneda.setSelectedIndex(0);
+                this.jCBTipoComprobante.setSelectedIndex(0);
+                
+                this.jTextArticulo.setText("");
+                this.jTextCantidad.setText("");
+                this.jTextUnitario.setText("");
+                this.jTextDescuento.setText("");
+                this.jTextSubTotalArt.setText("");
+                
+                DefaultTableModel model = (DefaultTableModel) this.jTableArticulos.getModel();
+                model.setRowCount(0);                
+                
+                this.ListaArticulo.clear();
+                this.articulo_seleccionado = null;
+
+                Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
+                this.jTextRut.setText(p.getRUT());
+                this.jTextDireccion.setText(p.getDireccion());
+                if (p.isTipoFacturacion()) {
+                    this.jCheckBoxIvaInc.setSelected(true);
+                    this.CalcularTotales_conIVA_inc();
+                } else {
+                    this.jCheckBoxIvaInc.setSelected(false);
+                    this.CalcularTotales_sinIVA_inc();
+                }
+                
             } else {
                 javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
-
         }
     }//GEN-LAST:event_jButtonIngresarActionPerformed
 
@@ -1616,6 +1662,7 @@ public class AltaFactura extends javax.swing.JFrame {
        
         Factura fac = this.f;
         this.vista = true;
+        this.labelCotizacion.setText("");
 
         this.jCBTipoComprobante.setModel(new DefaultComboBoxModel(tipoComprobante.values()));
         this.jCBMoneda.setModel(new DefaultComboBoxModel(tipoMoneda.values()));
@@ -1666,6 +1713,12 @@ public class AltaFactura extends javax.swing.JFrame {
             this.jCheckBoxIvaInc.setSelected(true);
         } else {
             this.jCheckBoxIvaInc.setSelected(false);
+        }
+        
+        if (this.jCheckBoxIvaInc.isSelected()) {
+            this.CalcularTotales_conIVA_inc();
+        } else {
+            this.CalcularTotales_sinIVA_inc();
         }
 
         this.jCBProveedor.setEnabled(false);
@@ -1820,7 +1873,17 @@ public class AltaFactura extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextNumeroFactKeyTyped
 
+    private void jTextIVAbasicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextIVAbasicoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextIVAbasicoActionPerformed
+
     private void CalcularTotales_sinIVA_inc() {
+        //DecimalFormat formatoFloat = new DecimalFormat("#.00");
+        Locale currentLocale = getLocale();
+        DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+        unusualSymbols.setDecimalSeparator('.');
+        String strange = "#.00";
+        DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
         float subtotal = 0, iva_minimo = 0, iva_basico = 0, total = 0;
 
         DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
@@ -1840,13 +1903,19 @@ public class AltaFactura extends javax.swing.JFrame {
 
         }
         total = subtotal + iva_minimo + iva_basico;
-        this.jTextIVAminimo.setText(String.valueOf(iva_minimo));
-        this.jTextIVAbasico.setText(String.valueOf(iva_basico));
-        this.jTextSubTotal.setText(String.valueOf(subtotal));
-        this.jTextTOTAL.setText(String.valueOf(total));
+        this.jTextIVAminimo.setText(formatoFloat.format(iva_minimo));
+        this.jTextIVAbasico.setText(formatoFloat.format(iva_basico));
+        this.jTextSubTotal.setText(formatoFloat.format(subtotal));
+        this.jTextTOTAL.setText(formatoFloat.format(total));
     }
 
     private void CalcularTotales_conIVA_inc() {
+        //DecimalFormat formatoFloat = new DecimalFormat("#.00");
+        Locale currentLocale = getLocale();
+        DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+        unusualSymbols.setDecimalSeparator('.');
+        String strange = "#.00";
+        DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
         float subtotal = 0, iva_minimo = 0, iva_basico = 0, total = 0;
 
         //Subtotal excento, basico y minimo.
@@ -1877,10 +1946,10 @@ public class AltaFactura extends javax.swing.JFrame {
         subtotal = subtotalExcento + subtotalMinimo + subtotalBasico;
         total = subtotal + iva_minimo + iva_basico;
 
-        this.jTextIVAminimo.setText(String.valueOf(iva_minimo));
-        this.jTextIVAbasico.setText(String.valueOf(iva_basico));
-        this.jTextSubTotal.setText(String.valueOf(subtotal));
-        this.jTextTOTAL.setText(String.valueOf(total));
+        this.jTextIVAminimo.setText(formatoFloat.format(iva_minimo));
+        this.jTextIVAbasico.setText(formatoFloat.format(iva_basico));
+        this.jTextSubTotal.setText(formatoFloat.format(subtotal));
+        this.jTextTOTAL.setText(formatoFloat.format(total));
     }
 
     private List<LocalDate> traerFechas(LocalDate fechaCotizacion) {
