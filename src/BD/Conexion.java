@@ -16,9 +16,9 @@ import Clases.IVA;
 import Clases.Proveedor;
 import Clases.Recibo;
 import Clases.Usuario;
-import Clases.tipoComprobante;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -706,6 +706,47 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
                     + "INNER JOIN proveedor ON (comprobante.proveedor_codigo = proveedor.codigo)"
                     + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " "
                     + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)              
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return listaFacturas;
+    }
+    
+    public List<Factura> ListarFacturasPorFechaSinProveedor(LocalDate fechaDesde, LocalDate fechaHasta) {
+        List<Factura> listaFacturas = null;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+   
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+
+        Date dateFechaDesde = Date.from(fechaDesde.atStartOfDay(defaultZoneId).toInstant());
+        Date dateFechaHasta = Date.from(fechaHasta.atStartOfDay(defaultZoneId).toInstant());
+        
+
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+        
+        int anio = Integer.parseInt(getAnioFormato.format(dateFechaDesde));
+        int mes = Integer.parseInt(getMesFormato.format(dateFechaDesde));
+        int dia = Integer.parseInt(getDiaFormato.format(dateFechaDesde));
+
+        int anio2 = Integer.parseInt(getAnioFormato.format(dateFechaHasta));
+        int mes2 = Integer.parseInt(getMesFormato.format(dateFechaHasta));
+        int dia2 = Integer.parseInt(getDiaFormato.format(dateFechaHasta));
+
+        String fecha1 = "'" + anio + "-" + mes + "-" + dia + "'";
+        String fecha2 = "'" + anio2 + "-" + mes2 + "-" + dia2 + "'";
+        
+        
+        try {
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.*, proveedor.* FROM factura INNER JOIN comprobante ON(factura.serieComprobante = comprobante.serieComprobante "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0) "
+                    + "INNER JOIN proveedor ON (comprobante.proveedor_codigo = proveedor.codigo)"
+                    + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " "
+                    + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)
                     .getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {

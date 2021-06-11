@@ -49,7 +49,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
                         altaUsuario aU = new altaUsuario();
-                        aU.show();
+                        aU.setVisible(true);
                     }
                 });
                 jMenu4.add(jm);
@@ -60,7 +60,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     altaUsuario aU = new altaUsuario(controladorBasura.getU());
-                    aU.show();
+                    aU.setVisible(true);
                 }
             });
 
@@ -73,7 +73,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
                     altaUsuario aU = new altaUsuario(controladorBasura.getU());
-                    aU.show();
+                    aU.setVisible(true);
                 }
             });
 
@@ -129,6 +129,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuItem18 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         jMenuItem21 = new javax.swing.JMenuItem();
+        jMenuItem22 = new javax.swing.JMenuItem();
 
         jMenuItem11.setText("jMenuItem11");
 
@@ -314,15 +315,23 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu5);
 
-        jMenu6.setText("Listado");
+        jMenu6.setText("Cierre de mes");
 
-        jMenuItem21.setText("Cierre");
+        jMenuItem21.setText("Cierre y listado");
         jMenuItem21.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem21ActionPerformed(evt);
             }
         });
         jMenu6.add(jMenuItem21);
+
+        jMenuItem22.setText("Abrir mes");
+        jMenuItem22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem22ActionPerformed(evt);
+            }
+        });
+        jMenu6.add(jMenuItem22);
 
         jMenuBar1.add(jMenu6);
 
@@ -337,7 +346,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(122, Short.MAX_VALUE))
+                .addContainerGap(165, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -356,7 +365,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         altaArticulo aP = new altaArticulo();
         aP.setLocationRelativeTo(null);
-        aP.show();
+        aP.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuItem1MouseClicked
@@ -367,56 +376,56 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         bajaArticulo bP = new bajaArticulo();
         bP.setLocationRelativeTo(null);
-        bP.show();
+        bP.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         modificarArticulo mA = new modificarArticulo();
         mA.setLocationRelativeTo(null);
-        mA.show();
+        mA.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
 
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
         altaProveedor ap = new altaProveedor();
         ap.setLocationRelativeTo(null);
-        ap.show();
+        ap.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
         modificarProveedor mp = new modificarProveedor();
         mp.setLocationRelativeTo(null);
-        mp.show();
+        mp.setVisible(true);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
         bajaProveedor bp = new bajaProveedor();
         bp.setLocationRelativeTo(null);
-        bp.show();
+        bp.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         
         AltaFactura f = new AltaFactura();
         f.setLocationRelativeTo(null);
-        f.show();
+        f.setVisible(true);
         
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
         AltaRecibo r = new AltaRecibo();
         r.setLocationRelativeTo(null);
-        r.show();
+        r.setVisible(true);
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
         // TODO add your handling code here:
         ListarComprobantes lc = new ListarComprobantes();
         lc.setLocationRelativeTo(null);
-        lc.show();
+        lc.setVisible(true);
         
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
@@ -424,21 +433,21 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
         altaIVA aI = new altaIVA();
         aI.setLocationRelativeTo(null);
-        aI.show();
+        aI.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         // TODO add your handling code here:
         compararPrecios CPuwu = new compararPrecios();
         CPuwu.setLocationRelativeTo(null);
-        CPuwu.show();
+        CPuwu.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         // TODO add your handling code here:
         recuperarProveedor rp = new recuperarProveedor();
         rp.setLocationRelativeTo(null);
-        rp.show();
+        rp.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
@@ -446,7 +455,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             // TODO add your handling code here:
             Cotizaciones c = new Cotizaciones();
             c.setLocationRelativeTo(null);
-            c.show();
+            c.setVisible(true);
         } catch (DatatypeConfigurationException ex) {
             Logger.getLogger(pantallaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }                    
@@ -455,13 +464,13 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
         // TODO add your handling code here:
         altaCotizacion aC = new altaCotizacion();
-        aC.show();
+        aC.setVisible(true);
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
         listadoCotizacionesExistentes lCE = new listadoCotizacionesExistentes();
-        lCE.show();
+        lCE.setVisible(true);
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
@@ -480,7 +489,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
         RecuperarComprobantes RC = new RecuperarComprobantes();
-        RC.show();
+        RC.setVisible(true);
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
@@ -489,6 +498,13 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         lCI.setLocationRelativeTo(null);
         lCI.setVisible(true);
     }//GEN-LAST:event_jMenuItem21ActionPerformed
+
+    private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
+        // TODO add your handling code here:
+        abrirMes aM = new abrirMes();
+        aM.setLocationRelativeTo(null);
+        aM.setVisible(true);
+    }//GEN-LAST:event_jMenuItem22ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -550,6 +566,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
+    private javax.swing.JMenuItem jMenuItem22;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;

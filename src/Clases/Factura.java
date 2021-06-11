@@ -71,6 +71,13 @@ public class Factura extends Comprobante implements Serializable {
     public void setDeshabilitado(boolean deshabilitado) {
         this.deshabilitado = deshabilitado;
     }
-    
-    
+
+    public boolean isCerrada() {
+        return cerrada;
+    }
+
+    public void setCerrada(boolean cerrada) {
+        this.cerrada = cerrada;
+    }
+
 }
