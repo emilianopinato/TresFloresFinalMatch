@@ -599,7 +599,7 @@ public class AltaRecibo extends javax.swing.JFrame {
                         float pendiente = f.getPendiente() - saldo;
                         f.setPendiente(pendiente);
                         f_r.setFactura(f);
-
+                        f.getFr_s().add(f_r);
                         listaf_r.add(f_r);
                     }
                 }
