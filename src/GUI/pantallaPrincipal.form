@@ -160,28 +160,12 @@
             <Property name="text" type="java.lang.String" value="Cotizaciones"/>
           </Properties>
           <SubComponents>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem14">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Ver cotizaciones"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem14ActionPerformed"/>
-              </Events>
-            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem15">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Crear cotizaci&#xf3;n"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem15ActionPerformed"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem16">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Listado de cotizaciones"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem16ActionPerformed"/>
               </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem17">
@@ -194,8 +178,19 @@
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem18">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Eliminar cotizaci&#xf3;n."/>
+                <Property name="text" type="java.lang.String" value="Eliminar cotizaci&#xf3;n"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem18ActionPerformed"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="jMenuItem16">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Listado de cotizaciones"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuItem16ActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>

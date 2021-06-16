@@ -97,6 +97,7 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Listado de compras separado por IVA mínimo e IVA básico a cierre de mes");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

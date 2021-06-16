@@ -122,11 +122,10 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
-        jMenuItem14 = new javax.swing.JMenuItem();
         jMenuItem15 = new javax.swing.JMenuItem();
-        jMenuItem16 = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
         jMenuItem18 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         jMenuItem21 = new javax.swing.JMenuItem();
         jMenuItem22 = new javax.swing.JMenuItem();
@@ -278,14 +277,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
         jMenu5.setText("Cotizaciones");
 
-        jMenuItem14.setText("Ver cotizaciones");
-        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem14ActionPerformed(evt);
-            }
-        });
-        jMenu5.add(jMenuItem14);
-
         jMenuItem15.setText("Crear cotización");
         jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -293,14 +284,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             }
         });
         jMenu5.add(jMenuItem15);
-
-        jMenuItem16.setText("Listado de cotizaciones");
-        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem16ActionPerformed(evt);
-            }
-        });
-        jMenu5.add(jMenuItem16);
 
         jMenuItem17.setText("Modificar cotización");
         jMenuItem17.addActionListener(new java.awt.event.ActionListener() {
@@ -310,8 +293,21 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         });
         jMenu5.add(jMenuItem17);
 
-        jMenuItem18.setText("Eliminar cotización.");
+        jMenuItem18.setText("Eliminar cotización");
+        jMenuItem18.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem18ActionPerformed(evt);
+            }
+        });
         jMenu5.add(jMenuItem18);
+
+        jMenuItem16.setText("Listado de cotizaciones");
+        jMenuItem16.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem16ActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jMenuItem16);
 
         jMenuBar1.add(jMenu5);
 
@@ -450,17 +446,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         rp.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
 
-    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
-        try {
-            // TODO add your handling code here:
-            Cotizaciones c = new Cotizaciones();
-            c.setLocationRelativeTo(null);
-            c.setVisible(true);
-        } catch (DatatypeConfigurationException ex) {
-            Logger.getLogger(pantallaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
-        }                    
-    }//GEN-LAST:event_jMenuItem14ActionPerformed
-
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
         // TODO add your handling code here:
         altaCotizacion aC = new altaCotizacion();
@@ -505,6 +490,13 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         aM.setLocationRelativeTo(null);
         aM.setVisible(true);
     }//GEN-LAST:event_jMenuItem22ActionPerformed
+
+    private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
+        // TODO add your handling code here:
+        bajaCotizacion bC = new bajaCotizacion();
+        bC.setLocationRelativeTo(null);
+        bC.setVisible(true);
+    }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -557,7 +549,6 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
-    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;
