@@ -39,7 +39,7 @@ public class Conexion {
         return ConexionHolder.INSTANCE;
     }
 
- private static class ConexionHolder {
+    private static class ConexionHolder {
 
         private static final Conexion INSTANCE = new Conexion();
         private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("Tres_Flores_-_Proveedores_2.0PU");
@@ -77,7 +77,7 @@ public class Conexion {
             em.getTransaction().rollback();
         }
     }
-    
+
     public boolean mergebool(Object object) {
         EntityManager em = getEntity();
         em.getTransaction().begin();
@@ -85,7 +85,7 @@ public class Conexion {
             em.merge(object);
             em.getTransaction().commit();
         } catch (Exception e) {
-            e.printStackTrace();          
+            e.printStackTrace();
             em.getTransaction().rollback();
             return false;
         }
@@ -115,7 +115,7 @@ public class Conexion {
             em.getTransaction().rollback();
         }
     }
-    
+
     public void remove(Object object) {
         EntityManager em = getEntity();
         em.getTransaction().begin();
@@ -127,7 +127,7 @@ public class Conexion {
             em.getTransaction().rollback();
         }
     }
-       
+
     public List<Articulo> listadoArticulos() {
         EntityManager em = getEntity();
         List<Articulo> listaProductos = null;
@@ -164,19 +164,19 @@ public class Conexion {
         return retorno;
     }
 
-      public List<Proveedor> listadoProveedores(){
+    public List<Proveedor> listadoProveedores() {
         EntityManager em = getEntity();
         List<Proveedor> listaProveedor = null;
         em.getTransaction().begin();
-        try{
+        try {
             listaProveedor = em.createNativeQuery("SELECT * FROM proveedor", Proveedor.class).getResultList();
             em.getTransaction().commit();
-        }catch(Exception e){
+        } catch (Exception e) {
             em.getTransaction().rollback();
         }
         return listaProveedor;
     }
- 
+
     public Proveedor getProveedor(int codigo) {
         Proveedor p = new Proveedor();
 
@@ -193,7 +193,7 @@ public class Conexion {
 
         return p;
     }
-    
+
     public Proveedor getProveedorxRazonSocial(String razonSocial) {
         Proveedor p = new Proveedor();
 
@@ -223,18 +223,18 @@ public class Conexion {
         }
         return ivas;
     }
-    
-    public List<Articulo> getArticuloxNombre_Descripcion(String texto){
-        
+
+    public List<Articulo> getArticuloxNombre_Descripcion(String texto) {
+
         texto = "%" + texto + "%";
         List<Articulo> listaA = null;
         EntityManager em = getEntity();
         em.getTransaction().begin();
         try {
-            listaA = em.createNativeQuery("SELECT * FROM articulo\n" +
-                                                "WHERE nombre LIKE :texto\n" +
-                                                "   OR codigo LIKE :texto\n" +
-                                                "   OR descripcion LIKE :texto", Articulo.class)
+            listaA = em.createNativeQuery("SELECT * FROM articulo\n"
+                    + "WHERE nombre LIKE :texto\n"
+                    + "   OR codigo LIKE :texto\n"
+                    + "   OR descripcion LIKE :texto", Articulo.class)
                     .setParameter("texto", texto)
                     .getResultList();
             em.getTransaction().commit();
@@ -243,7 +243,7 @@ public class Conexion {
         }
         return listaA;
     }
-    
+
     public boolean existeUsuario(String cedula) {
         boolean retorno = false;
         EntityManager em = getEntity();
@@ -293,14 +293,15 @@ public class Conexion {
         Usuario u = null;
         Empleado emp = null;
         try {
-             emp = (Empleado) em.createNativeQuery("SELECT U.cedula, U.nombre, U.apellido, U.contrasenia FROM usuario AS U INNER JOIN empleado AS E "
+            emp = (Empleado) em.createNativeQuery("SELECT U.cedula, U.nombre, U.apellido, U.contrasenia FROM usuario AS U INNER JOIN empleado AS E "
                     + "ON U.cedula = E.cedula WHERE E.cedula = :cedula", Empleado.class)
                     .setParameter("cedula", cedula)
                     .getSingleResult();
             em.getTransaction().commit();
-            
-            if(emp != null)
-                u = (Empleado)emp;
+
+            if (emp != null) {
+                u = (Empleado) emp;
+            }
 
         } catch (Exception e) {
             em.getTransaction().rollback();
@@ -308,7 +309,7 @@ public class Conexion {
         return u;
     }
 
-    public IVA getIva_de_Articulo(Articulo art){
+    public IVA getIva_de_Articulo(Articulo art) {
         EntityManager em = getEntity();
         IVA iva = null;
         em.getTransaction().begin();
@@ -323,17 +324,17 @@ public class Conexion {
         }
         return iva;
     }
-    
-    public List<Factura> ListarFacturas(Proveedor p){
+
+    public List<Factura> ListarFacturas(Proveedor p) {
         EntityManager em = getEntity();
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
-        try{
+        try {
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
                     + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo()).getResultList();
             em.getTransaction().commit();
-        }catch(Exception e){
+        } catch (Exception e) {
             em.getTransaction().rollback();
         }
         return listaFacturas;
@@ -347,7 +348,7 @@ public class Conexion {
         int anio = Integer.parseInt(getAnioFormato.format(fechaDesde));
         int mes = Integer.parseInt(getMesFormato.format(fechaDesde));
         int dia = Integer.parseInt(getDiaFormato.format(fechaDesde));
-        
+
         int anio2 = Integer.parseInt(getAnioFormato.format(fechaHasta));
         int mes2 = Integer.parseInt(getMesFormato.format(fechaHasta));
         int dia2 = Integer.parseInt(getDiaFormato.format(fechaHasta));
@@ -357,11 +358,11 @@ public class Conexion {
 
         EntityManager em = getEntity();
         List<Factura> listaFacturas = null;
-        em.getTransaction().begin();              
+        em.getTransaction().begin();
         try {
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
                     + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo "
-                    + "AND comprobante.fecha >= "+ fecha1 +" AND comprobante.fecha <= "+ fecha2 +" ORDER BY comprobante.fecha ASC", Factura.class)
+                    + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Factura.class)
                     .setParameter("codigo", codigoProveedor)
                     .getResultList();
             em.getTransaction().commit();
@@ -370,15 +371,15 @@ public class Conexion {
         }
         return listaFacturas;
     }
-    
-    public List<Factura> ListarFacturasBienSencillo(){
+
+    public List<Factura> ListarFacturasBienSencillo() {
         EntityManager em = getEntity();
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
-        try{
+        try {
             listaFacturas = em.createNativeQuery("SELECT * FROM factura", Factura.class).getResultList();
             em.getTransaction().commit();
-        }catch(Exception e){
+        } catch (Exception e) {
             em.getTransaction().rollback();
         }
         return listaFacturas;
@@ -407,7 +408,7 @@ public class Conexion {
         int anio = Integer.parseInt(getAnioFormato.format(fechaDesde));
         int mes = Integer.parseInt(getMesFormato.format(fechaDesde));
         int dia = Integer.parseInt(getDiaFormato.format(fechaDesde));
-        
+
         int anio2 = Integer.parseInt(getAnioFormato.format(fechaHasta));
         int mes2 = Integer.parseInt(getMesFormato.format(fechaHasta));
         int dia2 = Integer.parseInt(getDiaFormato.format(fechaHasta));
@@ -421,7 +422,7 @@ public class Conexion {
         try {
             listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
                     + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
-                    + "AND comprobante.fecha >= "+ fecha1 +" AND recibo.deshabilitado = 0 AND comprobante.fecha <= "+ fecha2 +" ORDER BY comprobante.fecha ASC", Recibo.class)                   
+                    + "AND comprobante.fecha >= " + fecha1 + " AND recibo.deshabilitado = 0 AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Recibo.class)
                     .setParameter("codigo", codigo)
                     .getResultList();
             em.getTransaction().commit();
@@ -447,8 +448,7 @@ public class Conexion {
 
         return listaComprobantes;
     }
-    
-    
+
     public List<Comprobante> listarComprobantesPorFecha(int codigo, Date fechaDesde, Date fechaHasta) {
         EntityManager em = getEntity();
         List<Comprobante> listaComprobantes = null;
@@ -468,14 +468,14 @@ public class Conexion {
 
         return listaComprobantes;
     }
-   
+
     public List<Historial> listarHistorialArticulo(String codigo) {
-        List<Historial> lista  = null;
+        List<Historial> lista = null;
 
         EntityManager em = getEntity();
         em.getTransaction().begin();
         try {
-            lista =  em.createNativeQuery("SELECT * FROM historial WHERE articulo_codigo = :codigo", Historial.class)
+            lista = em.createNativeQuery("SELECT * FROM historial WHERE articulo_codigo = :codigo", Historial.class)
                     .setParameter("codigo", codigo)
                     .getResultList();
             em.getTransaction().commit();
@@ -486,17 +486,17 @@ public class Conexion {
         return lista;
     }
 
-    public List<Factura> ListarFacturasCredito(Proveedor p){
+    public List<Factura> ListarFacturasCredito(Proveedor p) {
         EntityManager em = getEntity();
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
-        try{
+        try {
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
                     + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.tipo = 1 AND factura.Pendiente > 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo())
                     .getResultList();
             em.getTransaction().commit();
-        }catch(Exception e){
+        } catch (Exception e) {
             em.getTransaction().rollback();
         }
         return listaFacturas;
@@ -505,7 +505,7 @@ public class Conexion {
     public boolean existeFecha(Date fechaConvertida) {
         boolean retorno;
         Cotizacion cotizacion;
-       
+
         SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
         SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
         SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
@@ -519,7 +519,7 @@ public class Conexion {
         EntityManager em = getEntity();
         em.getTransaction().begin();
         try {
-            cotizacion = (Cotizacion) em.createNativeQuery("SELECT * FROM cotizacion WHERE DATE(cotizacion.fecha) = "  + fecha + "", Cotizacion.class)
+            cotizacion = (Cotizacion) em.createNativeQuery("SELECT * FROM cotizacion WHERE DATE(cotizacion.fecha) = " + fecha + "", Cotizacion.class)
                     .getSingleResult();
             em.getTransaction().commit();
 
@@ -552,7 +552,7 @@ public class Conexion {
         return listaCotizaciones;
     }
 
-public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
+    public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         Cotizacion cotizacion = null;
 
         int anio = fechaCotizacion.getYear();
@@ -593,58 +593,56 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
         }
         return listaCotizaciones;
     }
-    
-    public List<Proveedor> listarProveedoresArticulo(String codigo){
+
+    public List<Proveedor> listarProveedoresArticulo(String codigo) {
         EntityManager em = getEntity();
         List<Proveedor> listaProveedor = null;
         em.getTransaction().begin();
-        try{
+        try {
             listaProveedor = em.createNativeQuery("SELECT p.* FROM proveedor as p,articulo_proveedor as ap WHERE ap.proveedores_codigo = p.codigo AND p.deshabilitado = false AND ap.articulos_codigo = :codigo", Proveedor.class)
                     .setParameter("codigo", codigo)
                     .getResultList();
             em.getTransaction().commit();
-        }catch(Exception e){
+        } catch (Exception e) {
             em.getTransaction().rollback();
         }
         return listaProveedor;
-    
+
     }
-    
-    public List<Historial> listarHistorialProveedorArticulo(String codigoArt,int codigoPro){
+
+    public List<Historial> listarHistorialProveedorArticulo(String codigoArt, int codigoPro) {
         EntityManager em = getEntity();
         List<Historial> listaHistorial = null;
         em.getTransaction().begin();
-        try{
+        try {
             listaHistorial = em.createNativeQuery("SELECT * FROM historial WHERE articulo_codigo = :codigoArt AND proveedor_codigo = :codigoPro ", Historial.class)
                     .setParameter("codigoArt", codigoArt)
                     .setParameter("codigoPro", codigoPro)
                     .getResultList();
             em.getTransaction().commit();
-        }catch(Exception e){
+        } catch (Exception e) {
             em.getTransaction().rollback();
         }
         return listaHistorial;
-    
+
     }
-    
-    public List<Factura> ListarNotasCreditos(Proveedor p){
+
+    public List<Factura> ListarNotasCreditos(Proveedor p) {
         EntityManager em = getEntity();
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
-        try{
+        try {
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
                     + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.tipo = 3 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo())
                     .getResultList();
             em.getTransaction().commit();
-        }catch(Exception e){
+        } catch (Exception e) {
             em.getTransaction().rollback();
         }
         return listaFacturas;
     }
-    
-    
-    
+
     public List<Factura> listarFacturasDeshabilitados() {
         EntityManager em = getEntity();
         List<Factura> listaComprobantes = new ArrayList<>();
@@ -662,7 +660,7 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
 
         return listaComprobantes;
     }
-        
+
     public List<Recibo> listarRecibosDeshabilitados() {
         EntityManager em = getEntity();
         List<Recibo> listaComprobantes = new ArrayList<>();
@@ -680,7 +678,7 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
 
         return listaComprobantes;
     }
-    
+
     public List<Factura> ListarFacturasPorFechaSinProveedor(Date fechaDesde, Date fechaHasta) {
         SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
         SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
@@ -705,13 +703,123 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
                     + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0) "
                     + "INNER JOIN proveedor ON (comprobante.proveedor_codigo = proveedor.codigo)"
                     + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " "
-                    + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)              
+                    + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)
                     .getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
         }
         return listaFacturas;
+    }
+
+    public boolean existeFac(String serie, String numero, String prov) {
+        boolean retorno = false;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            Factura f = (Factura) em.createNativeQuery("SELECT * FROM factura, comprobante WHERE factura.serieComprobante = :serie "
+                    + "AND factura.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = factura.serieComprobante "
+                    + "AND comprobante.nroComprobante = factura.nroComprobante;", Factura.class)
+                    .setParameter("serie", serie)
+                    .setParameter("numero", numero)
+                    .setParameter("prov", prov)
+                    .getSingleResult();
+            em.getTransaction().commit();
+
+            if (f != null) {
+                retorno = true;
+            } else {
+                retorno = false;
+            }
+
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return retorno;
+    }
+    
+    public boolean existeFacModificar(String serie_antiguo, String numero_antiguo, String prov_antiguo,String serie_nuevo, String numero_nuevo, String prov_nuevo) {
+        boolean retorno = false;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            Factura f = (Factura) em.createNativeQuery("SELECT * FROM factura, comprobante WHERE factura.serieComprobante = :serie "
+                    + "AND factura.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = factura.serieComprobante "
+                    + "AND comprobante.nroComprobante = factura.nroComprobante;", Factura.class)
+                    .setParameter("serie", serie_nuevo)
+                    .setParameter("numero", numero_nuevo)
+                    .setParameter("prov", prov_nuevo)
+                    .getSingleResult();
+            em.getTransaction().commit();
+            if(serie_antiguo.equals(serie_nuevo) && numero_antiguo.equals(numero_nuevo) && prov_antiguo.equals(prov_nuevo)){
+                return false;
+            }
+            
+            if (f != null) {
+                retorno = true;
+            } else {
+                retorno = false;
+            }
+
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return retorno;
+    }
+
+    public boolean existeRec(String serie, String numero, String prov) {
+        boolean retorno = false;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE recibo.serieComprobante = :serie "
+                    + "AND recibo.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = recibo.serieComprobante "
+                    + "AND comprobante.nroComprobante = recibo.nroComprobante;", Recibo.class)
+                    .setParameter("serie", serie)
+                    .setParameter("numero", numero)
+                    .setParameter("prov", prov)
+                    .getSingleResult();
+            em.getTransaction().commit();
+
+            if (r != null) {
+                retorno = true;
+            } else {
+                retorno = false;
+            }
+
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return retorno;
+    }
+
+    public boolean existeRecModificar(String serie_antiguo, String numero_antiguo, String prov_antiguo,String serie_nuevo, String numero_nuevo, String prov_nuevo) {
+        boolean retorno = false;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE recibo.serieComprobante = :serie "
+                    + "AND recibo.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = recibo.serieComprobante "
+                    + "AND comprobante.nroComprobante = recibo.nroComprobante;", Recibo.class)
+                    .setParameter("serie", serie_nuevo)
+                    .setParameter("numero", numero_nuevo)
+                    .setParameter("prov", prov_nuevo)
+                    .getSingleResult();
+            em.getTransaction().commit();
+            if(serie_antiguo.equals(serie_nuevo) && numero_antiguo.equals(numero_nuevo) && prov_antiguo.equals(prov_nuevo)){
+                return false;
+            }
+            
+            if (r != null) {
+                retorno = true;
+            } else {
+                retorno = false;
+            }
+
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return retorno;
     }
 
 }

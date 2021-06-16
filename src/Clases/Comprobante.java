@@ -40,6 +40,7 @@ public class Comprobante implements Serializable {
     private float ivaBasico;
     
     //LINKS--------------------------------//
+    //@Id
     @ManyToOne
     private Proveedor proveedor;
 

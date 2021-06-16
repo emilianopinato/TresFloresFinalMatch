@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
@@ -37,10 +38,10 @@ public class Articulo implements Serializable {
     @ManyToOne
     private Usuario usuario;
     
-    @OneToMany(mappedBy = "articulo")
+    @OneToMany(mappedBy = "articulo", fetch = FetchType.EAGER)
     private List<Historial> historiales;
-    
-    @OneToMany(mappedBy = "articulo")
+
+    @OneToMany(mappedBy = "articulo", fetch = FetchType.EAGER )
     private List<F_P> f_ps;
     
     @ManyToOne
@@ -155,7 +156,8 @@ public class Articulo implements Serializable {
     }
     
     public void addF_P(F_P fp){
-        if(this.f_ps.isEmpty()){
+        if(this.f_ps == null){
+            this.f_ps = new ArrayList<F_P>();
             this.f_ps.add(fp);
         }else{
             this.f_ps.add(fp);   
