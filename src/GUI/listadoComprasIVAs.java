@@ -25,8 +25,7 @@ import java.io.FileOutputStream;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.Month;
-import java.time.temporal.TemporalAdjusters;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +48,17 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
      */
     public listadoComprasIVAs() {
         initComponents();
+        
+        LocalDate fechaActual = LocalDate.now();
+        LocalDate fechaDesde = LocalDate.of(fechaActual.getYear(), fechaActual.getMonth(), 1);  
+        LocalDate fechaHasta = LocalDate.of(fechaActual.getYear(), fechaActual.getMonth(), fechaActual.lengthOfMonth());
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+       
+        Date dateFechaDesde = Date.from(fechaDesde.atStartOfDay(defaultZoneId).toInstant());
+        Date dateFechaHasta = Date.from(fechaHasta.atStartOfDay(defaultZoneId).toInstant());
+        
+        jDateChooserDesde.setDate(dateFechaDesde);
+        jDateChooserHasta.setDate(dateFechaHasta);
         
         //Escondo la columna que tiene el objeto guardado.
         jTable1.getColumnModel().getColumn(6).setMinWidth(0);
@@ -87,6 +97,7 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Listado de compras separado por IVA mínimo e IVA básico a cierre de mes");
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -916,79 +927,186 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        
+
         //Traigo el mes seleccionado en el combo.
         String mesSeleccionado = jComboBox1.getSelectedItem().toString();
-        
-        if(mesSeleccionado != null){
+
+        if (mesSeleccionado != null) {
             //Traigo la fecha actual.
             LocalDate fechaActual = LocalDate.now();
-            
+
             //Comparo los meses.
-            String mesFechaActual = fechaActual.getMonth().name();
+            String mesFechaActual = fechaActual.getMonth().name(); //JUNIO
             String mesActual = "";
-            
-            if("JANUARY".equals(mesFechaActual)){
+            boolean mayor;
+
+            if ("JANUARY".equals(mesFechaActual)) {
                 mesActual = "Enero";
-            }else if("FEBRUARY".equals(mesFechaActual)){
+            } else if ("FEBRUARY".equals(mesFechaActual)) {
                 mesActual = "Febrero";
-            }else if("MARCH".equals(mesFechaActual)){
+            } else if ("MARCH".equals(mesFechaActual)) {
                 mesActual = "Marzo";
-            }else if("APRIL".equals(mesFechaActual)){
+            } else if ("APRIL".equals(mesFechaActual)) {
                 mesActual = "Abril";
-            }else if("MAY".equals(mesFechaActual)){
+            } else if ("MAY".equals(mesFechaActual)) {
                 mesActual = "Mayo";
-            }else if("JUNE".equals(mesFechaActual)){
+            } else if ("JUNE".equals(mesFechaActual)) {
                 mesActual = "Junio";
-            }else if("JULY".equals(mesFechaActual)){
+            } else if ("JULY".equals(mesFechaActual)) {
                 mesActual = "Julio";
-            }else if("AUGUST".equals(mesFechaActual)){
+            } else if ("AUGUST".equals(mesFechaActual)) {
                 mesActual = "Agosto";
-            }else if("SEPTEMBER".equals(mesFechaActual)){
+            } else if ("SEPTEMBER".equals(mesFechaActual)) {
                 mesActual = "Septiembre";
-            }else if("OCTOBER".equals(mesFechaActual)){
+            } else if ("OCTOBER".equals(mesFechaActual)) {
                 mesActual = "Octubre";
-            }else if("NOVEMBER".equals(mesFechaActual)){
+            } else if ("NOVEMBER".equals(mesFechaActual)) {
                 mesActual = "Noviembre";
-            }else if("DECEMBER".equals(mesFechaActual)){
+            } else if ("DECEMBER".equals(mesFechaActual)) {
                 mesActual = "Diciembre";
             }
-            
+
+            //Cuando el mes actual es igual al mes seleccionado.
             if (mesSeleccionado.equals(mesActual)) {
                 int diaDelMes = fechaActual.getDayOfMonth();
                 int ultimoDiaMes = fechaActual.lengthOfMonth();
 
                 //Si es el último día del mes ahí si tendría que poder cerrar sin problemas
                 if (diaDelMes == ultimoDiaMes) {
-                    boolean exito = cerrarMes(mesSeleccionado);
-                    //Cierra el mes
-                    //Alerta de que cerró bien etc.
+                    boolean shrek = existeMesSinCerrar(mesSeleccionado);
+                    if (shrek) {
+                        boolean exito = cerrarMes(mesSeleccionado);
+                        if (exito) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "El mes se ha cerrado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }else{
+                        javax.swing.JOptionPane.showMessageDialog(null, "No puede cerrar un mes si hay un mes anterior sin cerrar.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    }
                 } else {
                     int input = javax.swing.JOptionPane.showConfirmDialog(null, "El mes de " + mesActual.toLowerCase()
-                            + "no ha llegado a su fin, ¿Desea cerrar este mes de todas formas?",
+                            + " no ha llegado a su fin, ¿Desea cerrar este mes de todas formas?",
                             "Seleccione una opción",
                             javax.swing.JOptionPane.YES_NO_OPTION);
 
                     if (input == 0) {
                         //Acá cierra igual a pesar de que no sea fin de mes.
-                        
+                        boolean shrek = existeMesSinCerrar(mesSeleccionado);
+                        if (shrek) {
+                            boolean exito = cerrarMes(mesSeleccionado);
+                            if (exito) {
+                                javax.swing.JOptionPane.showMessageDialog(null, "El mes se ha cerrado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                            }
+                        }else{
+                        javax.swing.JOptionPane.showMessageDialog(null, "No puede cerrar un mes si hay un mes anterior sin cerrar.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    }
                     }
                 }
-                
-                
+            } else {
+                //Cuando el mes actual es mayor o menor al mes seleccionado.  
+                mayor = mesMayor(mesSeleccionado, fechaActual);
+                if (!mayor) {
+                    boolean shrek = existeMesSinCerrar(mesSeleccionado);
+                    if (shrek) {
+                        boolean exito = cerrarMes(mesSeleccionado);
+                        if (exito) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "El mes se ha cerrado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                        }
+                    }else{
+                        javax.swing.JOptionPane.showMessageDialog(null, "No puede cerrar un mes si hay un mes anterior sin cerrar.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    }
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Está intentando cerrar un mes posterior al mes actual", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                }
 
             }
 
         }
     }//GEN-LAST:event_jButton5ActionPerformed
-    
-    private boolean cerrarMes(String mesSeleccionado) {
-        LocalDate fechaACerrar = null;
-        LocalDate fechaActual = LocalDate.now();
 
+    private boolean cerrarMes(String mesSeleccionado) {
+        LocalDate fechaACerrar = convertirAFecha2(mesSeleccionado);
+
+        if (fechaACerrar != null) {
+            LocalDate fechaDesde = LocalDate.of(fechaACerrar.getYear(), fechaACerrar.getMonth(), 1);
+            List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaACerrar);
+            for (Factura f : facturas) {
+                f.setCerrada(true);
+                Conexion.getInstance().merge(f);
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+    private boolean mesMayor(String mesSeleccionado, LocalDate mesActual) {
+        LocalDate dateSeleccionada = convertirAFecha(mesSeleccionado);
+        if (dateSeleccionada.isAfter(mesActual)) {
+            return true;
+        }
+        return false;
+    }
+
+    private LocalDate convertirAFecha(String mesSeleccionado) {
+        LocalDate dateSeleccionada = null;
+        LocalDate fechaActual = LocalDate.now();
         if (mesSeleccionado.equals("Enero")) {
             LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 1, 1);
-            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth()); //31
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Febrero")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 2, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Marzo")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 3, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Abril")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 4, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Mayo")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 5, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Junio")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 6, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Julio")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 7, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Agosto")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 8, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Septiembre")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 9, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Octubre")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 10, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Noviembre")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 11, 1);
+            dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+        } else if (mesSeleccionado.equals("Diciembre")) {
+            //Si el valor del mes es 1 (enero), significa que estoy en enero del año siguiente.
+            //Por lo tanto tengo que restarle un año a la fecha que traigo del sistema.
+            if (fechaActual.getMonthValue() == 1) {
+                LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 12, 1);
+                fechaMesSeleccionado.minusYears(1);
+                dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+            } //En cambio si el mes es 12 (diciembre), no tengo que restarle un año a la fecha actual ya que las dos fechas tienen el mismo año.
+            else if (fechaActual.getMonthValue() == 12) {
+                LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 12, 1);
+                dateSeleccionada = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), 1);
+            }
+        }
+        return dateSeleccionada;
+    }
+
+    private LocalDate convertirAFecha2(String mesSeleccionado) {
+        LocalDate fechaACerrar = null;
+        LocalDate fechaActual = LocalDate.now();
+           
+        //Dependiendo del mes que selecciono, creo una fecha con el último día del mes a partir de ese mes, y el año actual.
+        if (mesSeleccionado.equals("Enero")) {
+            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 1, 1);
+            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth()); // 31/01/2021
         } else if (mesSeleccionado.equals("Febrero")) {
             LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 2, 1);
             fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
@@ -1020,19 +1138,22 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 11, 1);
             fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
         } else if (mesSeleccionado.equals("Diciembre")) {
-            LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 12, 1);
-            fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
-        }
-        
-        if (fechaACerrar != null) {
-            LocalDate fechaDesde;
-            LocalDate fechaHasta;
-            //List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
-        }
+            //Si el valor del mes es 1 (enero), significa que estoy en enero del año siguiente.
+            //Por lo tanto tengo que restarle un año a la fecha que traigo del sistema.
+            if (fechaActual.getMonthValue() == 1) {
+                LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 12, 1);
+                fechaMesSeleccionado.minusYears(1);
+                fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+            } //En cambio si el mes es 12 (diciembre), no tengo que restarle un año a la fecha actual ya que las dos fechas tienen el mismo año.
+            else if (fechaActual.getMonthValue() == 12) {
+                LocalDate fechaMesSeleccionado = LocalDate.of(fechaActual.getYear(), 12, 1);
+                fechaACerrar = LocalDate.of(fechaMesSeleccionado.getYear(), fechaMesSeleccionado.getMonth(), fechaMesSeleccionado.lengthOfMonth());
+            }
 
-        return false;
+        }
+        return fechaACerrar;
     }
-    
+
     /**
      * @param args the command line arguments
      */
@@ -1091,5 +1212,34 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 
+    private boolean existeMesSinCerrar(String mesSeleccionado) {
+        // 1 - Traer el mes seleccionado.
+        // 2 - Preguntar por los meses menores a ese mes.
+        //     2.1 - Si el mes es mayor, alerta.
+        //     2.2 - Si el mes es menor, chequear que esté cerrado.
+        //     2.2.1 - Para chequear que el mes esté cerrado, tengo que traer una factura de ese mes y chequear que "cerrada" esté en true.
+
+        boolean retorno = false;
+        LocalDate date1 = convertirAFecha(mesSeleccionado);
+        LocalDate date2 = convertirAFecha2(mesSeleccionado);
+        
+        LocalDate fechaDesde = date1.minusMonths(1);
+        LocalDate fechaHasta = date2.minusMonths(1);
+
+        List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
+        if (facturas.isEmpty()) {
+            return true;
+        } else {
+            for (Factura f : facturas) {
+                if (f.isCerrada()) {
+                    retorno = true;
+                    break;
+                }
+            }
+        }
+       
+
+        return retorno;
+    }
 
 }

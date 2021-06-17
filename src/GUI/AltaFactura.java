@@ -890,279 +890,282 @@ public class AltaFactura extends javax.swing.JFrame {
 
     private void jButtonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIngresarActionPerformed
         Factura fac = new Factura();
-        //Agregamos IVA Básico y Mínimo.
-        fac.setIvaBasico(Float.parseFloat(jTextIVAbasico.getText()));
-        fac.setIvaMinimo(Float.parseFloat(jTextIVAminimo.getText()));
-        fac.setDeshabilitado(false);
-        if (this.precioCotizacion == 0 && this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Está intentando ingresar una factura en dolares que no tiene cotización. "
-                    + "Seleccione otra fecha y vuelva a intentarlo.");
-        } else if (this.jTextSerie.getText().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la serie del numero de factura.");
-        } else if (this.jTextNumeroFact.getText().isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el numero de factura.");
-        } else if (this.jDateChooser.getDate() == null) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la fecha de la factura.");
-        } else if (this.ListaArticulo.isEmpty()) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Es necesario ingresar minimo un articulo.");
-        } else {
-            String prov = String.valueOf(((Proveedor) this.jCBProveedor.getSelectedItem()).getCodigo());
-            if (Conexion.getInstance().existeFac(this.jTextSerie.getText(), this.jTextNumeroFact.getText(), prov) == true) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Ya ingresaste un recibo con ese numero anteriormente.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        if (((Proveedor) this.jCBProveedor.getSelectedItem()) != null) {
+            //Agregamos IVA Básico y Mínimo.
+            fac.setIvaBasico(Float.parseFloat(jTextIVAbasico.getText()));
+            fac.setIvaMinimo(Float.parseFloat(jTextIVAminimo.getText()));
+            fac.setDeshabilitado(false);
+
+            if (this.precioCotizacion == 0 && this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Está intentando ingresar una factura en dolares que no tiene cotización. "
+                        + "Seleccione otra fecha y vuelva a intentarlo.");
+            } else if (this.jTextSerie.getText().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la serie del numero de factura.");
+            } else if (this.jTextNumeroFact.getText().isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el numero de factura.");
+            } else if (this.jDateChooser.getDate() == null) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la fecha de la factura.");
+            } else if (this.ListaArticulo.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Es necesario ingresar minimo un articulo.");
             } else {
+                String prov = String.valueOf(((Proveedor) this.jCBProveedor.getSelectedItem()).getCodigo());
+                if (Conexion.getInstance().existeFac(this.jTextSerie.getText(), this.jTextNumeroFact.getText(), prov) == true) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Ya ingresaste un recibo con ese numero anteriormente.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                } else {
 
-                if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
-                    fac.setTipo(tipoComprobante.Contado);
-                    fac.setSerieComprobante(this.jTextSerie.getText());
-                    fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                    fac.setPendiente(0);
-                    fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
-                    fac.setFecha(this.jDateChooser.getDate());
-                    fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                    if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
+                        fac.setTipo(tipoComprobante.Contado);
+                        fac.setSerieComprobante(this.jTextSerie.getText());
+                        fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                        fac.setPendiente(0);
+                        fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                        fac.setFecha(this.jDateChooser.getDate());
+                        fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
 
-                    if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                        fac.setCotizacion(1);
-                        fac.setMoneda(tipoMoneda.$U);
-                    } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                        fac.setCotizacion((float) precioCotizacion);
-                        fac.setMoneda(tipoMoneda.US$);
+                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                            fac.setCotizacion(1);
+                            fac.setMoneda(tipoMoneda.$U);
+                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                            fac.setCotizacion((float) precioCotizacion);
+                            fac.setMoneda(tipoMoneda.US$);
+                        }
+
+                        List<F_P> listaf_p = new ArrayList<F_P>();
+                        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                        for (int i = 0; i < modelo.getRowCount(); i++) {
+                            F_P f_p = new F_P();
+                            f_p.setFactura(fac);
+                            f_p.setArticulo(this.ListaArticulo.get(i));
+
+                            String c = modelo.getValueAt(i, 1).toString();
+                            float cant = Float.parseFloat(c);
+                            f_p.setCantidad(cant);
+
+                            String p = modelo.getValueAt(i, 2).toString();
+                            float precio = Float.parseFloat(p);
+                            f_p.setPrecio(precio);
+
+                            String d = modelo.getValueAt(i, 3).toString();
+                            float descuento = Float.parseFloat(d);
+                            f_p.setDescuento(descuento);
+
+                            this.ListaArticulo.get(i).addF_P(f_p);
+
+                            listaf_p.add(f_p);
+
+                            //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
+                            Historial h = new Historial();
+                            h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                            h.setPrecio(precio);
+                            h.setProducto(this.ListaArticulo.get(i));
+                            h.setFecha(this.jDateChooser.getDate());
+                            this.ListaArticulo.get(i).getHistoriales().add(h);
+                            Conexion.getInstance().persist(h);
+
+                            //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
+                        }
+                        fac.setFp_s(listaf_p);
+
+                    } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Crédito")) {
+                        fac.setTipo(tipoComprobante.Credito);
+                        fac.setSerieComprobante(this.jTextSerie.getText());
+                        fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                        fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
+                        fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                        fac.setFecha(this.jDateChooser.getDate());
+                        fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+
+                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                            fac.setCotizacion(1);
+                            fac.setMoneda(tipoMoneda.$U);
+                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                            fac.setCotizacion((float) precioCotizacion);
+                            fac.setMoneda(tipoMoneda.US$);
+                        }
+
+                        List<F_P> listaf_p = new ArrayList<F_P>();
+                        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                        for (int i = 0; i < modelo.getRowCount(); i++) {
+                            F_P f_p = new F_P();
+                            f_p.setFactura(fac);
+                            f_p.setArticulo(this.ListaArticulo.get(i));
+
+                            String c = modelo.getValueAt(i, 1).toString();
+                            float cant = Float.parseFloat(c);
+                            f_p.setCantidad(cant);
+
+                            String p = modelo.getValueAt(i, 2).toString();
+                            float precio = Float.parseFloat(p);
+                            f_p.setPrecio(precio);
+
+                            String d = modelo.getValueAt(i, 3).toString();
+                            float descuento = Float.parseFloat(d);
+                            f_p.setDescuento(descuento);
+
+                            this.ListaArticulo.get(i).addF_P(f_p);
+
+                            listaf_p.add(f_p);
+
+                            //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
+                            Historial h = new Historial();
+                            h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                            h.setPrecio(precio);
+                            h.setProducto(this.ListaArticulo.get(i));
+                            h.setFecha(this.jDateChooser.getDate());
+                            this.ListaArticulo.get(i).getHistoriales().add(h);
+                            Conexion.getInstance().persist(h);
+
+                            //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
+                        }
+                        fac.setFp_s(listaf_p);
+                    } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Devolución Contado")) {
+                        fac.setTipo(tipoComprobante.DevolucionContado);
+                        fac.setSerieComprobante(this.jTextSerie.getText());
+                        fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                        fac.setPendiente(0);
+                        fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                        fac.setFecha(this.jDateChooser.getDate());
+                        fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+
+                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                            fac.setCotizacion(1);
+                            fac.setMoneda(tipoMoneda.$U);
+                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                            fac.setCotizacion((float) precioCotizacion);
+                            fac.setMoneda(tipoMoneda.US$);
+                        }
+
+                        List<F_P> listaf_p = new ArrayList<F_P>();
+                        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                        for (int i = 0; i < modelo.getRowCount(); i++) {
+                            F_P f_p = new F_P();
+                            f_p.setFactura(fac);
+                            f_p.setArticulo(this.ListaArticulo.get(i));
+
+                            String c = modelo.getValueAt(i, 1).toString();
+                            float cant = Float.parseFloat(c);
+                            f_p.setCantidad(cant);
+
+                            String p = modelo.getValueAt(i, 2).toString();
+                            float precio = Float.parseFloat(p);
+                            f_p.setPrecio(precio);
+
+                            String d = modelo.getValueAt(i, 3).toString();
+                            float descuento = Float.parseFloat(d);
+                            f_p.setDescuento(descuento);
+
+                            this.ListaArticulo.get(i).addF_P(f_p);
+
+                            listaf_p.add(f_p);
+
+                            //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
+                            Historial h = new Historial();
+                            h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                            h.setPrecio(precio);
+                            h.setProducto(this.ListaArticulo.get(i));
+                            h.setFecha(this.jDateChooser.getDate());
+                            this.ListaArticulo.get(i).getHistoriales().add(h);
+                            Conexion.getInstance().persist(h);
+
+                            //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
+                        }
+                        fac.setFp_s(listaf_p);
+                    } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals(tipoComprobante.NotaCredito.toString())) {
+                        fac.setTipo(tipoComprobante.NotaCredito);
+                        fac.setSerieComprobante(this.jTextSerie.getText());
+                        fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                        fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
+                        fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                        fac.setFecha(this.jDateChooser.getDate());
+                        fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+
+                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                            fac.setCotizacion(1);
+                            fac.setMoneda(tipoMoneda.$U);
+                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                            fac.setCotizacion((float) precioCotizacion);
+                            fac.setMoneda(tipoMoneda.US$);
+                        }
+
+                        List<F_P> listaf_p = new ArrayList<F_P>();
+                        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                        for (int i = 0; i < modelo.getRowCount(); i++) {
+                            F_P f_p = new F_P();
+                            f_p.setFactura(fac);
+                            f_p.setArticulo(this.ListaArticulo.get(i));
+
+                            String c = modelo.getValueAt(i, 1).toString();
+                            float cant = Float.parseFloat(c);
+                            f_p.setCantidad(cant);
+
+                            String p = modelo.getValueAt(i, 2).toString();
+                            float precio = Float.parseFloat(p);
+                            f_p.setPrecio(precio);
+
+                            String d = modelo.getValueAt(i, 3).toString();
+                            float descuento = Float.parseFloat(d);
+                            f_p.setDescuento(descuento);
+
+                            this.ListaArticulo.get(i).addF_P(f_p);
+
+                            listaf_p.add(f_p);
+
+                            Historial h = new Historial();
+                            h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                            h.setPrecio(precio);
+                            h.setProducto(this.ListaArticulo.get(i));
+                            h.setFecha(this.jDateChooser.getDate());
+                            this.ListaArticulo.get(i).getHistoriales().add(h);
+                            Conexion.getInstance().persist(h);
+
+                        }
+                        fac.setFp_s(listaf_p);
                     }
+                    fac.setUsuario(controladorBasura.getU());
 
-                    List<F_P> listaf_p = new ArrayList<F_P>();
-                    DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
-                    for (int i = 0; i < modelo.getRowCount(); i++) {
-                        F_P f_p = new F_P();
-                        f_p.setFactura(fac);
-                        f_p.setArticulo(this.ListaArticulo.get(i));
-
-                        String c = modelo.getValueAt(i, 1).toString();
-                        float cant = Float.parseFloat(c);
-                        f_p.setCantidad(cant);
-
-                        String p = modelo.getValueAt(i, 2).toString();
-                        float precio = Float.parseFloat(p);
-                        f_p.setPrecio(precio);
-
-                        String d = modelo.getValueAt(i, 3).toString();
-                        float descuento = Float.parseFloat(d);
-                        f_p.setDescuento(descuento);
-
-                        this.ListaArticulo.get(i).addF_P(f_p);
-
-                        listaf_p.add(f_p);
-
-                        //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
-                        Historial h = new Historial();
-                        h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-                        h.setPrecio(precio);
-                        h.setProducto(this.ListaArticulo.get(i));
-                        h.setFecha(this.jDateChooser.getDate());
-                        this.ListaArticulo.get(i).getHistoriales().add(h);
-                        Conexion.getInstance().persist(h);
-
-                        //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
+                    boolean f = Conexion.getInstance().persist(fac);
+                    List<F_P> lf_p = fac.getFp_s();
+                    for (int i = 0; i < lf_p.size(); i++) {
+                        boolean pf = Conexion.getInstance().persist(lf_p.get(i));
+                        if (!pf) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                        }
                     }
-                    fac.setFp_s(listaf_p);
+                    if (f) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Factura fue ingresada exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                        //limpia cacillas y actualiza, para seguir ingresando mas facturas
+                        this.jTextSerie.setText("");
+                        this.jTextNumeroFact.setText("");
+                        this.jDateChooser.setDate(new Date());
+                        this.jCBMoneda.setSelectedIndex(0);
+                        this.jCBTipoComprobante.setSelectedIndex(0);
 
-                } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Crédito")) {
-                    fac.setTipo(tipoComprobante.Credito);
-                    fac.setSerieComprobante(this.jTextSerie.getText());
-                    fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                    fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
-                    fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
-                    fac.setFecha(this.jDateChooser.getDate());
-                    fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                        this.jTextArticulo.setText("");
+                        this.jTextCantidad.setText("");
+                        this.jTextUnitario.setText("");
+                        this.jTextDescuento.setText("");
+                        this.jTextSubTotalArt.setText("");
 
-                    if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                        fac.setCotizacion(1);
-                        fac.setMoneda(tipoMoneda.$U);
-                    } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                        fac.setCotizacion((float) precioCotizacion);
-                        fac.setMoneda(tipoMoneda.US$);
-                    }
+                        DefaultTableModel model = (DefaultTableModel) this.jTableArticulos.getModel();
+                        model.setRowCount(0);
 
-                    List<F_P> listaf_p = new ArrayList<F_P>();
-                    DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
-                    for (int i = 0; i < modelo.getRowCount(); i++) {
-                        F_P f_p = new F_P();
-                        f_p.setFactura(fac);
-                        f_p.setArticulo(this.ListaArticulo.get(i));
+                        this.ListaArticulo.clear();
+                        this.articulo_seleccionado = null;
 
-                        String c = modelo.getValueAt(i, 1).toString();
-                        float cant = Float.parseFloat(c);
-                        f_p.setCantidad(cant);
+                        Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
+                        this.jTextRut.setText(p.getRUT());
+                        this.jTextDireccion.setText(p.getDireccion());
+                        if (p.isTipoFacturacion()) {
+                            this.jCheckBoxIvaInc.setSelected(true);
+                            this.CalcularTotales_conIVA_inc();
+                        } else {
+                            this.jCheckBoxIvaInc.setSelected(false);
+                            this.CalcularTotales_sinIVA_inc();
+                        }
 
-                        String p = modelo.getValueAt(i, 2).toString();
-                        float precio = Float.parseFloat(p);
-                        f_p.setPrecio(precio);
-
-                        String d = modelo.getValueAt(i, 3).toString();
-                        float descuento = Float.parseFloat(d);
-                        f_p.setDescuento(descuento);
-
-                        this.ListaArticulo.get(i).addF_P(f_p);
-
-                        listaf_p.add(f_p);
-
-                        //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
-                        Historial h = new Historial();
-                        h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-                        h.setPrecio(precio);
-                        h.setProducto(this.ListaArticulo.get(i));
-                        h.setFecha(this.jDateChooser.getDate());
-                        this.ListaArticulo.get(i).getHistoriales().add(h);
-                        Conexion.getInstance().persist(h);
-
-                        //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
-                    }
-                    fac.setFp_s(listaf_p);
-                } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Devolución Contado")) {
-                    fac.setTipo(tipoComprobante.DevolucionContado);
-                    fac.setSerieComprobante(this.jTextSerie.getText());
-                    fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                    fac.setPendiente(0);
-                    fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
-                    fac.setFecha(this.jDateChooser.getDate());
-                    fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-
-                    if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                        fac.setCotizacion(1);
-                        fac.setMoneda(tipoMoneda.$U);
-                    } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                        fac.setCotizacion((float) precioCotizacion);
-                        fac.setMoneda(tipoMoneda.US$);
-                    }
-
-                    List<F_P> listaf_p = new ArrayList<F_P>();
-                    DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
-                    for (int i = 0; i < modelo.getRowCount(); i++) {
-                        F_P f_p = new F_P();
-                        f_p.setFactura(fac);
-                        f_p.setArticulo(this.ListaArticulo.get(i));
-
-                        String c = modelo.getValueAt(i, 1).toString();
-                        float cant = Float.parseFloat(c);
-                        f_p.setCantidad(cant);
-
-                        String p = modelo.getValueAt(i, 2).toString();
-                        float precio = Float.parseFloat(p);
-                        f_p.setPrecio(precio);
-
-                        String d = modelo.getValueAt(i, 3).toString();
-                        float descuento = Float.parseFloat(d);
-                        f_p.setDescuento(descuento);
-
-                        this.ListaArticulo.get(i).addF_P(f_p);
-
-                        listaf_p.add(f_p);
-
-                        //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
-                        Historial h = new Historial();
-                        h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-                        h.setPrecio(precio);
-                        h.setProducto(this.ListaArticulo.get(i));
-                        h.setFecha(this.jDateChooser.getDate());
-                        this.ListaArticulo.get(i).getHistoriales().add(h);
-                        Conexion.getInstance().persist(h);
-
-                        //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
-                    }
-                    fac.setFp_s(listaf_p);
-                } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals(tipoComprobante.NotaCredito.toString())) {
-                    fac.setTipo(tipoComprobante.NotaCredito);
-                    fac.setSerieComprobante(this.jTextSerie.getText());
-                    fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                    fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
-                    fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
-                    fac.setFecha(this.jDateChooser.getDate());
-                    fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-
-                    if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                        fac.setCotizacion(1);
-                        fac.setMoneda(tipoMoneda.$U);
-                    } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                        fac.setCotizacion((float) precioCotizacion);
-                        fac.setMoneda(tipoMoneda.US$);
-                    }
-
-                    List<F_P> listaf_p = new ArrayList<F_P>();
-                    DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
-                    for (int i = 0; i < modelo.getRowCount(); i++) {
-                        F_P f_p = new F_P();
-                        f_p.setFactura(fac);
-                        f_p.setArticulo(this.ListaArticulo.get(i));
-
-                        String c = modelo.getValueAt(i, 1).toString();
-                        float cant = Float.parseFloat(c);
-                        f_p.setCantidad(cant);
-
-                        String p = modelo.getValueAt(i, 2).toString();
-                        float precio = Float.parseFloat(p);
-                        f_p.setPrecio(precio);
-
-                        String d = modelo.getValueAt(i, 3).toString();
-                        float descuento = Float.parseFloat(d);
-                        f_p.setDescuento(descuento);
-
-                        this.ListaArticulo.get(i).addF_P(f_p);
-
-                        listaf_p.add(f_p);
-
-                        Historial h = new Historial();
-                        h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-                        h.setPrecio(precio);
-                        h.setProducto(this.ListaArticulo.get(i));
-                        h.setFecha(this.jDateChooser.getDate());
-                        this.ListaArticulo.get(i).getHistoriales().add(h);
-                        Conexion.getInstance().persist(h);
-
-                    }
-                    fac.setFp_s(listaf_p);
-                }
-                fac.setUsuario(controladorBasura.getU());
-
-                boolean f = Conexion.getInstance().persist(fac);
-                List<F_P> lf_p = fac.getFp_s();
-                for (int i = 0; i < lf_p.size(); i++) {
-                    boolean pf = Conexion.getInstance().persist(lf_p.get(i));
-                    if (!pf) {
+                    } else {
                         javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     }
-                }
-                if (f) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Factura fue ingresada exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                    //limpia cacillas y actualiza, para seguir ingresando mas facturas
-                    this.jTextSerie.setText("");
-                    this.jTextNumeroFact.setText("");
-                    this.jDateChooser.setDate(new Date());
-                    this.jCBMoneda.setSelectedIndex(0);
-                    this.jCBTipoComprobante.setSelectedIndex(0);
-
-                    this.jTextArticulo.setText("");
-                    this.jTextCantidad.setText("");
-                    this.jTextUnitario.setText("");
-                    this.jTextDescuento.setText("");
-                    this.jTextSubTotalArt.setText("");
-
-                    DefaultTableModel model = (DefaultTableModel) this.jTableArticulos.getModel();
-                    model.setRowCount(0);
-
-                    this.ListaArticulo.clear();
-                    this.articulo_seleccionado = null;
-
-                    Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
-                    this.jTextRut.setText(p.getRUT());
-                    this.jTextDireccion.setText(p.getDireccion());
-                    if (p.isTipoFacturacion()) {
-                        this.jCheckBoxIvaInc.setSelected(true);
-                        this.CalcularTotales_conIVA_inc();
-                    } else {
-                        this.jCheckBoxIvaInc.setSelected(false);
-                        this.CalcularTotales_sinIVA_inc();
-                    }
-
-                } else {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 }
             }
         }

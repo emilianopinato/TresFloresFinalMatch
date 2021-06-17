@@ -100,17 +100,20 @@ public class listarDeudas extends javax.swing.JFrame {
     
     private float getSaldoRecibosCliente(Factura f,Date date){
         float suma = 0;
-        Iterator it = f.getFr_s().iterator();
-        LocalDate fecha1 = new java.sql.Date(date.getTime()).toLocalDate();
-        
-        
-        while(it.hasNext()){
-            F_R fr = (F_R)it.next();
-            Date date2 = fr.getRecibo().getFecha();
-            LocalDate fecha2 = new java.sql.Date(date2.getTime()).toLocalDate();
+        Iterator it = null;
+        if (f.getFr_s() != null ) {
+            it = f.getFr_s().iterator();
             
-            if(fecha1.isAfter(fecha2) || fecha1.equals(fecha2)){
-                suma += fr.getSaldo();
+            LocalDate fecha1 = new java.sql.Date(date.getTime()).toLocalDate();
+
+            while (it.hasNext()) {
+                F_R fr = (F_R) it.next();
+                Date date2 = fr.getRecibo().getFecha();
+                LocalDate fecha2 = new java.sql.Date(date2.getTime()).toLocalDate();
+
+                if (fecha1.isAfter(fecha2) || fecha1.equals(fecha2)) {
+                    suma += fr.getSaldo();
+                }
             }
         }
         return suma;

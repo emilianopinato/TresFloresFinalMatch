@@ -1004,7 +1004,7 @@ public class AltaRecibo extends javax.swing.JFrame {
         float importe = 0;
         DefaultTableModel modelo = (DefaultTableModel) this.jTableFacturas.getModel();
 
-        if (this.jTextImporte.getText() != null && this.jTextImporte.getText() != "") {
+        if (this.jTextImporte.getText() != null || this.jTextImporte.getText() != "") {
             importe = Float.parseFloat(this.jTextImporte.getText());
             if (importe != this.importerecordado) {
                 this.importerecordado = importe;

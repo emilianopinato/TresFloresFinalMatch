@@ -11,6 +11,8 @@ import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -26,9 +28,9 @@ import javax.persistence.Temporal;
 public class Comprobante implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    @Id
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
     private String serieComprobante;
-    @Id
     private int nroComprobante;   
     @Enumerated(EnumType.ORDINAL)
     private tipoMoneda moneda;
@@ -40,7 +42,6 @@ public class Comprobante implements Serializable {
     private float ivaBasico;
     
     //LINKS--------------------------------//
-    //@Id
     @ManyToOne
     private Proveedor proveedor;
 

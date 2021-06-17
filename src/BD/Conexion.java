@@ -16,9 +16,9 @@ import Clases.IVA;
 import Clases.Proveedor;
 import Clases.Recibo;
 import Clases.Usuario;
-import Clases.tipoComprobante;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -330,8 +330,11 @@ public class Conexion {
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
         try {
-            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
+//            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+//                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
+//                    .setParameter("codigo", p.getCodigo()).getResultList();
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE "
+                    + "factura.id = comprobante.id AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo()).getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -360,8 +363,13 @@ public class Conexion {
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
         try {
-            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo "
+//            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+//                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo "
+//                    + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Factura.class)
+//                    .setParameter("codigo", codigoProveedor)
+//                    .getResultList();
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE "
+                    + "factura.id = comprobante.id AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo "
                     + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Factura.class)
                     .setParameter("codigo", codigoProveedor)
                     .getResultList();
@@ -390,8 +398,11 @@ public class Conexion {
         List<Recibo> recibos = null;
         em.getTransaction().begin();
         try {
-            recibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
-                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND recibo.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Recibo.class)
+//            recibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
+//                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND recibo.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Recibo.class)
+//                    .setParameter("codigo", codigo).getResultList();
+              recibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE "
+                    + "recibo.id = comprobante.id AND recibo.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Recibo.class)
                     .setParameter("codigo", codigo).getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
@@ -420,8 +431,13 @@ public class Conexion {
         List<Recibo> listaRecibos = null;
         em.getTransaction().begin();
         try {
-            listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
-                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
+//            listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
+//                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
+//                    + "AND comprobante.fecha >= " + fecha1 + " AND recibo.deshabilitado = 0 AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Recibo.class)
+//                    .setParameter("codigo", codigo)
+//                    .getResultList();
+              listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE "
+                    + "recibo.id = comprobante.id AND comprobante.proveedor_codigo = :codigo "
                     + "AND comprobante.fecha >= " + fecha1 + " AND recibo.deshabilitado = 0 AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Recibo.class)
                     .setParameter("codigo", codigo)
                     .getResultList();
@@ -491,8 +507,13 @@ public class Conexion {
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
         try {
+            /*
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
                     + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.tipo = 1 AND factura.Pendiente > 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
+                    .setParameter("codigo", p.getCodigo())
+                    .getResultList();*/
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.id = comprobante.id "
+                    + "AND factura.tipo = 1 AND factura.Pendiente > 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo())
                     .getResultList();
             em.getTransaction().commit();
@@ -632,8 +653,12 @@ public class Conexion {
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
         try {
-            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.tipo = 3 AND comprobante.proveedor_codigo = :codigo", Factura.class)
+//            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+//                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.tipo = 3 AND comprobante.proveedor_codigo = :codigo", Factura.class)
+//                    .setParameter("codigo", p.getCodigo())
+//                    .getResultList();
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE "
+                    + "factura.id = comprobante.id AND factura.tipo = 3 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo())
                     .getResultList();
             em.getTransaction().commit();
@@ -648,8 +673,8 @@ public class Conexion {
         List<Factura> listaComprobantes = new ArrayList<>();
         em.getTransaction().begin();
         try {
-            listaComprobantes = em.createNativeQuery("SELECT factura.* , comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante "
+            listaComprobantes = em.createNativeQuery("SELECT factura.* , comprobante.* FROM factura INNER JOIN comprobante WHERE "
+                    + "factura.id = comprobante.id "
                     + "AND factura.deshabilitado = 1 ", Factura.class)
                     .getResultList();
             em.getTransaction().commit();
@@ -666,8 +691,8 @@ public class Conexion {
         List<Recibo> listaComprobantes = new ArrayList<>();
         em.getTransaction().begin();
         try {
-            listaComprobantes = em.createNativeQuery("SELECT recibo.* , comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
-                    + "AND recibo.nroComprobante = comprobante.nroComprobante "
+            listaComprobantes = em.createNativeQuery("SELECT recibo.* , comprobante.* FROM recibo INNER JOIN comprobante WHERE "
+                    + "AND recibo.id = comprobante.id "
                     + " AND recibo.deshabilitado = 1 ", Recibo.class)
                     .getResultList();
             em.getTransaction().commit();
@@ -699,8 +724,61 @@ public class Conexion {
         List<Factura> listaFacturas = null;
         em.getTransaction().begin();
         try {
-            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.*, proveedor.* FROM factura INNER JOIN comprobante ON(factura.serieComprobante = comprobante.serieComprobante "
-                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0) "
+//            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.*, proveedor.* FROM factura INNER JOIN comprobante ON(factura.serieComprobante = comprobante.serieComprobante "
+//                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0) "
+//                    + "INNER JOIN proveedor ON (comprobante.proveedor_codigo = proveedor.codigo)"
+//                    + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " "
+//                    + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)
+//                    .getResultList();
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.*, proveedor.* FROM factura INNER JOIN comprobante ON(factura.id = comprobante.id "
+                    + "AND factura.deshabilitado = 0) "
+                    + "INNER JOIN proveedor ON (comprobante.proveedor_codigo = proveedor.codigo)"
+                    + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " "
+                    + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return listaFacturas;
+    }
+    
+    public List<Factura> ListarFacturasPorFechaSinProveedor(LocalDate fechaDesde, LocalDate fechaHasta) {
+        List<Factura> listaFacturas = null;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+   
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+
+        Date dateFechaDesde = Date.from(fechaDesde.atStartOfDay(defaultZoneId).toInstant());
+        Date dateFechaHasta = Date.from(fechaHasta.atStartOfDay(defaultZoneId).toInstant());
+        
+
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+        
+        int anio = Integer.parseInt(getAnioFormato.format(dateFechaDesde));
+        int mes = Integer.parseInt(getMesFormato.format(dateFechaDesde));
+        int dia = Integer.parseInt(getDiaFormato.format(dateFechaDesde));
+
+        int anio2 = Integer.parseInt(getAnioFormato.format(dateFechaHasta));
+        int mes2 = Integer.parseInt(getMesFormato.format(dateFechaHasta));
+        int dia2 = Integer.parseInt(getDiaFormato.format(dateFechaHasta));
+
+        String fecha1 = "'" + anio + "-" + mes + "-" + dia + "'";
+        String fecha2 = "'" + anio2 + "-" + mes2 + "-" + dia2 + "'";
+        
+        
+        try {
+//            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.*, proveedor.* FROM factura INNER JOIN comprobante ON(factura.serieComprobante = comprobante.serieComprobante "
+//                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0) "
+//                    + "INNER JOIN proveedor ON (comprobante.proveedor_codigo = proveedor.codigo)"
+//                    + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " "
+//                    + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)
+//                    .getResultList();
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.*, proveedor.* FROM factura INNER JOIN comprobante ON(factura.id = comprobante.id "
+                    + "AND factura.deshabilitado = 0) "
                     + "INNER JOIN proveedor ON (comprobante.proveedor_codigo = proveedor.codigo)"
                     + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " "
                     + "ORDER BY proveedor.rut, comprobante.fecha ASC", Factura.class)
@@ -717,15 +795,22 @@ public class Conexion {
         EntityManager em = getEntity();
         em.getTransaction().begin();
         try {
-            Factura f = (Factura) em.createNativeQuery("SELECT * FROM factura, comprobante WHERE factura.serieComprobante = :serie "
+            /*Factura f = (Factura) em.createNativeQuery("SELECT * FROM factura, comprobante WHERE factura.serieComprobante = :serie "
                     + "AND factura.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = factura.serieComprobante "
                     + "AND comprobante.nroComprobante = factura.nroComprobante;", Factura.class)
                     .setParameter("serie", serie)
                     .setParameter("numero", numero)
                     .setParameter("prov", prov)
                     .getSingleResult();
+            em.getTransaction().commit();*/
+            Factura f = (Factura) em.createNativeQuery("SELECT * FROM factura, comprobante WHERE comprobante.serieComprobante = :serie "
+                    + "AND comprobante.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov "
+                    + "AND comprobante.id = factura.id", Factura.class)
+                    .setParameter("serie", serie)
+                    .setParameter("numero", numero)
+                    .setParameter("prov", prov)
+                    .getSingleResult();
             em.getTransaction().commit();
-
             if (f != null) {
                 retorno = true;
             } else {
@@ -743,9 +828,16 @@ public class Conexion {
         EntityManager em = getEntity();
         em.getTransaction().begin();
         try {
+//            Factura f = (Factura) em.createNativeQuery("SELECT * FROM factura, comprobante WHERE factura.serieComprobante = :serie "
+//                    + "AND factura.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = factura.serieComprobante "
+//                    + "AND comprobante.nroComprobante = factura.nroComprobante;", Factura.class)
+//                    .setParameter("serie", serie_nuevo)
+//                    .setParameter("numero", numero_nuevo)
+//                    .setParameter("prov", prov_nuevo)
+//                    .getSingleResult();
             Factura f = (Factura) em.createNativeQuery("SELECT * FROM factura, comprobante WHERE factura.serieComprobante = :serie "
-                    + "AND factura.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = factura.serieComprobante "
-                    + "AND comprobante.nroComprobante = factura.nroComprobante;", Factura.class)
+                    + "AND factura.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND "
+                    + "comprobante.id = factura.id;", Factura.class)
                     .setParameter("serie", serie_nuevo)
                     .setParameter("numero", numero_nuevo)
                     .setParameter("prov", prov_nuevo)
@@ -772,9 +864,16 @@ public class Conexion {
         EntityManager em = getEntity();
         em.getTransaction().begin();
         try {
-            Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE recibo.serieComprobante = :serie "
-                    + "AND recibo.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = recibo.serieComprobante "
-                    + "AND comprobante.nroComprobante = recibo.nroComprobante;", Recibo.class)
+//            Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE recibo.serieComprobante = :serie "
+//                    + "AND recibo.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = recibo.serieComprobante "
+//                    + "AND comprobante.nroComprobante = recibo.nroComprobante;", Recibo.class)
+//                    .setParameter("serie", serie)
+//                    .setParameter("numero", numero)
+//                    .setParameter("prov", prov)
+//                    .getSingleResult();
+            Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE comprobante.serieComprobante = :serie "
+                    + "AND comprobante.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov "
+                    + "AND comprobante.id = recibo.id;", Recibo.class)
                     .setParameter("serie", serie)
                     .setParameter("numero", numero)
                     .setParameter("prov", prov)
@@ -798,9 +897,16 @@ public class Conexion {
         EntityManager em = getEntity();
         em.getTransaction().begin();
         try {
-            Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE recibo.serieComprobante = :serie "
-                    + "AND recibo.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = recibo.serieComprobante "
-                    + "AND comprobante.nroComprobante = recibo.nroComprobante;", Recibo.class)
+//            Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE recibo.serieComprobante = :serie "
+//                    + "AND recibo.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov AND comprobante.serieComprobante = recibo.serieComprobante "
+//                    + "AND comprobante.nroComprobante = recibo.nroComprobante;", Recibo.class)
+//                    .setParameter("serie", serie_nuevo)
+//                    .setParameter("numero", numero_nuevo)
+//                    .setParameter("prov", prov_nuevo)
+//                    .getSingleResult();
+                Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE comprobante.serieComprobante = :serie "
+                    + "AND comprobante.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov "
+                    + "AND comprobante.id = recibo.id;", Recibo.class)
                     .setParameter("serie", serie_nuevo)
                     .setParameter("numero", numero_nuevo)
                     .setParameter("prov", prov_nuevo)

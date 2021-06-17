@@ -387,16 +387,23 @@ public class ListarComprobantes extends javax.swing.JFrame {
 
     private List<Comprobante> agregarComprobantes(List<Factura> ListaFact, List<Recibo> listaRecibos) {
         List<Comprobante> comprobantes = new ArrayList<>();
-        for (Factura factura : ListaFact) {
-            comprobantes.add(factura);
+
+        if (!ListaFact.isEmpty()) {
+            for (Factura factura : ListaFact) {
+                comprobantes.add(factura);
+            }
         }
 
-        for (Recibo recibo : listaRecibos) {
-            comprobantes.add(recibo);
+        if (!listaRecibos.isEmpty()) {
+            for (Recibo recibo : listaRecibos) {
+                comprobantes.add(recibo);
+            }
         }
 
-        Collections.sort(comprobantes, (Comprobante o1, Comprobante o2) -> o1.getFecha().compareTo(o2.getFecha()));
-
+        if (!comprobantes.isEmpty()) {
+            Collections.sort(comprobantes, (Comprobante o1, Comprobante o2) -> o1.getFecha().compareTo(o2.getFecha()));
+        }
+        
         return comprobantes;
     }
         
