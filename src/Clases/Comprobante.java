@@ -42,7 +42,7 @@ public class Comprobante implements Serializable {
     private float ivaBasico;
     
     //LINKS--------------------------------//
-    @ManyToOne
+    @ManyToOne    
     private Proveedor proveedor;
 
     @ManyToOne

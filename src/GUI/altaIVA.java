@@ -156,15 +156,32 @@ public class altaIVA extends javax.swing.JFrame {
         if (this.jDateChooser.getDate() == null) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la fecha en la que comenzará a regir el IVA ingresado.");
         } else {
-            IVA iva = new IVA();
-            Date fecha = new Date();
-            iva.setFecha(fecha);
-            iva.setTipo((tipoIVA) jComboBox1.getSelectedItem());
-            iva.setPorcentaje(Integer.parseInt(jTextField1.getText()));
-            iva.setFechaRegir(this.jDateChooser.getDate());
-            iva.setAdmin((Administrador) controladorBasura.getU());
-            Conexion.getInstance().persist(iva);
-            javax.swing.JOptionPane.showMessageDialog(null, "El IVA fue creado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            int shrek = 4;
+            if (jComboBox1.getSelectedItem() == tipoIVA.Basico) {
+                shrek = 0;
+            } else if (jComboBox1.getSelectedItem() == tipoIVA.Minimo) {
+                shrek = 1;
+            } else if (jComboBox1.getSelectedItem() == tipoIVA.Excento) {
+                shrek = 2;
+            }
+            boolean existe = Conexion.getInstance().existeIVA(jDateChooser.getDate(), shrek);
+            if (!existe) {
+                IVA iva = new IVA();
+                Date fecha = new Date();
+                iva.setFecha(fecha);
+                iva.setTipo((tipoIVA) jComboBox1.getSelectedItem());
+                iva.setPorcentaje(Integer.parseInt(jTextField1.getText()));
+                iva.setFechaRegir(this.jDateChooser.getDate());
+                iva.setAdmin((Administrador) controladorBasura.getU());
+                boolean exito = Conexion.getInstance().persist(iva);
+                if (exito) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "El IVA fue creado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
+            }else{
+                javax.swing.JOptionPane.showMessageDialog(null, "El IVA con la fecha ingresada ya existe.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

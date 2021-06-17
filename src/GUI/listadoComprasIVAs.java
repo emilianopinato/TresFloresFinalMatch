@@ -974,12 +974,14 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                 //Si es el último día del mes ahí si tendría que poder cerrar sin problemas
                 if (diaDelMes == ultimoDiaMes) {
                     boolean shrek = existeMesSinCerrar(mesSeleccionado);
-                    if (shrek) {
+                    if (!shrek) {
                         boolean exito = cerrarMes(mesSeleccionado);
                         if (exito) {
                             javax.swing.JOptionPane.showMessageDialog(null, "El mes se ha cerrado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            javax.swing.JOptionPane.showMessageDialog(null, "El mes ya está cerrado.", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                         }
-                    }else{
+                    } else {
                         javax.swing.JOptionPane.showMessageDialog(null, "No puede cerrar un mes si hay un mes anterior sin cerrar.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
@@ -991,14 +993,16 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                     if (input == 0) {
                         //Acá cierra igual a pesar de que no sea fin de mes.
                         boolean shrek = existeMesSinCerrar(mesSeleccionado);
-                        if (shrek) {
+                        if (!shrek) {
                             boolean exito = cerrarMes(mesSeleccionado);
                             if (exito) {
                                 javax.swing.JOptionPane.showMessageDialog(null, "El mes se ha cerrado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                javax.swing.JOptionPane.showMessageDialog(null, "El mes ya está cerrado.", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                             }
-                        }else{
-                        javax.swing.JOptionPane.showMessageDialog(null, "No puede cerrar un mes si hay un mes anterior sin cerrar.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                    }
+                        } else {
+                            javax.swing.JOptionPane.showMessageDialog(null, "No puede cerrar este mes si hay un mes anterior sin cerrar.", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
                 }
             } else {
@@ -1006,16 +1010,18 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                 mayor = mesMayor(mesSeleccionado, fechaActual);
                 if (!mayor) {
                     boolean shrek = existeMesSinCerrar(mesSeleccionado);
-                    if (shrek) {
+                    if (!shrek) {
                         boolean exito = cerrarMes(mesSeleccionado);
                         if (exito) {
                             javax.swing.JOptionPane.showMessageDialog(null, "El mes se ha cerrado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            javax.swing.JOptionPane.showMessageDialog(null, "El mes ya está cerrado.", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                         }
-                    }else{
-                        javax.swing.JOptionPane.showMessageDialog(null, "No puede cerrar un mes si hay un mes anterior sin cerrar.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        javax.swing.JOptionPane.showMessageDialog(null, "No puede cerrar un mes si hay un mes anterior sin cerrar.", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                     }
                 } else {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Está intentando cerrar un mes posterior al mes actual", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    javax.swing.JOptionPane.showMessageDialog(null, "Está intentando cerrar un mes posterior al mes actual", "Información", javax.swing.JOptionPane.INFORMATION_MESSAGE);
                 }
 
             }
@@ -1025,18 +1031,22 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
 
     private boolean cerrarMes(String mesSeleccionado) {
         LocalDate fechaACerrar = convertirAFecha2(mesSeleccionado);
+        LocalDate fechaDesde = LocalDate.of(fechaACerrar.getYear(), fechaACerrar.getMonth(), 1);
+        boolean retorno = true;
 
-        if (fechaACerrar != null) {
-            LocalDate fechaDesde = LocalDate.of(fechaACerrar.getYear(), fechaACerrar.getMonth(), 1);
-            List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaACerrar);
-            for (Factura f : facturas) {
+        List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaACerrar);
+        for (Factura f : facturas) {
+            if (f.isCerrada() == true) {
+                retorno = false;
+                break;
+            } else {
                 f.setCerrada(true);
                 Conexion.getInstance().merge(f);
             }
-            return true;
+
         }
 
-        return false;
+        return retorno;
     }
 
     private boolean mesMayor(String mesSeleccionado, LocalDate mesActual) {
@@ -1219,27 +1229,25 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         //     2.2 - Si el mes es menor, chequear que esté cerrado.
         //     2.2.1 - Para chequear que el mes esté cerrado, tengo que traer una factura de ese mes y chequear que "cerrada" esté en true.
 
-        boolean retorno = false;
         LocalDate date1 = convertirAFecha(mesSeleccionado);
         LocalDate date2 = convertirAFecha2(mesSeleccionado);
-        
-        LocalDate fechaDesde = date1.minusMonths(1);
-        LocalDate fechaHasta = date2.minusMonths(1);
 
-        List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
-        if (facturas.isEmpty()) {
-            return true;
-        } else {
-            for (Factura f : facturas) {
-                if (f.isCerrada()) {
-                    retorno = true;
-                    break;
+        for (int i = 1; i <= 6; i++) {
+            LocalDate fechaDesde = date1.minusMonths(i);
+            LocalDate fechaHasta = date2.minusMonths(i);
+
+            List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
+            if (facturas.isEmpty()) {
+                return false;
+            } else {
+                for (Factura f : facturas) {
+                    if (!f.isCerrada()) {
+                        return true;
+                    }
                 }
             }
         }
-       
-
-        return retorno;
+        return true;
     }
 
 }

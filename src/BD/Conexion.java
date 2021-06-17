@@ -104,6 +104,22 @@ public class Conexion {
         }
     }
 
+    public boolean deleteBoolean(Object object) {
+        boolean retorno;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            em.remove(object);
+            em.getTransaction().commit();
+            retorno = true;
+        } catch (Exception e) {
+            retorno = false;
+            e.printStackTrace();
+            em.getTransaction().rollback();
+        }
+        return retorno;
+    }
+
     public void refresh(Object object) {
         EntityManager em = getEntity();
         em.getTransaction().begin();
@@ -401,7 +417,7 @@ public class Conexion {
 //            recibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
 //                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND recibo.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Recibo.class)
 //                    .setParameter("codigo", codigo).getResultList();
-              recibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE "
+            recibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE "
                     + "recibo.id = comprobante.id AND recibo.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Recibo.class)
                     .setParameter("codigo", codigo).getResultList();
             em.getTransaction().commit();
@@ -436,7 +452,7 @@ public class Conexion {
 //                    + "AND comprobante.fecha >= " + fecha1 + " AND recibo.deshabilitado = 0 AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Recibo.class)
 //                    .setParameter("codigo", codigo)
 //                    .getResultList();
-              listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE "
+            listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE "
                     + "recibo.id = comprobante.id AND comprobante.proveedor_codigo = :codigo "
                     + "AND comprobante.fecha >= " + fecha1 + " AND recibo.deshabilitado = 0 AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Recibo.class)
                     .setParameter("codigo", codigo)
@@ -742,22 +758,21 @@ public class Conexion {
         }
         return listaFacturas;
     }
-    
+
     public List<Factura> ListarFacturasPorFechaSinProveedor(LocalDate fechaDesde, LocalDate fechaHasta) {
         List<Factura> listaFacturas = null;
         EntityManager em = getEntity();
         em.getTransaction().begin();
-   
+
         ZoneId defaultZoneId = ZoneId.systemDefault();
 
         Date dateFechaDesde = Date.from(fechaDesde.atStartOfDay(defaultZoneId).toInstant());
         Date dateFechaHasta = Date.from(fechaHasta.atStartOfDay(defaultZoneId).toInstant());
-        
 
         SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
         SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
         SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
-        
+
         int anio = Integer.parseInt(getAnioFormato.format(dateFechaDesde));
         int mes = Integer.parseInt(getMesFormato.format(dateFechaDesde));
         int dia = Integer.parseInt(getDiaFormato.format(dateFechaDesde));
@@ -768,8 +783,7 @@ public class Conexion {
 
         String fecha1 = "'" + anio + "-" + mes + "-" + dia + "'";
         String fecha2 = "'" + anio2 + "-" + mes2 + "-" + dia2 + "'";
-        
-        
+
         try {
 //            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.*, proveedor.* FROM factura INNER JOIN comprobante ON(factura.serieComprobante = comprobante.serieComprobante "
 //                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0) "
@@ -822,8 +836,8 @@ public class Conexion {
         }
         return retorno;
     }
-    
-    public boolean existeFacModificar(String serie_antiguo, String numero_antiguo, String prov_antiguo,String serie_nuevo, String numero_nuevo, String prov_nuevo) {
+
+    public boolean existeFacModificar(String serie_antiguo, String numero_antiguo, String prov_antiguo, String serie_nuevo, String numero_nuevo, String prov_nuevo) {
         boolean retorno = false;
         EntityManager em = getEntity();
         em.getTransaction().begin();
@@ -843,10 +857,10 @@ public class Conexion {
                     .setParameter("prov", prov_nuevo)
                     .getSingleResult();
             em.getTransaction().commit();
-            if(serie_antiguo.equals(serie_nuevo) && numero_antiguo.equals(numero_nuevo) && prov_antiguo.equals(prov_nuevo)){
+            if (serie_antiguo.equals(serie_nuevo) && numero_antiguo.equals(numero_nuevo) && prov_antiguo.equals(prov_nuevo)) {
                 return false;
             }
-            
+
             if (f != null) {
                 retorno = true;
             } else {
@@ -892,7 +906,7 @@ public class Conexion {
         return retorno;
     }
 
-    public boolean existeRecModificar(String serie_antiguo, String numero_antiguo, String prov_antiguo,String serie_nuevo, String numero_nuevo, String prov_nuevo) {
+    public boolean existeRecModificar(String serie_antiguo, String numero_antiguo, String prov_antiguo, String serie_nuevo, String numero_nuevo, String prov_nuevo) {
         boolean retorno = false;
         EntityManager em = getEntity();
         em.getTransaction().begin();
@@ -904,7 +918,7 @@ public class Conexion {
 //                    .setParameter("numero", numero_nuevo)
 //                    .setParameter("prov", prov_nuevo)
 //                    .getSingleResult();
-                Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE comprobante.serieComprobante = :serie "
+            Recibo r = (Recibo) em.createNativeQuery("SELECT * FROM recibo, comprobante WHERE comprobante.serieComprobante = :serie "
                     + "AND comprobante.nroComprobante = :numero AND comprobante.proveedor_codigo = :prov "
                     + "AND comprobante.id = recibo.id;", Recibo.class)
                     .setParameter("serie", serie_nuevo)
@@ -912,10 +926,10 @@ public class Conexion {
                     .setParameter("prov", prov_nuevo)
                     .getSingleResult();
             em.getTransaction().commit();
-            if(serie_antiguo.equals(serie_nuevo) && numero_antiguo.equals(numero_nuevo) && prov_antiguo.equals(prov_nuevo)){
+            if (serie_antiguo.equals(serie_nuevo) && numero_antiguo.equals(numero_nuevo) && prov_antiguo.equals(prov_nuevo)) {
                 return false;
             }
-            
+
             if (r != null) {
                 retorno = true;
             } else {
@@ -926,6 +940,51 @@ public class Conexion {
             em.getTransaction().rollback();
         }
         return retorno;
+    }
+
+    public List<Factura> listarFacturasSinFechaADolares() {
+        List<Factura> listaFacturas = null;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            listaFacturas = em.createNativeQuery("SELECT factura.* , comprobante.* FROM factura INNER JOIN comprobante WHERE "
+                    + "factura.id = comprobante.id "
+                    + "AND comprobante.moneda = 1 ", Factura.class)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e);
+            em.getTransaction().rollback();
+        }
+        return listaFacturas;
+    }
+
+    public boolean existeIVA(Date date, int tipoIVA) {
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+
+        int anio = Integer.parseInt(getAnioFormato.format(date));
+        int mes = Integer.parseInt(getMesFormato.format(date));
+        int dia = Integer.parseInt(getDiaFormato.format(date));
+
+        String fecha = "'" + anio + "-" + mes + "-" + dia + "'";
+        IVA iva = null;
+        boolean retorno;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            iva = (IVA) em.createNativeQuery("SELECT iva.* from iva WHERE DATE(fechaRegir) = " + fecha + " AND tipo = " + tipoIVA + "", IVA.class)
+                    .getSingleResult();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+
+        retorno = iva != null;
+
+        return retorno;
+
     }
 
 }
