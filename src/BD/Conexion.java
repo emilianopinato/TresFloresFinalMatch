@@ -39,7 +39,7 @@ public class Conexion {
         return ConexionHolder.INSTANCE;
     }
 
- private static class ConexionHolder {
+private static class ConexionHolder {
 
         private static final Conexion INSTANCE = new Conexion();
         private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("Tres_Flores_-_Proveedores_2.0PU");
@@ -786,6 +786,34 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
             em.getTransaction().rollback();
         }
         return listaFacturas;
+    }
+
+    public boolean existeIVA(Date date, int tipoIVA) {
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+
+        int anio = Integer.parseInt(getAnioFormato.format(date));
+        int mes = Integer.parseInt(getMesFormato.format(date));
+        int dia = Integer.parseInt(getDiaFormato.format(date));
+
+        String fecha = "'" + anio + "-" + mes + "-" + dia + "'";
+        IVA iva = null;
+        boolean retorno;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            iva = (IVA) em.createNativeQuery("SELECT iva.* from iva WHERE DATE(fechaRegir) = " + fecha + " AND tipo = "+ tipoIVA +"", IVA.class)
+                    .getSingleResult();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+
+        retorno = iva != null;
+        
+        return retorno;
+
     }
 
 }
