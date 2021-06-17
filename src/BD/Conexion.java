@@ -104,6 +104,22 @@ public class Conexion {
         }
     }
 
+    public boolean deleteBoolean(Object object) {
+        boolean retorno;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            em.remove(object);
+            em.getTransaction().commit();
+            retorno = true;
+        } catch (Exception e) {
+            retorno = false;
+            e.printStackTrace();
+            em.getTransaction().rollback();
+        }
+        return retorno;
+    }
+
     public void refresh(Object object) {
         EntityManager em = getEntity();
         em.getTransaction().begin();
@@ -750,6 +766,23 @@ public Cotizacion traerCotizacion(LocalDate fechaCotizacion) {
                     .getResultList();
             em.getTransaction().commit();
         } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return listaFacturas;
+    }
+
+    public List<Factura> listarFacturasSinFechaADolares() {
+        List<Factura> listaFacturas = null;
+        EntityManager em = getEntity();
+        em.getTransaction().begin();
+        try {
+            listaFacturas = em.createNativeQuery("SELECT factura.* , comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+                    + "AND factura.nroComprobante = comprobante.nroComprobante "
+                    + "AND comprobante.moneda = 1 ", Factura.class)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            System.out.println(e);
             em.getTransaction().rollback();
         }
         return listaFacturas;

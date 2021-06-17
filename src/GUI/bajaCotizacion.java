@@ -6,10 +6,11 @@
 package GUI;
 
 import BD.Conexion;
-import Clases.Articulo;
 import Clases.Cotizacion;
+import Clases.Factura;
 import java.text.SimpleDateFormat;
 import java.util.Iterator;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -133,12 +134,25 @@ public class bajaCotizacion extends javax.swing.JFrame {
         // TODO add your handling code here:
         int input = javax.swing.JOptionPane.showConfirmDialog(null, "¿Desea continuar?", "Seleccione una opción",
                 javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
-        
+
         if (input == 0) {
             DefaultTableModel mdl = (DefaultTableModel) jTable1.getModel();
-            Cotizacion c = (Cotizacion) jTable1.getValueAt(jTable1.getSelectedRow(), 3);            
-            Conexion.getInstance().delete(c);
-            mdl.removeRow(jTable1.getSelectedRow());
+            Cotizacion c = (Cotizacion) jTable1.getValueAt(jTable1.getSelectedRow(), 3);
+            //Preguntar si la cotización no está en uso antes de borrar.
+            List<Factura> facturas = Conexion.getInstance().listarFacturasSinFechaADolares();
+            for (Factura f : facturas) {
+                if ((float) c.getImporte() == f.getCotizacion()) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "No puede borrar una cotización si tiene una o más facturas asignadas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+            boolean exito = Conexion.getInstance().deleteBoolean(c);
+            if (exito) {
+                javax.swing.JOptionPane.showMessageDialog(null, "La cotización fue eliminada correctamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                mdl.removeRow(jTable1.getSelectedRow());
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
