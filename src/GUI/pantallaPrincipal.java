@@ -118,6 +118,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem19 = new javax.swing.JMenuItem();
         jMenuItem20 = new javax.swing.JMenuItem();
+        jMenuItem14 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
@@ -257,6 +258,14 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             }
         });
         jMenuFactura.add(jMenuItem20);
+
+        jMenuItem14.setText("Estado de Cuenta");
+        jMenuItem14.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem14ActionPerformed(evt);
+            }
+        });
+        jMenuFactura.add(jMenuItem14);
 
         jMenuBar1.add(jMenuFactura);
 
@@ -498,6 +507,12 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         bC.setVisible(true);
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
+    private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
+        EstadodeCuenta estadodecuenta = new EstadodeCuenta();
+        estadodecuenta.setLocationRelativeTo(null);
+        estadodecuenta.setVisible(true);
+    }//GEN-LAST:event_jMenuItem14ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -549,6 +564,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
+    private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;

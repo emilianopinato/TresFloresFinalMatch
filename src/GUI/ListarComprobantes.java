@@ -253,7 +253,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                         String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
                         model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
                             numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(),
-                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", ListaFact.get(i)});
+                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
                     }
                 }
 
@@ -276,7 +276,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                             String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
                             model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
                                 numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", ListaFact.get(i)});
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
                         }
                     }
                 }
@@ -293,7 +293,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                         String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
                         model.addRow(new Object[]{sdf.format(listaRecibos.get(i).getFecha()), "Recibo",
                             numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), Float.parseFloat("0"),
-                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", listaRecibos.get(i)});
+                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), listaRecibos.get(i).getObservacion(), listaRecibos.get(i)});
                     }
                 }
             }
@@ -315,7 +315,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                             String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
                             model.addRow(new Object[]{sdf.format(listaRecibos.get(i).getFecha()), "Recibo",
                                 numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", listaRecibos.get(i)});
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), listaRecibos.get(i).getObservacion(), listaRecibos.get(i)});
                         }
                     }
                 }
@@ -336,13 +336,13 @@ public class ListarComprobantes extends javax.swing.JFrame {
                             String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
                             model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
                                 numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", f});
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
                         } else {
                             Recibo r = (Recibo) comprobante;
                             String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
                             model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
                                 numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", r});
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), r.getObservacion(), r});
                         }
                     }
                 }
@@ -368,13 +368,13 @@ public class ListarComprobantes extends javax.swing.JFrame {
                                 String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
                                 model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
                                     numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
-                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", f});
+                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
                             } else {
                                 Recibo r = (Recibo) comprobante;
                                 String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
                                 model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
                                     numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
-                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), "nada", r});
+                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"),r.getObservacion(), r});
                             }
                         }
                     }
