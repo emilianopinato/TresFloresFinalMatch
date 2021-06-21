@@ -27,6 +27,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  */
 public class EstadodeCuenta extends javax.swing.JFrame {
 
+    TableFilterHeader filterHeader = null;
     /**
      * Creates new form EstadodeCuenta
      */
@@ -39,6 +40,13 @@ public class EstadodeCuenta extends javax.swing.JFrame {
                 this.jCBProveedor.addItem(p);
             }
         });
+        
+        jTableComprobantes.getColumnModel().getColumn(11).setMinWidth(0);
+        jTableComprobantes.getColumnModel().getColumn(11).setMaxWidth(0);
+        jTableComprobantes.getColumnModel().getColumn(11).setWidth(0);
+
+        //Permite agregar un filtro de búsqueda por cada columna.
+        filterHeader = new TableFilterHeader(jTableComprobantes, AutoChoices.ENABLED);
     }
 
     /**
@@ -111,6 +119,15 @@ public class EstadodeCuenta extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTableComprobantes);
+        if (jTableComprobantes.getColumnModel().getColumnCount() > 0) {
+            jTableComprobantes.getColumnModel().getColumn(3).setPreferredWidth(50);
+            jTableComprobantes.getColumnModel().getColumn(4).setPreferredWidth(50);
+            jTableComprobantes.getColumnModel().getColumn(6).setPreferredWidth(50);
+            jTableComprobantes.getColumnModel().getColumn(7).setPreferredWidth(50);
+            jTableComprobantes.getColumnModel().getColumn(8).setPreferredWidth(50);
+            jTableComprobantes.getColumnModel().getColumn(9).setPreferredWidth(60);
+            jTableComprobantes.getColumnModel().getColumn(10).setPreferredWidth(250);
+        }
 
         jButtonCerrar.setText("Cerrar");
         jButtonCerrar.addActionListener(new java.awt.event.ActionListener() {
@@ -200,10 +217,12 @@ public class EstadodeCuenta extends javax.swing.JFrame {
                 for (Comprobante comprobante : comprobantes) {
                     if (comprobante instanceof Factura) {
                         Factura f = (Factura) comprobante;
-                        String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                        model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-                            numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
-                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
+                        if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
+                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
+                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
+                        }
                     } else {
                         Recibo r = (Recibo) comprobante;
                         String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
@@ -232,10 +251,12 @@ public class EstadodeCuenta extends javax.swing.JFrame {
                     for (Comprobante comprobante : comprobantes) {
                         if (comprobante instanceof Factura) {
                             Factura f = (Factura) comprobante;
-                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
+                            if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
+                                String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
+                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
+                            }
                         } else {
                             Recibo r = (Recibo) comprobante;
                             String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
