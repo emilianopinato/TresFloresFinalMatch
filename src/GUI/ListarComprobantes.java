@@ -236,12 +236,14 @@ public class ListarComprobantes extends javax.swing.JFrame {
         String valorCombo = this.jComboBox1.getSelectedItem().toString();
         Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-
-//        if (!jCheckBoxSinFecha.isSelected()) {
-//            if (fechaDesde.after(fechaHasta)) {
-//                javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-//            }
-//        }
+        
+        if (fechaDesde != null && fechaHasta != null) {
+            if (!jCheckBoxSinFecha.isSelected()) {
+                if (fechaDesde.after(fechaHasta)) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
 
         if (valorCombo.equals("Ingrese una opción")) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar una opción", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
