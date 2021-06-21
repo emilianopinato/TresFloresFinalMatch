@@ -10,6 +10,7 @@ import Clases.Comprobante;
 import Clases.Factura;
 import Clases.Proveedor;
 import Clases.Recibo;
+import Clases.tipoComprobante;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,25 +26,30 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
  * @author emiliano
  */
 public class ListarComprobantes extends javax.swing.JFrame {
+
     TableFilterHeader filterHeader = null;
+
     /**
      * Creates new form VerComprobantes
      */
     public ListarComprobantes() {
         initComponents();
-        
+
         this.setLocationRelativeTo(null);
         AutoCompleteDecorator.decorate(this.jCBProveedor);
         List<Proveedor> LProv = Conexion.getInstance().listadoProveedores();
         LProv.forEach((p) -> {
-            if(!p.isDeshabilitado())
-            this.jCBProveedor.addItem(p);
+            if (!p.isDeshabilitado()) {
+                this.jCBProveedor.addItem(p);
+            }
         });
-        
-        jTableComprobantes.getColumnModel().getColumn(11).setMinWidth(0);
-        jTableComprobantes.getColumnModel().getColumn(11).setMaxWidth(0);
-        jTableComprobantes.getColumnModel().getColumn(11).setWidth(0);
-        
+
+        this.jCheckBox1.setSelected(true);
+
+        jTableComprobantes.getColumnModel().getColumn(6).setMinWidth(0);
+        jTableComprobantes.getColumnModel().getColumn(6).setMaxWidth(0);
+        jTableComprobantes.getColumnModel().getColumn(6).setWidth(0);
+
         //Permite agregar un filtro de búsqueda por cada columna.
         filterHeader = new TableFilterHeader(jTableComprobantes, AutoChoices.ENABLED);
 
@@ -82,11 +88,11 @@ public class ListarComprobantes extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Fecha", "Tipo", "Numero", "Moneda", "Importe", "Pendiente", "Debe", "Haber", "Saldo $", "Saldo USD", "Observación", "objeto"
+                "Fecha", "Tipo", "Numero", "Moneda", "Importe", "Observación", "objeto"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -103,7 +109,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
             jTableComprobantes.getColumnModel().getColumn(0).setPreferredWidth(90);
             jTableComprobantes.getColumnModel().getColumn(1).setPreferredWidth(100);
             jTableComprobantes.getColumnModel().getColumn(3).setPreferredWidth(60);
-            jTableComprobantes.getColumnModel().getColumn(10).setPreferredWidth(300);
+            jTableComprobantes.getColumnModel().getColumn(5).setPreferredWidth(300);
         }
 
         jLabel2.setText("Desde");
@@ -208,12 +214,12 @@ public class ListarComprobantes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCheckBoxSinFechaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBoxSinFechaItemStateChanged
-        if(this.jCheckBoxSinFecha.isSelected()){
+        if (this.jCheckBoxSinFecha.isSelected()) {
             this.jDateChooserHasta.setEnabled(false);
             this.jDateChooserDesde.setEnabled(false);
             this.jDateChooserDesde.setCalendar(null);
             this.jDateChooserHasta.setCalendar(null);
-        }else{
+        } else {
             this.jDateChooserHasta.setEnabled(true);
             this.jDateChooserDesde.setEnabled(true);
         }
@@ -230,18 +236,16 @@ public class ListarComprobantes extends javax.swing.JFrame {
         String valorCombo = this.jComboBox1.getSelectedItem().toString();
         Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        
-        if (!jCheckBoxSinFecha.isSelected()) {
-            if (fechaDesde.after(fechaHasta)) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            }
-        }
-      
-        
+
+//        if (!jCheckBoxSinFecha.isSelected()) {
+//            if (fechaDesde.after(fechaHasta)) {
+//                javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+//            }
+//        }
+
         if (valorCombo.equals("Ingrese una opción")) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar una opción", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
-
             //Cuando el usuario selecciona facturas pero sin ingresar una fecha inicio y fecha final.
             if (jCheckBoxSinFecha.isSelected() && valorCombo.equals("Facturas")) {
                 model.setRowCount(0);
@@ -250,10 +254,17 @@ public class ListarComprobantes extends javax.swing.JFrame {
                     javax.swing.JOptionPane.showMessageDialog(null, "No existe ninguna factura", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 } else {
                     for (int i = 0; i < ListaFact.size(); i++) {
-                        String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
-                        model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
-                            numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(),
-                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
+                        if (!this.jCheckBox1.isSelected()) {
+                            if (ListaFact.get(i).getTipo() != tipoComprobante.Contado && ListaFact.get(i).getTipo() != tipoComprobante.DevolucionContado) {
+                                String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
+                                model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
+                                    numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
+                            }
+                        } else {
+                            String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
+                            model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
+                                numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
+                        }
                     }
                 }
 
@@ -273,11 +284,19 @@ public class ListarComprobantes extends javax.swing.JFrame {
                         javax.swing.JOptionPane.showMessageDialog(null, "No existe ninguna factura entre las fechas ingresadas", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     } else {
                         for (int i = 0; i < ListaFact.size(); i++) {
-                            String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
-                            model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
-                                numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getPendiente(),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
+                            if (!this.jCheckBox1.isSelected()) {
+                                if (ListaFact.get(i).getTipo() != tipoComprobante.Contado && ListaFact.get(i).getTipo() != tipoComprobante.DevolucionContado) {
+                                    String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
+                                    model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
+                                        numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
+                                }
+                            } else {
+                                String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
+                                model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
+                                    numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
+                            }
                         }
+
                     }
                 }
             }
@@ -292,8 +311,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                     for (int i = 0; i < listaRecibos.size(); i++) {
                         String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
                         model.addRow(new Object[]{sdf.format(listaRecibos.get(i).getFecha()), "Recibo",
-                            numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), Float.parseFloat("0"),
-                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), listaRecibos.get(i).getObservacion(), listaRecibos.get(i)});
+                            numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), listaRecibos.get(i).getObservacion(), listaRecibos.get(i)});
                     }
                 }
             }
@@ -314,8 +332,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
                         for (int i = 0; i < listaRecibos.size(); i++) {
                             String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
                             model.addRow(new Object[]{sdf.format(listaRecibos.get(i).getFecha()), "Recibo",
-                                numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), listaRecibos.get(i).getObservacion(), listaRecibos.get(i)});
+                                numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), listaRecibos.get(i).getObservacion(), listaRecibos.get(i)});
                         }
                     }
                 }
@@ -325,24 +342,35 @@ public class ListarComprobantes extends javax.swing.JFrame {
             if (jCheckBoxSinFecha.isSelected() && valorCombo.equals("Ambos")) {
                 model.setRowCount(0);
                 List<Factura> ListaFact = Conexion.getInstance().ListarFacturas(p);
-                List<Recibo> listaRecibos = Conexion.getInstance().listarRecibos(p.getCodigo());               
+                List<Recibo> listaRecibos = Conexion.getInstance().listarRecibos(p.getCodigo());
                 List<Comprobante> comprobantes = agregarComprobantes(ListaFact, listaRecibos);
                 if (comprobantes == null) {
                     javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún comprobante", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 } else {
                     for (Comprobante comprobante : comprobantes) {
                         if (comprobante instanceof Factura) {
-                            Factura f = (Factura) comprobante;
-                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
+                            if (!this.jCheckBox1.isSelected()) {
+                                Factura f = (Factura) comprobante;
+                                if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
+                                    String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                    model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                        numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+                                }
+                            } else {
+                                Factura f = (Factura) comprobante;
+                                String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+                            }
+//                            Factura f = (Factura) comprobante;
+//                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+//                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+//                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
                         } else {
                             Recibo r = (Recibo) comprobante;
                             String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
                             model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
-                                numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), r.getObservacion(), r});
+                                numeroComp, r.getMoneda().toString(), r.getTotal(), r.getObservacion(), r});
                         }
                     }
                 }
@@ -357,24 +385,35 @@ public class ListarComprobantes extends javax.swing.JFrame {
                     javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 } else {
                     List<Factura> ListaFact = Conexion.getInstance().ListarFacturasPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
-                    List<Recibo> listaRecibos = Conexion.getInstance().listarRecibosPorFecha(p.getCodigo(), fechaDesde, fechaHasta);                   
+                    List<Recibo> listaRecibos = Conexion.getInstance().listarRecibosPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
                     List<Comprobante> comprobantes = agregarComprobantes(ListaFact, listaRecibos);
                     if (comprobantes.isEmpty()) {
                         javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún comprobante", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     } else {
                         for (Comprobante comprobante : comprobantes) {
                             if (comprobante instanceof Factura) {
-                                Factura f = (Factura) comprobante;
-                                String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
-                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
+                                if (!this.jCheckBox1.isSelected()) {
+                                    Factura f = (Factura) comprobante;
+                                    if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
+                                        String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                        model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                            numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+                                    }
+                                } else {
+                                    Factura f = (Factura) comprobante;
+                                    String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                    model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                        numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+                                }
+//                                Factura f = (Factura) comprobante;
+//                                String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+//                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+//                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
                             } else {
                                 Recibo r = (Recibo) comprobante;
                                 String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
                                 model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
-                                    numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
-                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"),r.getObservacion(), r});
+                                    numeroComp, r.getMoneda().toString(), r.getTotal(), r.getObservacion(), r});
                             }
                         }
                     }
@@ -403,17 +442,17 @@ public class ListarComprobantes extends javax.swing.JFrame {
         if (!comprobantes.isEmpty()) {
             Collections.sort(comprobantes, (Comprobante o1, Comprobante o2) -> o1.getFecha().compareTo(o2.getFecha()));
         }
-        
+
         return comprobantes;
     }
-        
+
     private void jTableComprobantesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableComprobantesMouseClicked
-        if(this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11) instanceof Factura){
-            Factura fac = (Factura) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
+        if (this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 6) instanceof Factura) {
+            Factura fac = (Factura) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 6);
             AltaFactura af = new AltaFactura(fac);
             af.show();
-        }else if(this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11) instanceof Recibo){
-            Recibo rec = (Recibo) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
+        } else if (this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 6) instanceof Recibo) {
+            Recibo rec = (Recibo) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 6);
             AltaRecibo ar = new AltaRecibo(rec);
             ar.show();
         }
@@ -422,7 +461,6 @@ public class ListarComprobantes extends javax.swing.JFrame {
     private void jCheckBoxSinFechaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBoxSinFechaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCheckBoxSinFechaActionPerformed
-
 
     /**
      * @param args the command line arguments
@@ -476,6 +514,5 @@ public class ListarComprobantes extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTableComprobantes;
     // End of variables declaration//GEN-END:variables
-
 
 }
