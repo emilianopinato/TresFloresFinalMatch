@@ -64,6 +64,10 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         jTable1.getColumnModel().getColumn(6).setMinWidth(0);
         jTable1.getColumnModel().getColumn(6).setMaxWidth(0);
         jTable1.getColumnModel().getColumn(6).setWidth(0);
+        
+        jTextField1.setEditable(false);
+        jTextField2.setEditable(false);
+        jTextField3.setEditable(false);
     }
 
     /**
@@ -299,10 +303,12 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                 Factura next = it.next();
                 Object[] fila = new Object[7];
                 if (!next.isDeshabilitado()) {
-                    float subTotal = next.getTotal() - next.getIvaBasico() - next.getIvaMinimo();
-                    total = total + next.getTotal();
-                    ivaMinimo = ivaMinimo + next.getIvaMinimo();
-                    ivaBasico = ivaBasico + next.getIvaBasico();
+                    float subTotal = (next.getTotal() * next.getCotizacion())
+                            - (next.getIvaMinimo() * next.getCotizacion())
+                            - (next.getIvaBasico() * next.getCotizacion());
+                    total = total + (next.getTotal() * next.getCotizacion());
+                    ivaMinimo = ivaMinimo + (next.getIvaMinimo() * next.getCotizacion());
+                    ivaBasico = ivaBasico + (next.getIvaBasico() * next.getCotizacion());
                     fila[0] = next.getProveedor().getRazonSocial();
                     fila[1] = next.getProveedor().getRUT();
                     fila[2] = subTotal;
@@ -311,6 +317,7 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                     fila[5] = next.getTotal();
                     fila[6] = next;
                     mdl.addRow(fila);
+
                 }
             }
 
@@ -1051,10 +1058,7 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
 
     private boolean mesMayor(String mesSeleccionado, LocalDate mesActual) {
         LocalDate dateSeleccionada = convertirAFecha(mesSeleccionado);
-        if (dateSeleccionada.isAfter(mesActual)) {
-            return true;
-        }
-        return false;
+        return dateSeleccionada.isAfter(mesActual);
     }
 
     private LocalDate convertirAFecha(String mesSeleccionado) {
@@ -1237,13 +1241,19 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             LocalDate fechaHasta = date2.minusMonths(i);
 
             List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
+            int cantidadFacturas = facturas.size();
+            int cantidadFacturasCerradas = 0;
+
             if (facturas.isEmpty()) {
                 return false;
             } else {
                 for (Factura f : facturas) {
-                    if (!f.isCerrada()) {
-                        return true;
+                    if (f.isCerrada()) {
+                        cantidadFacturasCerradas++;
                     }
+                }
+                if (cantidadFacturas != cantidadFacturasCerradas) {
+                    return true;
                 }
             }
         }
