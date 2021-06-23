@@ -114,10 +114,10 @@ public class AltaRecibo extends javax.swing.JFrame {
         List<F_R> listaf_r = rec.getFr_s();
 
         for (int i = 0; i < listaf_r.size(); i++) {
-            if(listaf_r.get(i).getSaldo() >= 0){
+            if (listaf_r.get(i).getSaldo() >= 0) {
                 String numeroComp = listaf_r.get(i).getFactura().getSerieComprobante() + "-" + listaf_r.get(i).getFactura().getNroComprobante();
                 model.addRow(new Object[]{listaf_r.get(i).getFactura().getFecha(), numeroComp, listaf_r.get(i).getFactura().getTotal(), listaf_r.get(i).getFactura().getPendiente(),
-                listaf_r.get(i).getSaldo(), listaf_r.get(i).getFactura()});
+                    listaf_r.get(i).getSaldo(), listaf_r.get(i).getFactura()});
             }
         }
     }
@@ -449,7 +449,7 @@ public class AltaRecibo extends javax.swing.JFrame {
     private void jCBProveedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBProveedorItemStateChanged
         if (this.vista == false) {
             if (this.jTableFacturas.isEditing()) {
-                    this.jTableFacturas.getCellEditor().stopCellEditing();
+                this.jTableFacturas.getCellEditor().stopCellEditing();
             }
             DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
             model.setRowCount(0);
@@ -506,7 +506,7 @@ public class AltaRecibo extends javax.swing.JFrame {
             if (Conexion.getInstance().existeRec(this.jTextSerie.getText(), this.jTextNumero.getText(), prov) == true) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Ya ingresaste un recibo con ese numero anteriormente.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             } else {
-                
+
                 if (this.jTableFacturas.isEditing()) {
                     this.jTableFacturas.getCellEditor().stopCellEditing();
                 }
@@ -871,7 +871,7 @@ public class AltaRecibo extends javax.swing.JFrame {
                     this.jTextSerie.getText(), this.jTextNumero.getText(), String.valueOf(this.r.getProveedor().getCodigo())) == true) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Ya existe otro recibo con ese numero.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             } else {
-                
+
                 if (this.jTableFacturas.isEditing()) {
                     this.jTableFacturas.getCellEditor().stopCellEditing();
                 }
@@ -1001,7 +1001,7 @@ public class AltaRecibo extends javax.swing.JFrame {
 
     private void jCBMonedaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBMonedaItemStateChanged
         if (this.jTableFacturas.isEditing()) {
-                    this.jTableFacturas.getCellEditor().stopCellEditing();
+            this.jTableFacturas.getCellEditor().stopCellEditing();
         }
         DefaultTableModel model = (DefaultTableModel) this.jTableFacturas.getModel();
         model.setRowCount(0);
@@ -1030,7 +1030,7 @@ public class AltaRecibo extends javax.swing.JFrame {
         float importe = 0;
         DefaultTableModel modelo = (DefaultTableModel) this.jTableFacturas.getModel();
 
-        if (this.jTextImporte.getText() != null || this.jTextImporte.getText() != "") {
+        if (this.jTextImporte.getText() != null && this.jTextImporte.getText() != "") {
             importe = Float.parseFloat(this.jTextImporte.getText());
             if (importe != this.importerecordado) {
                 this.importerecordado = importe;

@@ -2,7 +2,7 @@
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
-    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="defaultCloseOperation" type="int" value="2"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
@@ -143,9 +143,9 @@
                 <Column editable="true" title="Numero" type="java.lang.String"/>
                 <Column editable="true" title="Moneda" type="java.lang.String"/>
                 <Column editable="true" title="Importe" type="java.lang.Float"/>
-                <Column editable="true" title="Pendiente" type="java.lang.Float"/>
-                <Column editable="true" title="Debe" type="java.lang.Float"/>
-                <Column editable="true" title="Haber" type="java.lang.Float"/>
+                <Column editable="true" title="Pendiente" type="java.lang.String"/>
+                <Column editable="true" title="Debe" type="java.lang.String"/>
+                <Column editable="true" title="Haber" type="java.lang.String"/>
                 <Column editable="true" title="Saldo $" type="java.lang.Float"/>
                 <Column editable="true" title="Saldo USD" type="java.lang.Float"/>
                 <Column editable="true" title="Observaci&#xf3;n" type="java.lang.String"/>

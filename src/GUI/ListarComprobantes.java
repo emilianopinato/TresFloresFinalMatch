@@ -236,54 +236,27 @@ public class ListarComprobantes extends javax.swing.JFrame {
         String valorCombo = this.jComboBox1.getSelectedItem().toString();
         Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        
-        if (fechaDesde != null && fechaHasta != null) {
-            if (!jCheckBoxSinFecha.isSelected()) {
-                if (fechaDesde.after(fechaHasta)) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
-
-        if (valorCombo.equals("Ingrese una opción")) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar una opción", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        if (p == null) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
-            //Cuando el usuario selecciona facturas pero sin ingresar una fecha inicio y fecha final.
-            if (jCheckBoxSinFecha.isSelected() && valorCombo.equals("Facturas")) {
-                model.setRowCount(0);
-                List<Factura> ListaFact = Conexion.getInstance().ListarFacturas(p);
-                if (ListaFact.isEmpty()) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "No existe ninguna factura", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else {
-                    for (int i = 0; i < ListaFact.size(); i++) {
-                        if (!this.jCheckBox1.isSelected()) {
-                            if (ListaFact.get(i).getTipo() != tipoComprobante.Contado && ListaFact.get(i).getTipo() != tipoComprobante.DevolucionContado) {
-                                String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
-                                model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
-                                    numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
-                            }
-                        } else {
-                            String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
-                            model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
-                                numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
-                        }
+            
+            if (fechaDesde != null && fechaHasta != null) {
+                if (!jCheckBoxSinFecha.isSelected()) {
+                    if (fechaDesde.after(fechaHasta)) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     }
                 }
-
             }
 
-            //Cuando el usuario selecciona facturas pero esta vez selecciona fecha de inicio y fecha de fin.
-            if (!jCheckBoxSinFecha.isSelected() && valorCombo.equals("Facturas")) {
-                model.setRowCount(0);
-                if (fechaDesde == null && fechaHasta == null) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "No ha ingresado ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else if (fechaDesde == null || fechaHasta == null) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else {
+            if (valorCombo.equals("Ingrese una opción")) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar una opción", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            } else {
+                //Cuando el usuario selecciona facturas pero sin ingresar una fecha inicio y fecha final.
+                if (jCheckBoxSinFecha.isSelected() && valorCombo.equals("Facturas")) {
                     model.setRowCount(0);
-                    List<Factura> ListaFact = Conexion.getInstance().ListarFacturasPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                    List<Factura> ListaFact = Conexion.getInstance().ListarFacturas(p);
                     if (ListaFact.isEmpty()) {
-                        javax.swing.JOptionPane.showMessageDialog(null, "No existe ninguna factura entre las fechas ingresadas", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                        javax.swing.JOptionPane.showMessageDialog(null, "No existe ninguna factura", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     } else {
                         for (int i = 0; i < ListaFact.size(); i++) {
                             if (!this.jCheckBox1.isSelected()) {
@@ -298,36 +271,45 @@ public class ListarComprobantes extends javax.swing.JFrame {
                                     numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
                             }
                         }
-
                     }
-                }
-            }
 
-            //Cuando el usuario selecciona recibos pero sin fecha de inicio y sin fecha de fin.
-            if (jCheckBoxSinFecha.isSelected() && valorCombo.equals("Recibos")) {
-                model.setRowCount(0);
-                List<Recibo> listaRecibos = Conexion.getInstance().listarRecibos(p.getCodigo());
-                if (listaRecibos.isEmpty()) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún recibo entre las fechas ingresadas", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else {
-                    for (int i = 0; i < listaRecibos.size(); i++) {
-                        String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
-                        model.addRow(new Object[]{sdf.format(listaRecibos.get(i).getFecha()), "Recibo",
-                            numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), listaRecibos.get(i).getObservacion(), listaRecibos.get(i)});
-                    }
                 }
-            }
 
-            //Cuando el usuario selecciona recibos pero esta vez con fecha de inicio y fecha de fin.
-            if (!jCheckBoxSinFecha.isSelected() && valorCombo.equals("Recibos")) {
-                model.setRowCount(0);
-                if (fechaDesde == null && fechaHasta == null) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "No ha ingresado ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else if (fechaDesde == null || fechaHasta == null) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else {
+                //Cuando el usuario selecciona facturas pero esta vez selecciona fecha de inicio y fecha de fin.
+                if (!jCheckBoxSinFecha.isSelected() && valorCombo.equals("Facturas")) {
                     model.setRowCount(0);
-                    List<Recibo> listaRecibos = Conexion.getInstance().listarRecibosPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                    if (fechaDesde == null && fechaHasta == null) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "No ha ingresado ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else if (fechaDesde == null || fechaHasta == null) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        model.setRowCount(0);
+                        List<Factura> ListaFact = Conexion.getInstance().ListarFacturasPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                        if (ListaFact.isEmpty()) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "No existe ninguna factura entre las fechas ingresadas", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            for (int i = 0; i < ListaFact.size(); i++) {
+                                if (!this.jCheckBox1.isSelected()) {
+                                    if (ListaFact.get(i).getTipo() != tipoComprobante.Contado && ListaFact.get(i).getTipo() != tipoComprobante.DevolucionContado) {
+                                        String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
+                                        model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
+                                            numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
+                                    }
+                                } else {
+                                    String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
+                                    model.addRow(new Object[]{sdf.format(ListaFact.get(i).getFecha()), ListaFact.get(i).getTipo().toString(),
+                                        numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), ListaFact.get(i).getObservacion(), ListaFact.get(i)});
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                //Cuando el usuario selecciona recibos pero sin fecha de inicio y sin fecha de fin.
+                if (jCheckBoxSinFecha.isSelected() && valorCombo.equals("Recibos")) {
+                    model.setRowCount(0);
+                    List<Recibo> listaRecibos = Conexion.getInstance().listarRecibos(p.getCodigo());
                     if (listaRecibos.isEmpty()) {
                         javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún recibo entre las fechas ingresadas", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     } else {
@@ -338,58 +320,36 @@ public class ListarComprobantes extends javax.swing.JFrame {
                         }
                     }
                 }
-            }
 
-            //Cuando el usuario selecciona ambos pero sin fecha.
-            if (jCheckBoxSinFecha.isSelected() && valorCombo.equals("Ambos")) {
-                model.setRowCount(0);
-                List<Factura> ListaFact = Conexion.getInstance().ListarFacturas(p);
-                List<Recibo> listaRecibos = Conexion.getInstance().listarRecibos(p.getCodigo());
-                List<Comprobante> comprobantes = agregarComprobantes(ListaFact, listaRecibos);
-                if (comprobantes == null) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún comprobante", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else {
-                    for (Comprobante comprobante : comprobantes) {
-                        if (comprobante instanceof Factura) {
-                            if (!this.jCheckBox1.isSelected()) {
-                                Factura f = (Factura) comprobante;
-                                if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
-                                    String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                                    model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-                                        numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
-                                }
-                            } else {
-                                Factura f = (Factura) comprobante;
-                                String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
-                            }
-//                            Factura f = (Factura) comprobante;
-//                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-//                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-//                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+                //Cuando el usuario selecciona recibos pero esta vez con fecha de inicio y fecha de fin.
+                if (!jCheckBoxSinFecha.isSelected() && valorCombo.equals("Recibos")) {
+                    model.setRowCount(0);
+                    if (fechaDesde == null && fechaHasta == null) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "No ha ingresado ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else if (fechaDesde == null || fechaHasta == null) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        model.setRowCount(0);
+                        List<Recibo> listaRecibos = Conexion.getInstance().listarRecibosPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                        if (listaRecibos.isEmpty()) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún recibo entre las fechas ingresadas", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                         } else {
-                            Recibo r = (Recibo) comprobante;
-                            String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
-                            model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
-                                numeroComp, r.getMoneda().toString(), r.getTotal(), r.getObservacion(), r});
+                            for (int i = 0; i < listaRecibos.size(); i++) {
+                                String numeroComp = listaRecibos.get(i).getSerieComprobante() + "-" + listaRecibos.get(i).getNroComprobante();
+                                model.addRow(new Object[]{sdf.format(listaRecibos.get(i).getFecha()), "Recibo",
+                                    numeroComp, listaRecibos.get(i).getMoneda().toString(), listaRecibos.get(i).getTotal(), listaRecibos.get(i).getObservacion(), listaRecibos.get(i)});
+                            }
                         }
                     }
                 }
-            }
 
-            //Cuando el usuario selecciona ambos pero con fecha.
-            if (!jCheckBoxSinFecha.isSelected() && valorCombo.equals("Ambos")) {
-                model.setRowCount(0);
-                if (fechaDesde == null && fechaHasta == null) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "No ha ingresado ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else if (fechaDesde == null || fechaHasta == null) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else {
-                    List<Factura> ListaFact = Conexion.getInstance().ListarFacturasPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
-                    List<Recibo> listaRecibos = Conexion.getInstance().listarRecibosPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                //Cuando el usuario selecciona ambos pero sin fecha.
+                if (jCheckBoxSinFecha.isSelected() && valorCombo.equals("Ambos")) {
+                    model.setRowCount(0);
+                    List<Factura> ListaFact = Conexion.getInstance().ListarFacturas(p);
+                    List<Recibo> listaRecibos = Conexion.getInstance().listarRecibos(p.getCodigo());
                     List<Comprobante> comprobantes = agregarComprobantes(ListaFact, listaRecibos);
-                    if (comprobantes.isEmpty()) {
+                    if (comprobantes == null) {
                         javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún comprobante", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     } else {
                         for (Comprobante comprobante : comprobantes) {
@@ -407,10 +367,10 @@ public class ListarComprobantes extends javax.swing.JFrame {
                                     model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
                                         numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
                                 }
-//                                Factura f = (Factura) comprobante;
-//                                String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-//                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-//                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+//                            Factura f = (Factura) comprobante;
+//                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+//                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+//                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
                             } else {
                                 Recibo r = (Recibo) comprobante;
                                 String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
@@ -419,10 +379,54 @@ public class ListarComprobantes extends javax.swing.JFrame {
                             }
                         }
                     }
-
                 }
-            }
 
+                //Cuando el usuario selecciona ambos pero con fecha.
+                if (!jCheckBoxSinFecha.isSelected() && valorCombo.equals("Ambos")) {
+                    model.setRowCount(0);
+                    if (fechaDesde == null && fechaHasta == null) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "No ha ingresado ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else if (fechaDesde == null || fechaHasta == null) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        List<Factura> ListaFact = Conexion.getInstance().ListarFacturasPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                        List<Recibo> listaRecibos = Conexion.getInstance().listarRecibosPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                        List<Comprobante> comprobantes = agregarComprobantes(ListaFact, listaRecibos);
+                        if (comprobantes.isEmpty()) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún comprobante", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            for (Comprobante comprobante : comprobantes) {
+                                if (comprobante instanceof Factura) {
+                                    if (!this.jCheckBox1.isSelected()) {
+                                        Factura f = (Factura) comprobante;
+                                        if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
+                                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+                                        }
+                                    } else {
+                                        Factura f = (Factura) comprobante;
+                                        String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                        model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                            numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+                                    }
+//                                Factura f = (Factura) comprobante;
+//                                String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+//                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+//                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getObservacion(), f});
+                                } else {
+                                    Recibo r = (Recibo) comprobante;
+                                    String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
+                                    model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
+                                        numeroComp, r.getMoneda().toString(), r.getTotal(), r.getObservacion(), r});
+                                }
+                            }
+                        }
+
+                    }
+                }
+
+            }
         }
     }//GEN-LAST:event_jButtonConsultarActionPerformed
 

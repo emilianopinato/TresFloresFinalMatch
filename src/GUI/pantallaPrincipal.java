@@ -8,6 +8,7 @@ package GUI;
 import BD.Conexion;
 import Clases.Administrador;
 import Clases.Cotizacion;
+import Clases.Proveedor;
 import Clases.controladorBasura;
 import WebService.ArrayOfint;
 import WebService.DatoscotizacionesDato;
@@ -34,7 +35,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * @author joaco
  */
 public class pantallaPrincipal extends javax.swing.JFrame {
-  
+
     /**
      * Creates new form pantallaPrincipal
      */
@@ -80,13 +81,13 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             jMenu4.add(jm);
         }
         setLocationRelativeTo(null);
-        
-        try{
-           cargarCotizaciones(); 
-        }catch(Exception e){
+
+        try {
+            cargarCotizaciones();
+        } catch (Exception e) {
             //alerta.
         }
-        
+
     }
 
     /**
@@ -413,17 +414,25 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem4ActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-        
-        AltaFactura f = new AltaFactura();
-        f.setLocationRelativeTo(null);
-        f.setVisible(true);
-        
+        List<Proveedor> LProv = Conexion.getInstance().listadoProveedores();
+        if (LProv.size() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.");
+        } else {
+            AltaFactura f = new AltaFactura();
+            f.setLocationRelativeTo(null);
+            f.setVisible(true);
+        }
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jMenuItem8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem8ActionPerformed
-        AltaRecibo r = new AltaRecibo();
-        r.setLocationRelativeTo(null);
-        r.setVisible(true);
+        List<Proveedor> LProv = Conexion.getInstance().listadoProveedores();
+        if (LProv.size() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.");
+        } else {
+            AltaRecibo r = new AltaRecibo();
+            r.setLocationRelativeTo(null);
+            r.setVisible(true);
+        }
     }//GEN-LAST:event_jMenuItem8ActionPerformed
 
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
@@ -431,7 +440,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         ListarComprobantes lc = new ListarComprobantes();
         lc.setLocationRelativeTo(null);
         lc.setVisible(true);
-        
+
     }//GEN-LAST:event_jMenuItem9ActionPerformed
 
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
@@ -588,21 +597,20 @@ public class pantallaPrincipal extends javax.swing.JFrame {
 
         //Tomamos la fecha de hoy.
         Date fechaHoy = new Date();
-        
+
         SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
         SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
         SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
-        
+
         int anio = Integer.parseInt(getAnioFormato.format(fechaHoy));
         int mes = Integer.parseInt(getMesFormato.format(fechaHoy)) - 2;
         int dia = Integer.parseInt(getDiaFormato.format(fechaHoy));
-        
 
         //Tomamos la fecha de 2 meses para atrás.
         Calendar calendario = Calendar.getInstance();
         calendario.set(anio, mes, dia);
         Date fechaAnterior = calendario.getTime();
-      
+
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         sdf.format(fechaHoy);
         sdf.format(fechaAnterior);
@@ -610,11 +618,11 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         //El calendario xml gregoriano lo pide el web service.
         XMLGregorianCalendar fec;
         XMLGregorianCalendar fec2;
-        
+
         GregorianCalendar c = new GregorianCalendar();
         c.clear();
         c.setTime(fechaHoy);
-        
+
         GregorianCalendar c2 = new GregorianCalendar();
         c2.clear();
         c2.setTime(fechaAnterior);
@@ -622,7 +630,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             fec = DatatypeFactory.newInstance().newXMLGregorianCalendar(c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1,
                     c.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED,
                     DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED);
-            
+
             fec2 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c2.get(Calendar.YEAR), c2.get(Calendar.MONTH),
                     c2.get(Calendar.DAY_OF_MONTH), DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED,
                     DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED, DatatypeConstants.FIELD_UNDEFINED);
@@ -662,10 +670,10 @@ public class pantallaPrincipal extends javax.swing.JFrame {
                 Date fechaConvertida = null;
                 XMLGregorianCalendar fecha = dtc1.getFecha();
                 Calendar calendario2 = Calendar.getInstance();
-                calendario2.set(fecha.getYear(), fecha.getMonth()-1, fecha.getDay());
+                calendario2.set(fecha.getYear(), fecha.getMonth() - 1, fecha.getDay());
                 fechaConvertida = calendario2.getTime();
-                sdf.format(fechaConvertida); 
-                if(!Conexion.getInstance().existeFecha(fechaConvertida)){                                  
+                sdf.format(fechaConvertida);
+                if (!Conexion.getInstance().existeFecha(fechaConvertida)) {
                     Cotizacion cot = new Cotizacion();
                     cot.setFecha(fechaConvertida);
                     cot.setImporte(dtc1.getTCC());

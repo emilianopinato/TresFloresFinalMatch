@@ -11,6 +11,7 @@ import Clases.Factura;
 import Clases.Proveedor;
 import Clases.Recibo;
 import Clases.tipoComprobante;
+import Clases.tipoMoneda;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,6 +29,7 @@ import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 public class EstadodeCuenta extends javax.swing.JFrame {
 
     TableFilterHeader filterHeader = null;
+
     /**
      * Creates new form EstadodeCuenta
      */
@@ -40,7 +42,7 @@ public class EstadodeCuenta extends javax.swing.JFrame {
                 this.jCBProveedor.addItem(p);
             }
         });
-        
+
         jTableComprobantes.getColumnModel().getColumn(11).setMinWidth(0);
         jTableComprobantes.getColumnModel().getColumn(11).setMaxWidth(0);
         jTableComprobantes.getColumnModel().getColumn(11).setWidth(0);
@@ -70,7 +72,7 @@ public class EstadodeCuenta extends javax.swing.JFrame {
         jTableComprobantes = new javax.swing.JTable();
         jButtonCerrar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Proveedor");
 
@@ -106,7 +108,7 @@ public class EstadodeCuenta extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.Float.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.String.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -197,88 +199,193 @@ public class EstadodeCuenta extends javax.swing.JFrame {
         //String valorCombo = this.jComboBox1.getSelectedItem().toString();
         Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        if (p == null) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
 
-        if (fechaDesde != null && fechaHasta != null) {
-            if (!jCheckBoxSinFecha.isSelected()) {
-                if (fechaDesde.after(fechaHasta)) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                }
-            }
-        }
-        //Cuando el usuario selecciona ambos pero sin fecha.
-        if (jCheckBoxSinFecha.isSelected()) {
-            model.setRowCount(0);
-            List<Factura> ListaFact = Conexion.getInstance().ListarFacturas(p);
-            List<Recibo> listaRecibos = Conexion.getInstance().listarRecibos(p.getCodigo());
-            List<Comprobante> comprobantes = agregarComprobantes(ListaFact, listaRecibos);
-            if (comprobantes == null) {
-                javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún comprobante", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            } else {
-                for (Comprobante comprobante : comprobantes) {
-                    if (comprobante instanceof Factura) {
-                        Factura f = (Factura) comprobante;
-                        if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
-                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
-                        }
-                    } else {
-                        Recibo r = (Recibo) comprobante;
-                        String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
-                        model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
-                            numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
-                            Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), r.getObservacion(), r});
+            if (fechaDesde != null && fechaHasta != null) {
+                if (!jCheckBoxSinFecha.isSelected()) {
+                    if (fechaDesde.after(fechaHasta)) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
-        }
-
-        //Cuando el usuario selecciona ambos pero con fecha.
-        if (!jCheckBoxSinFecha.isSelected()) {
-            model.setRowCount(0);
-            if (fechaDesde == null && fechaHasta == null) {
-                javax.swing.JOptionPane.showMessageDialog(null, "No ha ingresado ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            } else if (fechaDesde == null || fechaHasta == null) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-            } else {
-                List<Factura> ListaFact = Conexion.getInstance().ListarFacturasPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
-                List<Recibo> listaRecibos = Conexion.getInstance().listarRecibosPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+            //Cuando el usuario selecciona ambos pero sin fecha.
+            if (jCheckBoxSinFecha.isSelected()) {
+                model.setRowCount(0);
+                List<Factura> ListaFact = Conexion.getInstance().ListarFacturas(p);
+                List<Recibo> listaRecibos = Conexion.getInstance().listarRecibos(p.getCodigo());
                 List<Comprobante> comprobantes = agregarComprobantes(ListaFact, listaRecibos);
-                if (comprobantes.isEmpty()) {
+                Float saldo_pesos = 0f, saldo_dolares = 0f;
+                if (comprobantes == null) {
                     javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún comprobante", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 } else {
                     for (Comprobante comprobante : comprobantes) {
                         if (comprobante instanceof Factura) {
                             Factura f = (Factura) comprobante;
                             if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
-                                String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
-                                model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
-                                    numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), Float.parseFloat("0"),
-                                    Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), f.getObservacion(), f});
+                                if (f.getTipo() == tipoComprobante.Credito) {
+                                    if (f.getMoneda() == tipoMoneda.$U) {
+                                        saldo_pesos = saldo_pesos - f.getTotal();
+                                        String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                        model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                            numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), String.valueOf(-f.getTotal()),
+                                            "", saldo_pesos, saldo_dolares, f.getObservacion(), f});
+                                    } else if (f.getMoneda() == tipoMoneda.US$) {
+                                        saldo_dolares = saldo_dolares - f.getTotal();
+                                        String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                        model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                            numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), String.valueOf(-f.getTotal()),
+                                            "", saldo_pesos, saldo_dolares, f.getObservacion(), f});
+                                    }
+                                } else if (f.getTipo() == tipoComprobante.NotaCredito) {
+                                    if (f.getMoneda() == tipoMoneda.$U) {
+                                        saldo_pesos = saldo_pesos + f.getTotal();
+                                        String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                        model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                            numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), " ",
+                                            String.valueOf(-f.getTotal()), saldo_pesos, saldo_dolares, f.getObservacion(), f});
+                                    } else if (f.getMoneda() == tipoMoneda.US$) {
+                                        saldo_dolares = saldo_dolares + f.getTotal();
+                                        String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                        model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                            numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), " ",
+                                            String.valueOf(-f.getTotal()), saldo_pesos, saldo_dolares, f.getObservacion(), f});
+                                    }
+                                }
                             }
                         } else {
                             Recibo r = (Recibo) comprobante;
-                            String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
-                            model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
-                                numeroComp, r.getMoneda().toString(), r.getTotal(), Float.parseFloat("0"), Float.parseFloat("0"),
-                                Float.parseFloat("0"), Float.parseFloat("0"), Float.parseFloat("0"), r.getObservacion(), r});
+                            if (r.getMoneda() == tipoMoneda.$U) {
+                                saldo_pesos = saldo_pesos + r.getTotal();
+                                String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
+                                model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
+                                    numeroComp, r.getMoneda().toString(), r.getTotal(), "", "",
+                                    String.valueOf(-r.getTotal()), saldo_pesos, saldo_dolares, r.getObservacion(), r});
+                            } else if (r.getMoneda() == tipoMoneda.US$) {
+                                saldo_dolares = saldo_dolares + r.getTotal();
+                                String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
+                                model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
+                                    numeroComp, r.getMoneda().toString(), r.getTotal(), "", "",
+                                    String.valueOf(-r.getTotal()), saldo_pesos, saldo_dolares, r.getObservacion(), r});
+                            }
                         }
                     }
                 }
+            }
 
+            //Cuando el usuario selecciona ambos pero con fecha.
+            if (!jCheckBoxSinFecha.isSelected()) {
+                model.setRowCount(0);
+                if (fechaDesde == null && fechaHasta == null) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "No ha ingresado ninguna fecha.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                } else if (fechaDesde == null || fechaHasta == null) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Falta ingresar una de las fechas.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                } else {
+                    // en esta parte recorro todas las facturas anteriores a la fecha que selcciono, para obtener el saldo en pesos y en dolares que venian de antes
+                    Float saldo_pesos = 0f, saldo_dolares = 0f;
+                    List<Factura> ListaFactAnteriores = Conexion.getInstance().ListarFacturasAnterioresAFecha(p.getCodigo(), fechaDesde);
+                    List<Recibo> listaRecibosAnteriores = Conexion.getInstance().listarRecibosAnterioresAFecha(p.getCodigo(), fechaDesde);
+                    List<Comprobante> comprobantesAnteriores = agregarComprobantes(ListaFactAnteriores, listaRecibosAnteriores);
+                    for (Comprobante comprobante_anteriores : comprobantesAnteriores) {
+                        if (comprobante_anteriores instanceof Factura) {
+                            Factura f = (Factura) comprobante_anteriores;
+                            if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
+                                if (f.getTipo() == tipoComprobante.Credito) {
+                                    if (f.getMoneda() == tipoMoneda.$U) {
+                                        saldo_pesos = saldo_pesos - f.getTotal();
+                                    } else if (f.getMoneda() == tipoMoneda.US$) {
+                                        saldo_dolares = saldo_dolares - f.getTotal();
+                                    }
+                                } else if (f.getTipo() == tipoComprobante.NotaCredito) {
+                                    if (f.getMoneda() == tipoMoneda.$U) {
+                                        saldo_pesos = saldo_pesos + f.getTotal();
+                                    } else if (f.getMoneda() == tipoMoneda.US$) {
+                                        saldo_dolares = saldo_dolares + f.getTotal();
+                                    }
+                                }
+                            }
+                        } else {
+                            Recibo r = (Recibo) comprobante_anteriores;
+                            if (r.getMoneda() == tipoMoneda.$U) {
+                                saldo_pesos = saldo_pesos + r.getTotal();
+                            } else if (r.getMoneda() == tipoMoneda.US$) {
+                                saldo_dolares = saldo_dolares + r.getTotal();
+                            }
+                        }
+                    }
+                    // a partir de aca si recorro las facturas en las fechas seleccionadas
+                    List<Factura> ListaFact = Conexion.getInstance().ListarFacturasPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                    List<Recibo> listaRecibos = Conexion.getInstance().listarRecibosPorFecha(p.getCodigo(), fechaDesde, fechaHasta);
+                    List<Comprobante> comprobantes = agregarComprobantes(ListaFact, listaRecibos);
+                    if (comprobantes.isEmpty()) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "No existe ningún comprobante", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        for (Comprobante comprobante : comprobantes) {
+                            if (comprobante instanceof Factura) {
+                                Factura f = (Factura) comprobante;
+                                if (f.getTipo() != tipoComprobante.Contado && f.getTipo() != tipoComprobante.DevolucionContado) {
+                                    if (f.getTipo() == tipoComprobante.Credito) {
+                                        if (f.getMoneda() == tipoMoneda.$U) {
+                                            saldo_pesos = saldo_pesos - f.getTotal();
+                                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), String.valueOf(-f.getTotal()),
+                                                "", saldo_pesos, saldo_dolares, f.getObservacion(), f});
+                                        } else if (f.getMoneda() == tipoMoneda.US$) {
+                                            saldo_dolares = saldo_dolares - f.getTotal();
+                                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), String.valueOf(-f.getTotal()),
+                                                "", saldo_pesos, saldo_dolares, f.getObservacion(), f});
+                                        }
+                                    } else if (f.getTipo() == tipoComprobante.NotaCredito) {
+                                        if (f.getMoneda() == tipoMoneda.$U) {
+                                            saldo_pesos = saldo_pesos + f.getTotal();
+                                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), " ",
+                                                String.valueOf(-f.getTotal()), saldo_pesos, saldo_dolares, f.getObservacion(), f});
+                                        } else if (f.getMoneda() == tipoMoneda.US$) {
+                                            saldo_dolares = saldo_dolares + f.getTotal();
+                                            String numeroComp = f.getSerieComprobante() + "-" + f.getNroComprobante();
+                                            model.addRow(new Object[]{sdf.format(f.getFecha()), f.getTipo().toString(),
+                                                numeroComp, f.getMoneda().toString(), f.getTotal(), f.getPendiente(), " ",
+                                                String.valueOf(-f.getTotal()), saldo_pesos, saldo_dolares, f.getObservacion(), f});
+                                        }
+                                    }
+                                }
+                            } else {
+                                Recibo r = (Recibo) comprobante;
+                                if (r.getMoneda() == tipoMoneda.$U) {
+                                    saldo_pesos = saldo_pesos + r.getTotal();
+                                    String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
+                                    model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
+                                        numeroComp, r.getMoneda().toString(), r.getTotal(), "", "",
+                                        String.valueOf(-r.getTotal()), saldo_pesos, saldo_dolares, r.getObservacion(), r});
+                                } else if (r.getMoneda() == tipoMoneda.US$) {
+                                    saldo_dolares = saldo_dolares + r.getTotal();
+                                    String numeroComp = r.getSerieComprobante() + "-" + r.getNroComprobante();
+                                    model.addRow(new Object[]{sdf.format(r.getFecha()), "Recibo",
+                                        numeroComp, r.getMoneda().toString(), r.getTotal(), "", "",
+                                        String.valueOf(-r.getTotal()), saldo_pesos, saldo_dolares, r.getObservacion(), r});
+                                }
+                            }
+                        }
+                    }
+
+                }
             }
         }
-
     }//GEN-LAST:event_jButtonConsultarActionPerformed
 
     private void jCheckBoxSinFechaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCheckBoxSinFechaItemStateChanged
-        if(this.jCheckBoxSinFecha.isSelected()){
+        if (this.jCheckBoxSinFecha.isSelected()) {
             this.jDateChooserHasta.setEnabled(false);
             this.jDateChooserDesde.setEnabled(false);
             this.jDateChooserDesde.setCalendar(null);
             this.jDateChooserHasta.setCalendar(null);
-        }else{
+        } else {
             this.jDateChooserHasta.setEnabled(true);
             this.jDateChooserDesde.setEnabled(true);
         }
@@ -289,11 +396,11 @@ public class EstadodeCuenta extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxSinFechaActionPerformed
 
     private void jTableComprobantesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableComprobantesMouseClicked
-        if(this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11) instanceof Factura){
+        if (this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11) instanceof Factura) {
             Factura fac = (Factura) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
             AltaFactura af = new AltaFactura(fac);
             af.show();
-        }else if(this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11) instanceof Recibo){
+        } else if (this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11) instanceof Recibo) {
             Recibo rec = (Recibo) this.jTableComprobantes.getModel().getValueAt(this.jTableComprobantes.getSelectedRow(), 11);
             AltaRecibo ar = new AltaRecibo(rec);
             ar.show();

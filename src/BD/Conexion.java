@@ -987,4 +987,68 @@ public class Conexion {
 
     }
 
+    public List<Factura> ListarFacturasAnterioresAFecha(int codigoProveedor, Date fechaDesde) {
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+
+        int anio = Integer.parseInt(getAnioFormato.format(fechaDesde));
+        int mes = Integer.parseInt(getMesFormato.format(fechaDesde));
+        int dia = Integer.parseInt(getDiaFormato.format(fechaDesde));
+
+        String fecha1 = "'" + anio + "-" + mes + "-" + dia + "'";
+
+        EntityManager em = getEntity();
+        List<Factura> listaFacturas = null;
+        em.getTransaction().begin();
+        try {
+//            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.serieComprobante = comprobante.serieComprobante "
+//                    + "AND factura.nroComprobante = comprobante.nroComprobante AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo "
+//                    + "AND comprobante.fecha >= " + fecha1 + " AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Factura.class)
+//                    .setParameter("codigo", codigoProveedor)
+//                    .getResultList();
+            listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE "
+                    + "factura.id = comprobante.id AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo "
+                    + "AND comprobante.fecha < " + fecha1 + " ORDER BY comprobante.fecha ASC", Factura.class)
+                    .setParameter("codigo", codigoProveedor)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return listaFacturas;
+    }
+
+    public List<Recibo> listarRecibosAnterioresAFecha(int codigo, Date fechaDesde) {
+        SimpleDateFormat getAnioFormato = new SimpleDateFormat("yyyy");
+        SimpleDateFormat getMesFormato = new SimpleDateFormat("MM");
+        SimpleDateFormat getDiaFormato = new SimpleDateFormat("dd");
+
+        int anio = Integer.parseInt(getAnioFormato.format(fechaDesde));
+        int mes = Integer.parseInt(getMesFormato.format(fechaDesde));
+        int dia = Integer.parseInt(getDiaFormato.format(fechaDesde));
+
+        String fecha1 = "'" + anio + "-" + mes + "-" + dia + "'";
+
+        EntityManager em = getEntity();
+        List<Recibo> listaRecibos = null;
+        em.getTransaction().begin();
+        try {
+//            listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE recibo.serieComprobante = comprobante.serieComprobante "
+//                    + "AND recibo.nroComprobante = comprobante.nroComprobante AND comprobante.proveedor_codigo = :codigo "
+//                    + "AND comprobante.fecha >= " + fecha1 + " AND recibo.deshabilitado = 0 AND comprobante.fecha <= " + fecha2 + " ORDER BY comprobante.fecha ASC", Recibo.class)
+//                    .setParameter("codigo", codigo)
+//                    .getResultList();
+            listaRecibos = em.createNativeQuery("SELECT recibo.*, comprobante.* FROM recibo INNER JOIN comprobante WHERE "
+                    + "recibo.id = comprobante.id AND comprobante.proveedor_codigo = :codigo "
+                    + "AND comprobante.fecha < " + fecha1 + " AND recibo.deshabilitado = 0 " + " ORDER BY comprobante.fecha ASC", Recibo.class)
+                    .setParameter("codigo", codigo)
+                    .getResultList();
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+        }
+        return listaRecibos;
+    }
+
 }
