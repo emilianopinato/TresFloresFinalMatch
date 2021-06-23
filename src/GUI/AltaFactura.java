@@ -217,6 +217,12 @@ public class AltaFactura extends javax.swing.JFrame {
         } else {
             this.jCheckBoxIvaInc.setSelected(false);
         }
+        
+        if (this.jCheckBoxIvaInc.isSelected()) {
+            this.CalcularTotales_conIVA_inc();
+        } else {
+            this.CalcularTotales_sinIVA_inc();
+        }
 
         this.jCBProveedor.setEnabled(false);
         this.jTextRut.setEditable(false);

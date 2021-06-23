@@ -6,6 +6,7 @@
 package GUI;
 
 import BD.Conexion;
+import Clases.ColorearFilas;
 import Clases.F_R;
 import Clases.Factura;
 import Clases.Proveedor;
@@ -17,6 +18,8 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -72,6 +75,11 @@ public class AltaRecibo extends javax.swing.JFrame {
                 }
             }
         }
+        ColorearFilas color =new ColorearFilas(4);
+        this.jTableFacturas.getColumnModel().getColumn(4).setCellRenderer(color);
+//        DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+//        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+//        this.jTableFacturas.getColumnModel().getColumn(4).setCellRenderer(tcr);
     }
 
     public AltaRecibo(Recibo rec) {
@@ -120,6 +128,8 @@ public class AltaRecibo extends javax.swing.JFrame {
                     listaf_r.get(i).getSaldo(), listaf_r.get(i).getFactura()});
             }
         }
+        ColorearFilas color =new ColorearFilas(4);
+        this.jTableFacturas.getColumnModel().getColumn(4).setCellRenderer(color);
     }
 
     /**
@@ -1029,7 +1039,7 @@ public class AltaRecibo extends javax.swing.JFrame {
     private void jTextImporteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextImporteFocusLost
         float importe = 0;
         DefaultTableModel modelo = (DefaultTableModel) this.jTableFacturas.getModel();
-
+        String valor = this.jTextImporte.getText();
         if (this.jTextImporte.getText() != null && this.jTextImporte.getText() != "") {
             importe = Float.parseFloat(this.jTextImporte.getText());
             if (importe != this.importerecordado) {

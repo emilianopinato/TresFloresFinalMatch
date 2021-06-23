@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import net.coderazzi.filters.gui.AutoChoices;
 import net.coderazzi.filters.gui.TableFilterHeader;
@@ -52,6 +54,9 @@ public class ListarComprobantes extends javax.swing.JFrame {
 
         //Permite agregar un filtro de búsqueda por cada columna.
         filterHeader = new TableFilterHeader(jTableComprobantes, AutoChoices.ENABLED);
+        DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
+        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        this.jTableComprobantes.getColumnModel().getColumn(4).setCellRenderer(tcr);
 
     }
 
