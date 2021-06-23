@@ -139,8 +139,8 @@ public class abrirMes extends javax.swing.JFrame {
                 mesActual = "Diciembre";
             }
 
-            boolean shrek = mesCerrado(mesSeleccionado);
-            if (!shrek) {
+            boolean cerrado = mesCerrado(mesSeleccionado);
+            if (cerrado) {
                 boolean exito = abrirMes(mesSeleccionado);
                 if (exito) {
                     javax.swing.JOptionPane.showMessageDialog(null, "El mes se ha abierto exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
@@ -189,22 +189,27 @@ public class abrirMes extends javax.swing.JFrame {
     }
 
     private boolean mesCerrado(String mesSeleccionado) {
-
-        boolean retorno = true;
+        boolean retorno = false;
         LocalDate date1 = convertirAFecha(mesSeleccionado);
         LocalDate date2 = convertirAFecha2(mesSeleccionado);
 
         List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(date1, date2);
-        
+        int cantidadFacturas = facturas.size(); //800.
+        int cantidadFacturasCerradas = 0;
+
         if (!facturas.isEmpty()) {
             for (Factura f : facturas) {
                 if (f.isCerrada()) {
-                    retorno = false;
-                    break;
+                    cantidadFacturasCerradas++;
                 }
             }
+
+            if (cantidadFacturas == cantidadFacturasCerradas) {
+                retorno = true;
+            }
+
         }
-        
+
         return retorno;
     }
 
@@ -320,7 +325,7 @@ public class abrirMes extends javax.swing.JFrame {
 
         if (fechaACerrar != null) {
             LocalDate fechaDesde = LocalDate.of(fechaACerrar.getYear(), fechaACerrar.getMonth(), 1);
-            List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaACerrar);
+            List<Factura> facturas = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaACerrar);            
             for (Factura f : facturas) {
                 f.setCerrada(false);
                 Conexion.getInstance().merge(f);

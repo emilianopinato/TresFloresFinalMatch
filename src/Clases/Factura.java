@@ -22,6 +22,15 @@ public class Factura extends Comprobante implements Serializable {
 
     private boolean deshabilitado;
     private boolean cerrada;
+    private String observacion;
+
+    public String getObservacion() {
+        return observacion;
+    }
+
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
+    }
     
     //LINKS-------------------------//
       

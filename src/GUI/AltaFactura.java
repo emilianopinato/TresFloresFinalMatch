@@ -177,6 +177,7 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jTextSerie.setText(fac.getSerieComprobante());
         this.jTextNumeroFact.setText(String.valueOf(fac.getNroComprobante()));
         this.jTextTOTAL.setText(String.valueOf(fac.getTotal()));
+        this.jTextComentario.setText(fac.getObservacion());
 
         if (fac.getMoneda() == tipoMoneda.$U) {
             this.jCBMoneda.setSelectedIndex(0);
@@ -230,6 +231,7 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jCBTipoComprobante.setEnabled(false);
         this.jCBMoneda.setEnabled(false);
         this.jCheckBoxIvaInc.setEnabled(false);
+        this.jTextComentario.setEditable(false);
 
         this.jDateChooser.getDateEditor().addPropertyChangeListener(new PropertyChangeListener() {
             @Override
@@ -349,6 +351,8 @@ public class AltaFactura extends javax.swing.JFrame {
         jButtonCerrarMod = new javax.swing.JButton();
         jButtonModificar = new javax.swing.JButton();
         labelCotizacion = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jTextComentario = new javax.swing.JTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenuEdicion = new javax.swing.JMenu();
         jMenuItemModificar = new javax.swing.JMenuItem();
@@ -691,17 +695,17 @@ public class AltaFactura extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jLabel17.setText("Comentario:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jCheckBoxIvaInc)
-                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -726,7 +730,7 @@ public class AltaFactura extends javax.swing.JFrame {
                                         .addComponent(jCBMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(labelCotizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel7))
@@ -745,8 +749,18 @@ public class AltaFactura extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 580, Short.MAX_VALUE)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(6, 6, 6)
+                                        .addComponent(jLabel17)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTextComentario, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jCheckBoxIvaInc)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -813,18 +827,24 @@ public class AltaFactura extends javax.swing.JFrame {
                 .addComponent(jPanelSetArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(22, 22, 22)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCheckBoxIvaInc)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel13))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jTextIVAminimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addGap(6, 6, 6)))
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextSubTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel13))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jTextIVAminimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel14)
+                                .addGap(6, 6, 6))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel17)
+                            .addComponent(jTextComentario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCheckBoxIvaInc)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextIVAbasico, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -839,7 +859,7 @@ public class AltaFactura extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonIngresar)
                         .addComponent(jButtonCerrar)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(10, Short.MAX_VALUE))
         );
 
         jMenuEdicion.setText("Edición");
@@ -890,6 +910,8 @@ public class AltaFactura extends javax.swing.JFrame {
 
     private void jButtonIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonIngresarActionPerformed
         Factura fac = new Factura();
+        Date date = this.jDateChooser.getDate();
+
         if (((Proveedor) this.jCBProveedor.getSelectedItem()) != null) {
             //Agregamos IVA Básico y Mínimo.
             fac.setIvaBasico(Float.parseFloat(jTextIVAbasico.getText()));
@@ -908,263 +930,285 @@ public class AltaFactura extends javax.swing.JFrame {
             } else if (this.ListaArticulo.isEmpty()) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Es necesario ingresar minimo un articulo.");
             } else {
-                String prov = String.valueOf(((Proveedor) this.jCBProveedor.getSelectedItem()).getCodigo());
-                if (Conexion.getInstance().existeFac(this.jTextSerie.getText(), this.jTextNumeroFact.getText(), prov) == true) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "Ya ingresaste un recibo con ese numero anteriormente.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else {
 
-                    if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
-                        fac.setTipo(tipoComprobante.Contado);
-                        fac.setSerieComprobante(this.jTextSerie.getText());
-                        fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                        fac.setPendiente(0);
-                        fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
-                        fac.setFecha(this.jDateChooser.getDate());
-                        fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-
-                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                            fac.setCotizacion(1);
-                            fac.setMoneda(tipoMoneda.$U);
-                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                            fac.setCotizacion((float) precioCotizacion);
-                            fac.setMoneda(tipoMoneda.US$);
+                LocalDate fechaDatechoser = new java.sql.Date(date.getTime()).toLocalDate();
+                boolean mescerrado = false;
+                LocalDate fechaDesde = LocalDate.of(fechaDatechoser.getYear(), fechaDatechoser.getMonth(), 1);
+                LocalDate fechaHasta = LocalDate.of(fechaDatechoser.getYear(), fechaDatechoser.getMonth(), fechaDatechoser.lengthOfMonth());
+                List<Factura> lfac = Conexion.getInstance().ListarFacturasPorFechaSinProveedor(fechaDesde, fechaHasta);
+                if (!lfac.isEmpty()) {
+                    for (Factura f : lfac) {
+                        if (f.isCerrada()) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "El mes ya está cerrado.");
+                            mescerrado = true;
+                            return;
                         }
-
-                        List<F_P> listaf_p = new ArrayList<F_P>();
-                        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
-                        for (int i = 0; i < modelo.getRowCount(); i++) {
-                            F_P f_p = new F_P();
-                            f_p.setFactura(fac);
-                            f_p.setArticulo(this.ListaArticulo.get(i));
-
-                            String c = modelo.getValueAt(i, 1).toString();
-                            float cant = Float.parseFloat(c);
-                            f_p.setCantidad(cant);
-
-                            String p = modelo.getValueAt(i, 2).toString();
-                            float precio = Float.parseFloat(p);
-                            f_p.setPrecio(precio);
-
-                            String d = modelo.getValueAt(i, 3).toString();
-                            float descuento = Float.parseFloat(d);
-                            f_p.setDescuento(descuento);
-
-                            this.ListaArticulo.get(i).addF_P(f_p);
-
-                            listaf_p.add(f_p);
-
-                            //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
-                            Historial h = new Historial();
-                            h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-                            h.setPrecio(precio);
-                            h.setProducto(this.ListaArticulo.get(i));
-                            h.setFecha(this.jDateChooser.getDate());
-                            this.ListaArticulo.get(i).getHistoriales().add(h);
-                            Conexion.getInstance().persist(h);
-
-                            //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
-                        }
-                        fac.setFp_s(listaf_p);
-
-                    } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Crédito")) {
-                        fac.setTipo(tipoComprobante.Credito);
-                        fac.setSerieComprobante(this.jTextSerie.getText());
-                        fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                        fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
-                        fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
-                        fac.setFecha(this.jDateChooser.getDate());
-                        fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-
-                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                            fac.setCotizacion(1);
-                            fac.setMoneda(tipoMoneda.$U);
-                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                            fac.setCotizacion((float) precioCotizacion);
-                            fac.setMoneda(tipoMoneda.US$);
-                        }
-
-                        List<F_P> listaf_p = new ArrayList<F_P>();
-                        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
-                        for (int i = 0; i < modelo.getRowCount(); i++) {
-                            F_P f_p = new F_P();
-                            f_p.setFactura(fac);
-                            f_p.setArticulo(this.ListaArticulo.get(i));
-
-                            String c = modelo.getValueAt(i, 1).toString();
-                            float cant = Float.parseFloat(c);
-                            f_p.setCantidad(cant);
-
-                            String p = modelo.getValueAt(i, 2).toString();
-                            float precio = Float.parseFloat(p);
-                            f_p.setPrecio(precio);
-
-                            String d = modelo.getValueAt(i, 3).toString();
-                            float descuento = Float.parseFloat(d);
-                            f_p.setDescuento(descuento);
-
-                            this.ListaArticulo.get(i).addF_P(f_p);
-
-                            listaf_p.add(f_p);
-
-                            //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
-                            Historial h = new Historial();
-                            h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-                            h.setPrecio(precio);
-                            h.setProducto(this.ListaArticulo.get(i));
-                            h.setFecha(this.jDateChooser.getDate());
-                            this.ListaArticulo.get(i).getHistoriales().add(h);
-                            Conexion.getInstance().persist(h);
-
-                            //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
-                        }
-                        fac.setFp_s(listaf_p);
-                    } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Devolución Contado")) {
-                        fac.setTipo(tipoComprobante.DevolucionContado);
-                        fac.setSerieComprobante(this.jTextSerie.getText());
-                        fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                        fac.setPendiente(0);
-                        fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
-                        fac.setFecha(this.jDateChooser.getDate());
-                        fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-
-                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                            fac.setCotizacion(1);
-                            fac.setMoneda(tipoMoneda.$U);
-                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                            fac.setCotizacion((float) precioCotizacion);
-                            fac.setMoneda(tipoMoneda.US$);
-                        }
-
-                        List<F_P> listaf_p = new ArrayList<F_P>();
-                        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
-                        for (int i = 0; i < modelo.getRowCount(); i++) {
-                            F_P f_p = new F_P();
-                            f_p.setFactura(fac);
-                            f_p.setArticulo(this.ListaArticulo.get(i));
-
-                            String c = modelo.getValueAt(i, 1).toString();
-                            float cant = Float.parseFloat(c);
-                            f_p.setCantidad(cant);
-
-                            String p = modelo.getValueAt(i, 2).toString();
-                            float precio = Float.parseFloat(p);
-                            f_p.setPrecio(precio);
-
-                            String d = modelo.getValueAt(i, 3).toString();
-                            float descuento = Float.parseFloat(d);
-                            f_p.setDescuento(descuento);
-
-                            this.ListaArticulo.get(i).addF_P(f_p);
-
-                            listaf_p.add(f_p);
-
-                            //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
-                            Historial h = new Historial();
-                            h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-                            h.setPrecio(precio);
-                            h.setProducto(this.ListaArticulo.get(i));
-                            h.setFecha(this.jDateChooser.getDate());
-                            this.ListaArticulo.get(i).getHistoriales().add(h);
-                            Conexion.getInstance().persist(h);
-
-                            //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
-                        }
-                        fac.setFp_s(listaf_p);
-                    } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals(tipoComprobante.NotaCredito.toString())) {
-                        fac.setTipo(tipoComprobante.NotaCredito);
-                        fac.setSerieComprobante(this.jTextSerie.getText());
-                        fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                        fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
-                        fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
-                        fac.setFecha(this.jDateChooser.getDate());
-                        fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-
-                        if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
-                            fac.setCotizacion(1);
-                            fac.setMoneda(tipoMoneda.$U);
-                        } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
-                            fac.setCotizacion((float) precioCotizacion);
-                            fac.setMoneda(tipoMoneda.US$);
-                        }
-
-                        List<F_P> listaf_p = new ArrayList<F_P>();
-                        DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
-                        for (int i = 0; i < modelo.getRowCount(); i++) {
-                            F_P f_p = new F_P();
-                            f_p.setFactura(fac);
-                            f_p.setArticulo(this.ListaArticulo.get(i));
-
-                            String c = modelo.getValueAt(i, 1).toString();
-                            float cant = Float.parseFloat(c);
-                            f_p.setCantidad(cant);
-
-                            String p = modelo.getValueAt(i, 2).toString();
-                            float precio = Float.parseFloat(p);
-                            f_p.setPrecio(precio);
-
-                            String d = modelo.getValueAt(i, 3).toString();
-                            float descuento = Float.parseFloat(d);
-                            f_p.setDescuento(descuento);
-
-                            this.ListaArticulo.get(i).addF_P(f_p);
-
-                            listaf_p.add(f_p);
-
-                            Historial h = new Historial();
-                            h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
-                            h.setPrecio(precio);
-                            h.setProducto(this.ListaArticulo.get(i));
-                            h.setFecha(this.jDateChooser.getDate());
-                            this.ListaArticulo.get(i).getHistoriales().add(h);
-                            Conexion.getInstance().persist(h);
-
-                        }
-                        fac.setFp_s(listaf_p);
                     }
-                    fac.setUsuario(controladorBasura.getU());
+                }
+                if (!mescerrado) {
+                    String prov = String.valueOf(((Proveedor) this.jCBProveedor.getSelectedItem()).getCodigo());
+                    if (Conexion.getInstance().existeFac(this.jTextSerie.getText(), this.jTextNumeroFact.getText(), prov) == true) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "Ya ingresaste un recibo con ese numero anteriormente.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else {
 
-                    boolean f = Conexion.getInstance().persist(fac);
-                    List<F_P> lf_p = fac.getFp_s();
-                    for (int i = 0; i < lf_p.size(); i++) {
-                        boolean pf = Conexion.getInstance().persist(lf_p.get(i));
-                        if (!pf) {
+                        if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
+                            fac.setTipo(tipoComprobante.Contado);
+                            fac.setObservacion(this.jTextComentario.getText());
+                            fac.setSerieComprobante(this.jTextSerie.getText());
+                            fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                            fac.setPendiente(0);
+                            fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                            fac.setFecha(this.jDateChooser.getDate());
+                            fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+
+                            if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                                fac.setCotizacion(1);
+                                fac.setMoneda(tipoMoneda.$U);
+                            } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                                fac.setCotizacion((float) precioCotizacion);
+                                fac.setMoneda(tipoMoneda.US$);
+                            }
+
+                            List<F_P> listaf_p = new ArrayList<F_P>();
+                            DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                            for (int i = 0; i < modelo.getRowCount(); i++) {
+                                F_P f_p = new F_P();
+                                f_p.setFactura(fac);
+                                f_p.setArticulo(this.ListaArticulo.get(i));
+
+                                String c = modelo.getValueAt(i, 1).toString();
+                                float cant = Float.parseFloat(c);
+                                f_p.setCantidad(cant);
+
+                                String p = modelo.getValueAt(i, 2).toString();
+                                float precio = Float.parseFloat(p);
+                                f_p.setPrecio(precio);
+
+                                String d = modelo.getValueAt(i, 3).toString();
+                                float descuento = Float.parseFloat(d);
+                                f_p.setDescuento(descuento);
+
+                                this.ListaArticulo.get(i).addF_P(f_p);
+
+                                listaf_p.add(f_p);
+
+                                //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
+                                Historial h = new Historial();
+                                h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                                h.setPrecio(precio);
+                                h.setProducto(this.ListaArticulo.get(i));
+                                h.setFecha(this.jDateChooser.getDate());
+                                this.ListaArticulo.get(i).getHistoriales().add(h);
+                                Conexion.getInstance().persist(h);
+
+                                //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
+                            }
+                            fac.setFp_s(listaf_p);
+
+                        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Crédito")) {
+                            fac.setTipo(tipoComprobante.Credito);
+                            fac.setSerieComprobante(this.jTextSerie.getText());
+                            fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                            fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
+                            fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                            fac.setFecha(this.jDateChooser.getDate());
+                            fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                            fac.setObservacion(this.jTextComentario.getText());
+
+                            if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                                fac.setCotizacion(1);
+                                fac.setMoneda(tipoMoneda.$U);
+                            } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                                fac.setCotizacion((float) precioCotizacion);
+                                fac.setMoneda(tipoMoneda.US$);
+                            }
+
+                            List<F_P> listaf_p = new ArrayList<F_P>();
+                            DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                            for (int i = 0; i < modelo.getRowCount(); i++) {
+                                F_P f_p = new F_P();
+                                f_p.setFactura(fac);
+                                f_p.setArticulo(this.ListaArticulo.get(i));
+
+                                String c = modelo.getValueAt(i, 1).toString();
+                                float cant = Float.parseFloat(c);
+                                f_p.setCantidad(cant);
+
+                                String p = modelo.getValueAt(i, 2).toString();
+                                float precio = Float.parseFloat(p);
+                                f_p.setPrecio(precio);
+
+                                String d = modelo.getValueAt(i, 3).toString();
+                                float descuento = Float.parseFloat(d);
+                                f_p.setDescuento(descuento);
+
+                                this.ListaArticulo.get(i).addF_P(f_p);
+
+                                listaf_p.add(f_p);
+
+                                //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
+                                Historial h = new Historial();
+                                h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                                h.setPrecio(precio);
+                                h.setProducto(this.ListaArticulo.get(i));
+                                h.setFecha(this.jDateChooser.getDate());
+                                this.ListaArticulo.get(i).getHistoriales().add(h);
+                                Conexion.getInstance().persist(h);
+
+                                //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
+                            }
+                            fac.setFp_s(listaf_p);
+                        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Devolución Contado")) {
+                            fac.setTipo(tipoComprobante.DevolucionContado);
+                            fac.setSerieComprobante(this.jTextSerie.getText());
+                            fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                            fac.setPendiente(0);
+                            fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                            fac.setFecha(this.jDateChooser.getDate());
+                            fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                            fac.setObservacion(this.jTextComentario.getText());
+
+                            if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                                fac.setCotizacion(1);
+                                fac.setMoneda(tipoMoneda.$U);
+                            } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                                fac.setCotizacion((float) precioCotizacion);
+                                fac.setMoneda(tipoMoneda.US$);
+                            }
+
+                            List<F_P> listaf_p = new ArrayList<F_P>();
+                            DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                            for (int i = 0; i < modelo.getRowCount(); i++) {
+                                F_P f_p = new F_P();
+                                f_p.setFactura(fac);
+                                f_p.setArticulo(this.ListaArticulo.get(i));
+
+                                String c = modelo.getValueAt(i, 1).toString();
+                                float cant = Float.parseFloat(c);
+                                f_p.setCantidad(cant);
+
+                                String p = modelo.getValueAt(i, 2).toString();
+                                float precio = Float.parseFloat(p);
+                                f_p.setPrecio(precio);
+
+                                String d = modelo.getValueAt(i, 3).toString();
+                                float descuento = Float.parseFloat(d);
+                                f_p.setDescuento(descuento);
+
+                                this.ListaArticulo.get(i).addF_P(f_p);
+
+                                listaf_p.add(f_p);
+
+                                //HISTORIAL DE PRECIOS DEL PRODUCTO - INICIO
+                                Historial h = new Historial();
+                                h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                                h.setPrecio(precio);
+                                h.setProducto(this.ListaArticulo.get(i));
+                                h.setFecha(this.jDateChooser.getDate());
+                                this.ListaArticulo.get(i).getHistoriales().add(h);
+                                Conexion.getInstance().persist(h);
+
+                                //HISTORIAL DE PRECIOS DEL PRODUCTO - FIN
+                            }
+                            fac.setFp_s(listaf_p);
+                        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals(tipoComprobante.NotaCredito.toString())) {
+                            fac.setTipo(tipoComprobante.NotaCredito);
+                            fac.setSerieComprobante(this.jTextSerie.getText());
+                            fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
+                            fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
+                            fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
+                            fac.setFecha(this.jDateChooser.getDate());
+                            fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                            fac.setObservacion(this.jTextComentario.getText());
+
+                            if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
+                                fac.setCotizacion(1);
+                                fac.setMoneda(tipoMoneda.$U);
+                            } else if (this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+                                fac.setCotizacion((float) precioCotizacion);
+                                fac.setMoneda(tipoMoneda.US$);
+                            }
+
+                            List<F_P> listaf_p = new ArrayList<F_P>();
+                            DefaultTableModel modelo = (DefaultTableModel) jTableArticulos.getModel();
+                            for (int i = 0; i < modelo.getRowCount(); i++) {
+                                F_P f_p = new F_P();
+                                f_p.setFactura(fac);
+                                f_p.setArticulo(this.ListaArticulo.get(i));
+
+                                String c = modelo.getValueAt(i, 1).toString();
+                                float cant = Float.parseFloat(c);
+                                f_p.setCantidad(cant);
+
+                                String p = modelo.getValueAt(i, 2).toString();
+                                float precio = Float.parseFloat(p);
+                                f_p.setPrecio(precio);
+
+                                String d = modelo.getValueAt(i, 3).toString();
+                                float descuento = Float.parseFloat(d);
+                                f_p.setDescuento(descuento);
+
+                                this.ListaArticulo.get(i).addF_P(f_p);
+
+                                listaf_p.add(f_p);
+
+                                Historial h = new Historial();
+                                h.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                                h.setPrecio(precio);
+                                h.setProducto(this.ListaArticulo.get(i));
+                                h.setFecha(this.jDateChooser.getDate());
+                                this.ListaArticulo.get(i).getHistoriales().add(h);
+                                Conexion.getInstance().persist(h);
+
+                            }
+                            fac.setFp_s(listaf_p);
+                        }
+                        fac.setUsuario(controladorBasura.getU());
+
+                        boolean f = Conexion.getInstance().persist(fac);
+                        List<F_P> lf_p = fac.getFp_s();
+                        for (int i = 0; i < lf_p.size(); i++) {
+                            boolean pf = Conexion.getInstance().persist(lf_p.get(i));
+                            if (!pf) {
+                                javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                            }
+                        }
+                        if (f) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "Factura fue ingresada exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                            //limpia cacillas y actualiza, para seguir ingresando mas facturas
+                            this.jTextSerie.setText("");
+                            this.jTextNumeroFact.setText("");
+                            this.jDateChooser.setDate(new Date());
+                            this.jCBMoneda.setSelectedIndex(0);
+                            this.jCBTipoComprobante.setSelectedIndex(0);
+
+                            this.jTextArticulo.setText("");
+                            this.jTextCantidad.setText("");
+                            this.jTextUnitario.setText("");
+                            this.jTextDescuento.setText("");
+                            this.jTextSubTotalArt.setText("");
+                            this.jTextComentario.setText("");
+
+                            DefaultTableModel model = (DefaultTableModel) this.jTableArticulos.getModel();
+                            model.setRowCount(0);
+
+                            this.ListaArticulo.clear();
+                            this.articulo_seleccionado = null;
+
+                            Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
+                            this.jTextRut.setText(p.getRUT());
+                            this.jTextDireccion.setText(p.getDireccion());
+                            if (p.isTipoFacturacion()) {
+                                this.jCheckBoxIvaInc.setSelected(true);
+                                this.CalcularTotales_conIVA_inc();
+                            } else {
+                                this.jCheckBoxIvaInc.setSelected(false);
+                                this.CalcularTotales_sinIVA_inc();
+                            }
+
+                        } else {
                             javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                         }
-                    }
-                    if (f) {
-                        javax.swing.JOptionPane.showMessageDialog(null, "Factura fue ingresada exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                        //limpia cacillas y actualiza, para seguir ingresando mas facturas
-                        this.jTextSerie.setText("");
-                        this.jTextNumeroFact.setText("");
-                        this.jDateChooser.setDate(new Date());
-                        this.jCBMoneda.setSelectedIndex(0);
-                        this.jCBTipoComprobante.setSelectedIndex(0);
-
-                        this.jTextArticulo.setText("");
-                        this.jTextCantidad.setText("");
-                        this.jTextUnitario.setText("");
-                        this.jTextDescuento.setText("");
-                        this.jTextSubTotalArt.setText("");
-
-                        DefaultTableModel model = (DefaultTableModel) this.jTableArticulos.getModel();
-                        model.setRowCount(0);
-
-                        this.ListaArticulo.clear();
-                        this.articulo_seleccionado = null;
-
-                        Proveedor p = (Proveedor) this.jCBProveedor.getSelectedItem();
-                        this.jTextRut.setText(p.getRUT());
-                        this.jTextDireccion.setText(p.getDireccion());
-                        if (p.isTipoFacturacion()) {
-                            this.jCheckBoxIvaInc.setSelected(true);
-                            this.CalcularTotales_conIVA_inc();
-                        } else {
-                            this.jCheckBoxIvaInc.setSelected(false);
-                            this.CalcularTotales_sinIVA_inc();
-                        }
-
-                    } else {
-                        javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -1427,16 +1471,21 @@ public class AltaFactura extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBTipoComprobanteItemStateChanged
 
     private void jMenuItemModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemModificarActionPerformed
-        this.jTextSerie.setEditable(true);
-        this.jTextNumeroFact.setEditable(true);
-        this.jDateChooser.setEnabled(true);
-        this.jCBTipoComprobante.setEnabled(true);
-        this.jCBMoneda.setEnabled(true);
-        this.jButtonModificar.setVisible(true);
-        this.jPanelSetArticulo.setVisible(true);
+        if (this.f.isCerrada()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No se puede modificar una factura que esta cerrada.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            this.jTextSerie.setEditable(true);
+            this.jTextNumeroFact.setEditable(true);
+            this.jDateChooser.setEnabled(true);
+            this.jCBTipoComprobante.setEnabled(true);
+            this.jCBMoneda.setEnabled(true);
+            this.jButtonModificar.setVisible(true);
+            this.jPanelSetArticulo.setVisible(true);
+            this.jTextComentario.setEditable(true);
 
-        this.jPanelModificar.setVisible(true);
-        this.vista = false;
+            this.jPanelModificar.setVisible(true);
+            this.vista = false;
+        }
     }//GEN-LAST:event_jMenuItemModificarActionPerformed
 
     private void jMenuItemEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEliminarActionPerformed
@@ -1452,6 +1501,7 @@ public class AltaFactura extends javax.swing.JFrame {
     private void jButtonModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonModificarActionPerformed
 
         Factura fac = this.f;
+
         fac.setIvaBasico(Float.parseFloat(jTextIVAbasico.getText()));
         fac.setIvaMinimo(Float.parseFloat(jTextIVAminimo.getText()));
         if (Conexion.getInstance().existeFacModificar(fac.getSerieComprobante(), String.valueOf(fac.getNroComprobante()), String.valueOf(fac.getProveedor().getCodigo()),
@@ -1467,6 +1517,7 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
                 fac.setFecha(this.jDateChooser.getDate());
                 fac.setProveedor(this.getProveedor());
+                fac.setObservacion(this.jTextComentario.getText());
 
                 if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
                     fac.setCotizacion(1);
@@ -1511,6 +1562,7 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
                 fac.setFecha(this.jDateChooser.getDate());
                 fac.setProveedor(this.getProveedor());
+                fac.setObservacion(this.jTextComentario.getText());
 
                 if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
                     fac.setCotizacion(1);
@@ -1554,6 +1606,7 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
                 fac.setFecha(this.jDateChooser.getDate());
                 fac.setProveedor(this.getProveedor());
+                fac.setObservacion(this.jTextComentario.getText());
 
                 if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
                     fac.setCotizacion(1);
@@ -1597,6 +1650,7 @@ public class AltaFactura extends javax.swing.JFrame {
                 fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
                 fac.setFecha(this.jDateChooser.getDate());
                 fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
+                fac.setObservacion(this.jTextComentario.getText());
 
                 if (this.jCBMoneda.getSelectedItem() == tipoMoneda.$U) {
                     fac.setCotizacion(1);
@@ -1646,6 +1700,7 @@ public class AltaFactura extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "Factura fue modificada exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
             this.jTextSerie.setEditable(false);
             this.jTextNumeroFact.setEditable(false);
+            this.jTextComentario.setEditable(false);
             this.jDateChooser.setEnabled(false);
             this.jCBTipoComprobante.setEnabled(false);
             this.jCBMoneda.setEnabled(false);
@@ -1684,6 +1739,7 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jTextSerie.setText(fac.getSerieComprobante());
         this.jTextNumeroFact.setText(String.valueOf(fac.getNroComprobante()));
         this.jTextTOTAL.setText(String.valueOf(fac.getTotal()));
+        this.jTextComentario.setText(fac.getObservacion());
 
         if (fac.getMoneda() == tipoMoneda.$U) {
             this.jCBMoneda.setSelectedIndex(0);
@@ -1745,6 +1801,7 @@ public class AltaFactura extends javax.swing.JFrame {
         this.jCBTipoComprobante.setEnabled(false);
         this.jCBMoneda.setEnabled(false);
         this.jCheckBoxIvaInc.setEnabled(false);
+        this.jTextComentario.setEditable(false);
 
         this.jTextSerie.setEditable(false);
         this.jTextNumeroFact.setEditable(false);
@@ -2037,6 +2094,7 @@ public class AltaFactura extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -2056,6 +2114,7 @@ public class AltaFactura extends javax.swing.JFrame {
     private javax.swing.JTable jTableArticulos;
     private javax.swing.JTextField jTextArticulo;
     private javax.swing.JTextField jTextCantidad;
+    private javax.swing.JTextField jTextComentario;
     private javax.swing.JTextField jTextDescuento;
     private javax.swing.JTextField jTextDireccion;
     private javax.swing.JTextField jTextIVAbasico;
