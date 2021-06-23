@@ -237,8 +237,9 @@ public class ListarComprobantes extends javax.swing.JFrame {
             }
         }
       
-        
-        if (valorCombo.equals("Ingrese una opción")) {
+        if(jCBProveedor.getSelectedIndex() == -1){
+            javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar un proveedor", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }else if (valorCombo.equals("Ingrese una opción")) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar una opción", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
 
