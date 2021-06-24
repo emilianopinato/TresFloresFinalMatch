@@ -26,21 +26,24 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
         this.jTable1.getColumnModel().getColumn(6).setMinWidth(0);
         this.jTable1.getColumnModel().getColumn(6).setMaxWidth(0);
         this.jTable1.getColumnModel().getColumn(6).setWidth(0);
-        
+
         DefaultTableModel model = (DefaultTableModel) this.jTable1.getModel();
 
         List<Factura> ListaFact = Conexion.getInstance().listarFacturasDeshabilitados();
         for (int i = 0; i < ListaFact.size(); i++) {
             String numeroComp = ListaFact.get(i).getSerieComprobante() + "-" + ListaFact.get(i).getNroComprobante();
             model.addRow(new Object[]{ListaFact.get(i).getFecha().toString(), ListaFact.get(i).getTipo().toString(),
-                numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(),"Deshabilitado", ListaFact.get(i)});
+                numeroComp, ListaFact.get(i).getMoneda().toString(), ListaFact.get(i).getTotal(), "Deshabilitado", ListaFact.get(i)});
         }
-        
+
         List<Recibo> ListaRec = Conexion.getInstance().listarRecibosDeshabilitados();
         for (int i = 0; i < ListaRec.size(); i++) {
             String numeroComp = ListaRec.get(i).getSerieComprobante() + "-" + ListaRec.get(i).getNroComprobante();
             model.addRow(new Object[]{ListaRec.get(i).getFecha().toString(), "Recibo",
-                numeroComp, ListaRec.get(i).getMoneda().toString(), String.valueOf(ListaRec.get(i).getTotal()),"Deshabilitado", ListaRec.get(i)});
+                numeroComp, ListaRec.get(i).getMoneda().toString(), String.valueOf(ListaRec.get(i).getTotal()), "Deshabilitado", ListaRec.get(i)});
+        }
+        if(ListaFact.isEmpty() && ListaRec.isEmpty()){
+            this.jButton1.setEnabled(false);
         }
     }
 
@@ -118,16 +121,29 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        if(this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6) instanceof Factura){
-            Factura fac = (Factura) this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6);
-            fac.setDeshabilitado(false);
-            Conexion.getInstance().merge(fac);
-            javax.swing.JOptionPane.showMessageDialog(this, "La factura se ha habilitado correctamente.");
-        }else if(this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6) instanceof Recibo){
-            Recibo rec = (Recibo) this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6);
-            rec.setDeshabilitado(false);
-            Conexion.getInstance().merge(rec);
-            javax.swing.JOptionPane.showMessageDialog(this, "El recibo se ha habilitado correctamente.");
+        int row = this.jTable1.getSelectedRow();
+        if (row != -1) {
+            if (this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6) instanceof Factura) {
+                Factura fac = (Factura) this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6);
+                fac.setDeshabilitado(false);
+                Conexion.getInstance().merge(fac);
+                ((DefaultTableModel)this.jTable1.getModel()).removeRow(this.jTable1.getSelectedRow());
+                if(this.jTable1.getRowCount()==0){
+                    this.jButton1.setEnabled(false);
+                }
+                javax.swing.JOptionPane.showMessageDialog(this, "La factura se ha habilitado correctamente.");
+            } else if (this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6) instanceof Recibo) {
+                Recibo rec = (Recibo) this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6);
+                rec.setDeshabilitado(false);
+                Conexion.getInstance().merge(rec);
+                ((DefaultTableModel)this.jTable1.getModel()).removeRow(this.jTable1.getSelectedRow());
+                if(this.jTable1.getRowCount()==0){
+                    this.jButton1.setEnabled(false);
+                }
+                javax.swing.JOptionPane.showMessageDialog(this, "El recibo se ha habilitado correctamente.");
+            }
+        }else{
+            javax.swing.JOptionPane.showMessageDialog(this, "Seleccione un comprobante.");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

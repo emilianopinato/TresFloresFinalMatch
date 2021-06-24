@@ -15,6 +15,7 @@ import WebService.DatoscotizacionesDato;
 import WebService.WsbcucotizacionesExecute;
 import WebService.WsbcucotizacionesExecuteResponse;
 import WebService.Wsbcucotizacionesin;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.SimpleDateFormat;
@@ -24,6 +25,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
@@ -35,6 +37,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * @author joaco
  */
 public class pantallaPrincipal extends javax.swing.JFrame {
+
+    Color color = new Color(255, 227, 194);
 
     /**
      * Creates new form pantallaPrincipal
@@ -88,6 +92,27 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             //alerta.
         }
 
+        //iconos y diseño anaxi
+        ImageIcon iconolbl = new ImageIcon("src/img/factura.png");
+        ImageIcon iconolb2 = new ImageIcon("src/img/papel.png");
+        ImageIcon iconolb3 = new ImageIcon("src/img/notas.png");
+        ImageIcon iconolb4 = new ImageIcon("src/img/productos1.png");
+        ImageIcon iconolb5 = new ImageIcon("src/img/recibo3.png");
+        ImageIcon iconolb6 = new ImageIcon("src/img/proveedor.png");
+        ImageIcon iconolb7 = new ImageIcon("src/img/comparar.png");
+        ImageIcon iconolb8 = new ImageIcon("src/img/listaxiva.png");
+        this.JLabelListadoComprobante1.setIcon(iconolb2);
+        this.JLabelAddFact.setIcon(iconolbl);
+        this.JLabelAltaProducto.setIcon(iconolb4);
+        this.JLabelEstadodeCuenta.setIcon(iconolb3);
+        this.JLabelAddRecibo.setIcon(iconolb5);
+        this.JLabelAddProveedor.setIcon(iconolb6);
+        this.JLabelCompararPrecios.setIcon(iconolb7);
+        this.JLabelListadoxIVAS.setIcon(iconolb8);
+
+        //this.getContentPane().setBackground(this.color);
+        this.setResizable(false);
+        //this.jMenuBar1.setBackground(color);
     }
 
     /**
@@ -100,8 +125,22 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuItem11 = new javax.swing.JMenuItem();
+        JLabelAddFact = new javax.swing.JLabel();
+        JLabelAltaProducto = new javax.swing.JLabel();
+        JLabelListadoComprobante1 = new javax.swing.JLabel();
+        JLabelEstadodeCuenta = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        JLabelListadoxIVAS = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        JLabelAddRecibo = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        JLabelAddProveedor = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        JLabelCompararPrecios = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -137,9 +176,77 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tres Flores - Proveedores");
 
-        jLabel1.setText("Agregar fecha en la que el IVA empezó a usarse.");
+        JLabelAddFact.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JLabelAddFact.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelAddFactMouseClicked(evt);
+            }
+        });
 
-        jLabel2.setText("Esta fecha la selecciona el usuario.");
+        JLabelAltaProducto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JLabelAltaProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelAltaProductoMouseClicked(evt);
+            }
+        });
+
+        JLabelListadoComprobante1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JLabelListadoComprobante1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelListadoComprobante1MouseClicked(evt);
+            }
+        });
+
+        JLabelEstadodeCuenta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JLabelEstadodeCuenta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelEstadodeCuentaMouseClicked(evt);
+            }
+        });
+
+        jLabel1.setText("Listar Comprobantes");
+
+        jLabel2.setText("Agregar Factura");
+
+        jLabel3.setText("Estado de Cuenta");
+
+        jLabel4.setText("Nuevo Articulo");
+
+        JLabelListadoxIVAS.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JLabelListadoxIVAS.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelListadoxIVASMouseClicked(evt);
+            }
+        });
+
+        jLabel5.setText("Agregar Recibo");
+
+        JLabelAddRecibo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JLabelAddRecibo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelAddReciboMouseClicked(evt);
+            }
+        });
+
+        jLabel6.setText("Nuevo Proveedor");
+
+        JLabelAddProveedor.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JLabelAddProveedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelAddProveedorMouseClicked(evt);
+            }
+        });
+
+        jLabel7.setText("Listado por IVAS");
+
+        JLabelCompararPrecios.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        JLabelCompararPrecios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelCompararPreciosMouseClicked(evt);
+            }
+        });
+
+        jLabel8.setText("Comparar Precios");
 
         jMenu1.setText("Artículo");
 
@@ -348,20 +455,80 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addGap(16, 16, 16)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(JLabelAddRecibo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(9, 9, 9)
+                                    .addComponent(JLabelAddFact, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel2)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel3))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(39, 39, 39)
+                                        .addComponent(JLabelListadoComprobante1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(47, 47, 47)
+                                        .addComponent(JLabelEstadodeCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(41, 41, 41)
+                                .addComponent(JLabelAddProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(JLabelCompararPrecios, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(JLabelListadoxIVAS, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10))
+                            .addComponent(JLabelAltaProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JLabelEstadodeCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelListadoComprobante1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelAddFact, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelAltaProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(223, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(JLabelListadoxIVAS, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelAddRecibo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelAddProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelCompararPrecios, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -370,6 +537,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         // TODO add your handling code here:
         altaArticulo aP = new altaArticulo();
+        aP.setResizable(false);
         aP.setLocationRelativeTo(null);
         aP.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
@@ -381,6 +549,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         // TODO add your handling code here:
         bajaArticulo bP = new bajaArticulo();
+        bP.setResizable(false);
         bP.setLocationRelativeTo(null);
         bP.setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
@@ -388,6 +557,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         // TODO add your handling code here:
         modificarArticulo mA = new modificarArticulo();
+        mA.setResizable(false);
         mA.setLocationRelativeTo(null);
         mA.setVisible(true);
     }//GEN-LAST:event_jMenuItem3ActionPerformed
@@ -395,6 +565,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         // TODO add your handling code here:
         altaProveedor ap = new altaProveedor();
+        ap.setResizable(false);
         ap.setLocationRelativeTo(null);
         ap.setVisible(true);
     }//GEN-LAST:event_jMenuItem5ActionPerformed
@@ -402,6 +573,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem7ActionPerformed
         // TODO add your handling code here:
         modificarProveedor mp = new modificarProveedor();
+        mp.setResizable(false);
         mp.setLocationRelativeTo(null);
         mp.setVisible(true);
     }//GEN-LAST:event_jMenuItem7ActionPerformed
@@ -409,6 +581,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
         bajaProveedor bp = new bajaProveedor();
+        bp.setResizable(false);
         bp.setLocationRelativeTo(null);
         bp.setVisible(true);
     }//GEN-LAST:event_jMenuItem4ActionPerformed
@@ -419,6 +592,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.");
         } else {
             AltaFactura f = new AltaFactura();
+            f.setResizable(false);
             f.setLocationRelativeTo(null);
             f.setVisible(true);
         }
@@ -430,6 +604,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.");
         } else {
             AltaRecibo r = new AltaRecibo();
+            r.setResizable(false);
             r.setLocationRelativeTo(null);
             r.setVisible(true);
         }
@@ -438,6 +613,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
         // TODO add your handling code here:
         ListarComprobantes lc = new ListarComprobantes();
+        lc.setResizable(false);
         lc.setLocationRelativeTo(null);
         lc.setVisible(true);
 
@@ -446,6 +622,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
         // TODO add your handling code here:
         altaIVA aI = new altaIVA();
+        aI.setResizable(false);
         aI.setLocationRelativeTo(null);
         aI.setVisible(true);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
@@ -453,6 +630,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
         // TODO add your handling code here:
         compararPrecios CPuwu = new compararPrecios();
+        CPuwu.setResizable(false);
         CPuwu.setLocationRelativeTo(null);
         CPuwu.setVisible(true);
     }//GEN-LAST:event_jMenuItem12ActionPerformed
@@ -460,6 +638,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
         // TODO add your handling code here:
         recuperarProveedor rp = new recuperarProveedor();
+        rp.setResizable(false);
         rp.setLocationRelativeTo(null);
         rp.setVisible(true);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
@@ -467,18 +646,21 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
         // TODO add your handling code here:
         altaCotizacion aC = new altaCotizacion();
+        aC.setResizable(false);
         aC.setVisible(true);
     }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void jMenuItem16ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem16ActionPerformed
         // TODO add your handling code here:
         listadoCotizacionesExistentes lCE = new listadoCotizacionesExistentes();
+        lCE.setResizable(false);
         lCE.setVisible(true);
     }//GEN-LAST:event_jMenuItem16ActionPerformed
 
     private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
         // TODO add your handling code here:
         modificarCotización mC = new modificarCotización();
+        mC.setResizable(false);
         mC.setLocationRelativeTo(null);
         mC.setVisible(true);
     }//GEN-LAST:event_jMenuItem17ActionPerformed
@@ -486,18 +668,21 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
         // TODO add your handling code here:
         listarDeudas ld = new listarDeudas();
+        ld.setResizable(false);
         ld.setLocationRelativeTo(null);
         ld.setVisible(true);
     }//GEN-LAST:event_jMenuItem19ActionPerformed
 
     private void jMenuItem20ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem20ActionPerformed
         RecuperarComprobantes RC = new RecuperarComprobantes();
+        RC.setResizable(false);
         RC.setVisible(true);
     }//GEN-LAST:event_jMenuItem20ActionPerformed
 
     private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
         // TODO add your handling code here:
         listadoComprasIVAs lCI = new listadoComprasIVAs();
+        lCI.setResizable(false);
         lCI.setLocationRelativeTo(null);
         lCI.setVisible(true);
     }//GEN-LAST:event_jMenuItem21ActionPerformed
@@ -505,6 +690,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem22ActionPerformed
         // TODO add your handling code here:
         abrirMes aM = new abrirMes();
+        aM.setResizable(false);
         aM.setLocationRelativeTo(null);
         aM.setVisible(true);
     }//GEN-LAST:event_jMenuItem22ActionPerformed
@@ -512,15 +698,83 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void jMenuItem18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem18ActionPerformed
         // TODO add your handling code here:
         bajaCotizacion bC = new bajaCotizacion();
+        bC.setResizable(false);
         bC.setLocationRelativeTo(null);
         bC.setVisible(true);
     }//GEN-LAST:event_jMenuItem18ActionPerformed
 
     private void jMenuItem14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem14ActionPerformed
         EstadodeCuenta estadodecuenta = new EstadodeCuenta();
+        estadodecuenta.setResizable(false);
         estadodecuenta.setLocationRelativeTo(null);
         estadodecuenta.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
+
+    private void JLabelAddFactMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelAddFactMouseClicked
+        List<Proveedor> LProv = Conexion.getInstance().listadoProveedores();
+        if (LProv.size() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.");
+        } else {
+            AltaFactura f = new AltaFactura();
+            f.setResizable(false);
+            f.setLocationRelativeTo(null);
+            f.setVisible(true);
+        }
+    }//GEN-LAST:event_JLabelAddFactMouseClicked
+
+    private void JLabelListadoComprobante1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelListadoComprobante1MouseClicked
+        ListarComprobantes lc = new ListarComprobantes();
+        lc.setResizable(false);
+        lc.setLocationRelativeTo(null);
+        lc.setVisible(true);
+    }//GEN-LAST:event_JLabelListadoComprobante1MouseClicked
+
+    private void JLabelListadoxIVASMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelListadoxIVASMouseClicked
+        listadoComprasIVAs lCI = new listadoComprasIVAs();
+        lCI.setResizable(false);
+        lCI.setLocationRelativeTo(null);
+        lCI.setVisible(true);
+    }//GEN-LAST:event_JLabelListadoxIVASMouseClicked
+
+    private void JLabelAddReciboMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelAddReciboMouseClicked
+        List<Proveedor> LProv = Conexion.getInstance().listadoProveedores();
+        if (LProv.size() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.");
+        } else {
+            AltaRecibo r = new AltaRecibo();
+            r.setResizable(false);
+            r.setLocationRelativeTo(null);
+            r.setVisible(true);
+        }
+    }//GEN-LAST:event_JLabelAddReciboMouseClicked
+
+    private void JLabelAddProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelAddProveedorMouseClicked
+        altaProveedor ap = new altaProveedor();
+        ap.setResizable(false);
+        ap.setLocationRelativeTo(null);
+        ap.setVisible(true);
+    }//GEN-LAST:event_JLabelAddProveedorMouseClicked
+
+    private void JLabelCompararPreciosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelCompararPreciosMouseClicked
+        compararPrecios CPuwu = new compararPrecios();
+        CPuwu.setResizable(false);
+        CPuwu.setLocationRelativeTo(null);
+        CPuwu.setVisible(true);
+    }//GEN-LAST:event_JLabelCompararPreciosMouseClicked
+
+    private void JLabelEstadodeCuentaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelEstadodeCuentaMouseClicked
+        EstadodeCuenta estadodecuenta = new EstadodeCuenta();
+        estadodecuenta.setResizable(false);
+        estadodecuenta.setLocationRelativeTo(null);
+        estadodecuenta.setVisible(true);
+    }//GEN-LAST:event_JLabelEstadodeCuentaMouseClicked
+
+    private void JLabelAltaProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelAltaProductoMouseClicked
+        altaArticulo aP = new altaArticulo();
+        aP.setResizable(false);
+        aP.setLocationRelativeTo(null);
+        aP.setVisible(true);
+    }//GEN-LAST:event_JLabelAltaProductoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -558,8 +812,22 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel JLabelAddFact;
+    private javax.swing.JLabel JLabelAddProveedor;
+    private javax.swing.JLabel JLabelAddRecibo;
+    private javax.swing.JLabel JLabelAltaProducto;
+    private javax.swing.JLabel JLabelCompararPrecios;
+    private javax.swing.JLabel JLabelEstadodeCuenta;
+    private javax.swing.JLabel JLabelListadoComprobante1;
+    private javax.swing.JLabel JLabelListadoxIVAS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
