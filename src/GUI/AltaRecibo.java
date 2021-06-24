@@ -12,6 +12,7 @@ import Clases.Factura;
 import Clases.Proveedor;
 import Clases.Recibo;
 import Clases.tipoMoneda;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,11 +76,12 @@ public class AltaRecibo extends javax.swing.JFrame {
                 }
             }
         }
-        ColorearFilas color =new ColorearFilas(4);
-        this.jTableFacturas.getColumnModel().getColumn(4).setCellRenderer(color);
-//        DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-//        tcr.setHorizontalAlignment(SwingConstants.CENTER);
-//        this.jTableFacturas.getColumnModel().getColumn(4).setCellRenderer(tcr);
+        
+        Color color=new Color(255, 249, 140);
+        DefaultTableCellRenderer alinear_derecha_y_color = new DefaultTableCellRenderer();
+        alinear_derecha_y_color.setBackground(color);
+        alinear_derecha_y_color.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.jTableFacturas.getColumnModel().getColumn(4).setCellRenderer(alinear_derecha_y_color);
     }
 
     public AltaRecibo(Recibo rec) {
@@ -128,8 +130,11 @@ public class AltaRecibo extends javax.swing.JFrame {
                     listaf_r.get(i).getSaldo(), listaf_r.get(i).getFactura()});
             }
         }
-        ColorearFilas color =new ColorearFilas(4);
-        this.jTableFacturas.getColumnModel().getColumn(4).setCellRenderer(color);
+        Color color=new Color(255, 249, 140);
+        DefaultTableCellRenderer alinear_derecha_y_color = new DefaultTableCellRenderer();
+        alinear_derecha_y_color.setBackground(color);
+        alinear_derecha_y_color.setHorizontalAlignment(SwingConstants.RIGHT);
+        this.jTableFacturas.getColumnModel().getColumn(4).setCellRenderer(alinear_derecha_y_color);
     }
 
     /**
@@ -562,7 +567,7 @@ public class AltaRecibo extends javax.swing.JFrame {
                                 float pendiente = f.getPendiente() - saldo;
                                 f.setPendiente(pendiente);
                                 f_r.setFactura(f);
-
+                                Conexion.getInstance().merge(f);
                                 listaf_r.add(f_r);
                             }
                         }
@@ -640,7 +645,7 @@ public class AltaRecibo extends javax.swing.JFrame {
                             float pendiente = f.getPendiente() - saldo;
                             f.setPendiente(pendiente);
                             f_r.setFactura(f);
-
+                            Conexion.getInstance().merge(f);
                             listaf_r.add(f_r);
                         }
                     }

@@ -529,7 +529,7 @@ public class Conexion {
                     .setParameter("codigo", p.getCodigo())
                     .getResultList();*/
             listaFacturas = em.createNativeQuery("SELECT factura.*, comprobante.* FROM factura INNER JOIN comprobante WHERE factura.id = comprobante.id "
-                    + "AND factura.tipo = 1 AND factura.Pendiente > 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
+                    + "AND factura.tipo = 1 AND factura.Pendiente > 0 AND factura.deshabilitado = 0 AND comprobante.proveedor_codigo = :codigo", Factura.class)
                     .setParameter("codigo", p.getCodigo())
                     .getResultList();
             em.getTransaction().commit();

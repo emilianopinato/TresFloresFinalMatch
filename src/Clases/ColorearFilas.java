@@ -1,24 +1,34 @@
 package Clases;
 
 import java.awt.*;
+import java.util.Objects;
 import javax.swing.*;
 import javax.swing.table.*;
 
 public class ColorearFilas extends DefaultTableCellRenderer {
-
-    private final int columna_patron;
-
-    public ColorearFilas(int Colpatron) {
-        this.columna_patron = Colpatron;
-    }
-
+    
     @Override
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean Selected, boolean hasFocus, int row, int col) {
-        Color color=new Color(255, 249, 140);
-        setBackground(color);
-        setHorizontalAlignment(SwingConstants.RIGHT);
-        super.getTableCellRendererComponent(table, value, Selected, hasFocus, row, col);
-        return this;
+    public Component getTableCellRendererComponent(JTable table, Object value, 
+                                                   boolean isSelected, 
+                                                   boolean hasFocus, 
+                                                   int row, 
+                                                   int column) {
+        String p = String.valueOf(table.getValueAt(row, 5));
+        if(!p.isEmpty()){
+            Float pendiente = Float.parseFloat(p);
+            Float total = (Float) table.getValueAt(row, 4);
+
+            if (Objects.equals(pendiente, total)) {
+                setBackground(new Color(255, 161, 161));//rojo
+            }else if(pendiente < total && pendiente > 0){
+                setBackground(new Color(255, 249, 140));//amarillo
+            }else if(pendiente == 0){
+                setBackground(new Color(161, 255, 167));//verde
+            }
+        }else{
+            setBackground(Color.WHITE);
+        }
+        return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
     }
 
 }
