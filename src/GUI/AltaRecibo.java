@@ -1039,7 +1039,6 @@ public class AltaRecibo extends javax.swing.JFrame {
     private void jTextImporteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextImporteFocusLost
         float importe = 0;
         DefaultTableModel modelo = (DefaultTableModel) this.jTableFacturas.getModel();
-        String valor = this.jTextImporte.getText();
         if (this.jTextImporte.getText() != null && !this.jTextImporte.getText().equals("")) {
             importe = Float.parseFloat(this.jTextImporte.getText());
             if (importe != this.importerecordado) {

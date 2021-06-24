@@ -24,6 +24,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JMenuItem;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeConstants;
@@ -87,7 +88,24 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         } catch (Exception e) {
             //alerta.
         }
-
+        
+    //ImageIcon iconobtn = new ImageIcon("src/Imagenes/guardar.png");
+    ImageIcon iconolbl = new ImageIcon("src/img/factura.png");
+    ImageIcon iconolb2 = new ImageIcon("src/img/papel.png");
+    ImageIcon iconolb3 = new ImageIcon("src/img/notas.png");
+    ImageIcon iconolb4 = new ImageIcon("src/img/productos1.png");
+    ImageIcon iconolb5 = new ImageIcon("src/img/recibo3.png");
+    ImageIcon iconolb6 = new ImageIcon("src/img/proveedor.png");
+    ImageIcon iconolb7 = new ImageIcon("src/img/comparar.png");
+    ImageIcon iconolb8 = new ImageIcon("src/img/listaxiva.png");
+    this.JLabelListadoComprobante1.setIcon(iconolb2);
+    this.JLabelAddFact.setIcon(iconolbl);
+    this.JLabelAltaProducto.setIcon(iconolb4);
+    this.JLabelEstadodeCuenta.setIcon(iconolb3);
+    this.JLabelAddRecibo.setIcon(iconolb5);
+    this.JLabelAddProveedor.setIcon(iconolb6);
+    this.JLabelCompararPrecios.setIcon(iconolb7);
+    this.JLabelListadoxIVAS.setIcon(iconolb8);
     }
 
     /**
@@ -100,8 +118,22 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private void initComponents() {
 
         jMenuItem11 = new javax.swing.JMenuItem();
+        JLabelAddFact = new javax.swing.JLabel();
+        JLabelAltaProducto = new javax.swing.JLabel();
+        JLabelListadoComprobante1 = new javax.swing.JLabel();
+        JLabelEstadodeCuenta = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        JLabelListadoxIVAS = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        JLabelAddRecibo = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        JLabelAddProveedor = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        JLabelCompararPrecios = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -137,9 +169,57 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Tres Flores - Proveedores");
 
-        jLabel1.setText("Agregar fecha en la que el IVA empezó a usarse.");
+        JLabelAddFact.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelAddFactMouseClicked(evt);
+            }
+        });
 
-        jLabel2.setText("Esta fecha la selecciona el usuario.");
+        JLabelListadoComprobante1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelListadoComprobante1MouseClicked(evt);
+            }
+        });
+
+        jLabel1.setText("Listar Comprobantes");
+
+        jLabel2.setText("Agregar Factura");
+
+        jLabel3.setText("Estado de Cuenta");
+
+        jLabel4.setText("Nuevo Articulo");
+
+        JLabelListadoxIVAS.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelListadoxIVASMouseClicked(evt);
+            }
+        });
+
+        jLabel5.setText("Agregar Recibo");
+
+        JLabelAddRecibo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelAddReciboMouseClicked(evt);
+            }
+        });
+
+        jLabel6.setText("Nuevo Proveedor");
+
+        JLabelAddProveedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelAddProveedorMouseClicked(evt);
+            }
+        });
+
+        jLabel7.setText("Listado por IVAS");
+
+        JLabelCompararPrecios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JLabelCompararPreciosMouseClicked(evt);
+            }
+        });
+
+        jLabel8.setText("Comparar Precios");
 
         jMenu1.setText("Artículo");
 
@@ -348,20 +428,80 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(165, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel5)
+                        .addGap(31, 31, 31)
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel7))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(JLabelAddRecibo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(15, 15, 15)
+                                    .addComponent(JLabelAddFact, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addContainerGap()
+                                    .addComponent(jLabel2))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jLabel3))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(39, 39, 39)
+                                        .addComponent(JLabelListadoComprobante1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(47, 47, 47)
+                                        .addComponent(JLabelEstadodeCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(18, 18, 18))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(41, 41, 41)
+                                .addComponent(JLabelAddProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(JLabelCompararPrecios, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(34, 34, 34)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel4)
+                            .addComponent(JLabelListadoxIVAS, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(JLabelAltaProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel1)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(JLabelEstadodeCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelListadoComprobante1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelAddFact, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelAltaProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(223, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(JLabelListadoxIVAS, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelAddRecibo, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelAddProveedor, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JLabelCompararPrecios, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
@@ -522,6 +662,39 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         estadodecuenta.setVisible(true);
     }//GEN-LAST:event_jMenuItem14ActionPerformed
 
+    private void JLabelAddFactMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelAddFactMouseClicked
+        List<Proveedor> LProv = Conexion.getInstance().listadoProveedores();
+        if (LProv.size() == 0) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No hay proveedores.");
+        } else {
+            AltaFactura f = new AltaFactura();
+            f.setLocationRelativeTo(null);
+            f.setVisible(true);
+        }
+    }//GEN-LAST:event_JLabelAddFactMouseClicked
+
+    private void JLabelListadoComprobante1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelListadoComprobante1MouseClicked
+        altaArticulo aP = new altaArticulo();
+        aP.setLocationRelativeTo(null);
+        aP.setVisible(true);
+    }//GEN-LAST:event_JLabelListadoComprobante1MouseClicked
+
+    private void JLabelListadoxIVASMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelListadoxIVASMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JLabelListadoxIVASMouseClicked
+
+    private void JLabelAddReciboMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelAddReciboMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JLabelAddReciboMouseClicked
+
+    private void JLabelAddProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelAddProveedorMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JLabelAddProveedorMouseClicked
+
+    private void JLabelCompararPreciosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JLabelCompararPreciosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_JLabelCompararPreciosMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -558,8 +731,22 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel JLabelAddFact;
+    private javax.swing.JLabel JLabelAddProveedor;
+    private javax.swing.JLabel JLabelAddRecibo;
+    private javax.swing.JLabel JLabelAltaProducto;
+    private javax.swing.JLabel JLabelCompararPrecios;
+    private javax.swing.JLabel JLabelEstadodeCuenta;
+    private javax.swing.JLabel JLabelListadoComprobante1;
+    private javax.swing.JLabel JLabelListadoxIVAS;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

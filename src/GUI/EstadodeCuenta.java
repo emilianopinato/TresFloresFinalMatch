@@ -12,11 +12,14 @@ import Clases.Proveedor;
 import Clases.Recibo;
 import Clases.tipoComprobante;
 import Clases.tipoMoneda;
+import java.awt.Color;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import net.coderazzi.filters.gui.AutoChoices;
 import net.coderazzi.filters.gui.TableFilterHeader;
@@ -49,6 +52,27 @@ public class EstadodeCuenta extends javax.swing.JFrame {
 
         //Permite agregar un filtro de búsqueda por cada columna.
         filterHeader = new TableFilterHeader(jTableComprobantes, AutoChoices.ENABLED);
+        
+        //coloreo
+        DefaultTableCellRenderer alinear_izquierda = new DefaultTableCellRenderer();
+        DefaultTableCellRenderer alinear_izquierda_y_color = new DefaultTableCellRenderer();
+        alinear_izquierda.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        Color color=new Color(212, 212, 212);
+        alinear_izquierda_y_color.setBackground(color);
+        alinear_izquierda_y_color.setHorizontalAlignment(SwingConstants.LEFT);
+        
+        this.jTableComprobantes.getColumnModel().getColumn(0).setCellRenderer(alinear_izquierda);
+        this.jTableComprobantes.getColumnModel().getColumn(1).setCellRenderer(alinear_izquierda);
+        this.jTableComprobantes.getColumnModel().getColumn(2).setCellRenderer(alinear_izquierda);
+        this.jTableComprobantes.getColumnModel().getColumn(3).setCellRenderer(alinear_izquierda);
+        this.jTableComprobantes.getColumnModel().getColumn(4).setCellRenderer(alinear_izquierda);
+        this.jTableComprobantes.getColumnModel().getColumn(5).setCellRenderer(alinear_izquierda);
+        this.jTableComprobantes.getColumnModel().getColumn(6).setCellRenderer(alinear_izquierda);
+        this.jTableComprobantes.getColumnModel().getColumn(7).setCellRenderer(alinear_izquierda);
+        this.jTableComprobantes.getColumnModel().getColumn(8).setCellRenderer(alinear_izquierda_y_color);
+        this.jTableComprobantes.getColumnModel().getColumn(9).setCellRenderer(alinear_izquierda_y_color);
+        this.jTableComprobantes.getColumnModel().getColumn(10).setCellRenderer(alinear_izquierda);
     }
 
     /**

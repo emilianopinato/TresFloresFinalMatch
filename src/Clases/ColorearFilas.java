@@ -14,7 +14,8 @@ public class ColorearFilas extends DefaultTableCellRenderer {
 
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean Selected, boolean hasFocus, int row, int col) {
-        setBackground(Color.yellow);
+        Color color=new Color(255, 249, 140);
+        setBackground(color);
         setHorizontalAlignment(SwingConstants.RIGHT);
         super.getTableCellRendererComponent(table, value, Selected, hasFocus, row, col);
         return this;

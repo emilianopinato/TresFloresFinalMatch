@@ -55,7 +55,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
         //Permite agregar un filtro de búsqueda por cada columna.
         filterHeader = new TableFilterHeader(jTableComprobantes, AutoChoices.ENABLED);
         DefaultTableCellRenderer tcr = new DefaultTableCellRenderer();
-        tcr.setHorizontalAlignment(SwingConstants.CENTER);
+        tcr.setHorizontalAlignment(SwingConstants.LEFT);
         this.jTableComprobantes.getColumnModel().getColumn(4).setCellRenderer(tcr);
 
     }
