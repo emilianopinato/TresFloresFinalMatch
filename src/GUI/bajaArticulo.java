@@ -67,7 +67,7 @@ public class bajaArticulo extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                true, true, true, false
+                false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -78,6 +78,7 @@ public class bajaArticulo extends javax.swing.JFrame {
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
             jTable1.getColumnModel().getColumn(3).setResizable(false);
         }
 
@@ -134,15 +135,26 @@ public class bajaArticulo extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        int input = javax.swing.JOptionPane.showConfirmDialog(null, "¿Desea continuar?", "Seleccione una opción",
-                javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
 
-        if (input == 0) {
-            DefaultTableModel mdl = (DefaultTableModel) jTable1.getModel();
-            Articulo a = (Articulo) jTable1.getValueAt(jTable1.getSelectedRow(), 3);
-            a.setDeshabilitado(true);
-            Conexion.getInstance().merge(a);
-            mdl.removeRow(jTable1.getSelectedRow());
+        if (jTable1.getSelectedRow() == -1) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar el artículo que desee borrar.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            int input = javax.swing.JOptionPane.showConfirmDialog(null, "¿Desea continuar?", "Seleccione una opción",
+                    javax.swing.JOptionPane.YES_NO_CANCEL_OPTION, javax.swing.JOptionPane.YES_NO_CANCEL_OPTION);
+
+            if (input == 0) {
+                DefaultTableModel mdl = (DefaultTableModel) jTable1.getModel();
+                Articulo a = (Articulo) jTable1.getValueAt(jTable1.getSelectedRow(), 3);
+                a.setDeshabilitado(true);
+                boolean exito = Conexion.getInstance().mergebool(a);
+                if (exito) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue deshabilitado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    mdl.removeRow(jTable1.getSelectedRow());
+                } else {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un error.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
         }
 
 

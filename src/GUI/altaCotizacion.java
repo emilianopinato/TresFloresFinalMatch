@@ -72,6 +72,12 @@ public class altaCotizacion extends javax.swing.JFrame {
 
         jLabel2.setText("Importe: ");
 
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
+
         jButton1.setText("Crear");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -175,39 +181,23 @@ public class altaCotizacion extends javax.swing.JFrame {
                 }
             }
         }
-        
-//        if (tipo.equals("altamodificar")) {
-//            if (this.jDateChooser.getDate() == null) {
-//                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar una fecha.");
-//            } else if (this.jTextField1.getText().isEmpty()) {
-//                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el importe correspondiente.");
-//            } else {
-//                Date fechaIngresada = this.jDateChooser.getDate();
-//                Date fechaActual = new Date();
-//                if (fechaIngresada.after(fechaActual)) {
-//                    javax.swing.JOptionPane.showMessageDialog(null, "La fecha ingresada es mayor a la fecha actual.");
-//                } else {
-//                    if (Conexion.getInstance().existeFecha(fechaIngresada)) {
-//                        double importe = Float.parseFloat(this.jTextField1.getText());
-//                        this.c.setFecha(fechaActual);
-//                        this.c.setImporte(importe);
-//                        boolean exito = Conexion.getInstance().mergebool(c);
-//                        if (exito) {
-//                            DefaultTableModel dm = (DefaultTableModel) tabla.getModel();                           
-//                            javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue dado de alta exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-//                        } else {
-//                            javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-       
+
         if (tipo.equals("altafactura") || tipo.equals("altamodificar")) {
             this.dispose();
         }
 
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        char caracter = evt.getKeyChar();
+        if (caracter == '.') {
+            //no hace nadaxd
+        } else if (((caracter < '0')
+                || (caracter > '9'))
+                && (caracter != '\b' /*corresponde a BACK_SPACE*/)) {
+            evt.consume();  // ignorar el evento de teclado
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
 
     /**
      * @param args the command line arguments

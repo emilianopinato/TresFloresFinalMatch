@@ -114,12 +114,25 @@ public class modificarCotización extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Object.class, java.lang.String.class, java.lang.Double.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         jButton1.setText("Cerrar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -184,24 +197,32 @@ public class modificarCotización extends javax.swing.JFrame {
         crear = false;
         if (tipo.equals("a")) {
             int row = jTable1.getSelectedRow();
-            Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
-            altaCotizacion aC = new altaCotizacion(c, jTable1);
-            aC.setLocationRelativeTo(null);
-            aC.setVisible(true);
+            if (row == -1) {
+                javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar la cotización que desea modificar.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            } else {
+                Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
+                altaCotizacion aC = new altaCotizacion(c, jTable1);
+                aC.setLocationRelativeTo(null);
+                aC.setVisible(true);
+            }
         } else {
             if (crear == false) {
-                int input = javax.swing.JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea seleccionar esta cotización?", "Seleccione una opción",
-                        javax.swing.JOptionPane.YES_NO_OPTION);
-                if (input == 0) {
-                    int row = jTable1.getSelectedRow();
-                    Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
-                    controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
-                    double cot = controladorBasura.getInstance().getPrecioCotizacion();
-                    if (cot != 0) {
-                        af.labelCotizacion.setText("La cotización es: " + cot);
-                        af.precioCotizacion = cot;
+                int row = jTable1.getSelectedRow();
+                if (row == -1) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar la cotización que asignará a la factura.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                } else {
+                    int input = javax.swing.JOptionPane.showConfirmDialog(null, "¿Está seguro de que desea seleccionar esta cotización?", "Seleccione una opción",
+                            javax.swing.JOptionPane.YES_NO_OPTION);
+                    if (input == 0) {
+                        Cotizacion c = (Cotizacion) jTable1.getModel().getValueAt(row, 3);
+                        controladorBasura.getInstance().setPrecioCotizacion(c.getImporte());
+                        double cot = controladorBasura.getInstance().getPrecioCotizacion();
+                        if (cot != 0) {
+                            af.labelCotizacion.setText("La cotización es: " + cot);
+                            af.precioCotizacion = cot;
+                        }
+                        this.dispose();
                     }
-                    this.dispose();
                 }
             }
         }

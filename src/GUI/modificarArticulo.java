@@ -109,6 +109,7 @@ public class modificarArticulo extends javax.swing.JFrame {
         jList1 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Modifcar artículo");
 
         jButton1.setText("Modificar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -137,14 +138,27 @@ public class modificarArticulo extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jTable1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTable1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(4).setResizable(false);
+        }
 
         jLabel1.setText("Mostrar también artículos deshabilitados:");
 
@@ -245,10 +259,15 @@ public class modificarArticulo extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         int row = jTable1.getSelectedRow();
-        Articulo a = (Articulo) jTable1.getModel().getValueAt(row,4);
-        altaArticulo aA = new altaArticulo(a,jTable1, jList1,jCheckBox1.isSelected(),articulosDeshabilitados);
-        aA.setLocationRelativeTo(null);
-        aA.show();
+        if (row == -1) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar el artículo que desee modificar.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            Articulo a = (Articulo) jTable1.getModel().getValueAt(row, 4);
+            altaArticulo aA = new altaArticulo(a, jTable1, jList1, jCheckBox1.isSelected(), articulosDeshabilitados);
+            aA.setLocationRelativeTo(null);
+            aA.show();
+        }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed

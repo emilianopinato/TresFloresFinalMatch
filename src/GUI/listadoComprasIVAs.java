@@ -312,9 +312,9 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                     fila[0] = next.getProveedor().getRazonSocial();
                     fila[1] = next.getProveedor().getRUT();
                     fila[2] = subTotal;
-                    fila[3] = next.getIvaMinimo();
-                    fila[4] = next.getIvaBasico();
-                    fila[5] = next.getTotal();
+                    fila[3] = next.getIvaMinimo() * next.getCotizacion();
+                    fila[4] = next.getIvaBasico() * next.getCotizacion();
+                    fila[5] = next.getTotal() * next.getCotizacion();
                     fila[6] = next;
                     mdl.addRow(fila);
 

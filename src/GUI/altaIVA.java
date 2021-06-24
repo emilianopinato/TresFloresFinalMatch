@@ -153,7 +153,9 @@ public class altaIVA extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        if (this.jDateChooser.getDate() == null) {
+        if (this.jTextField1.getText().equals("")) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el porcentaje del IVA a crear.");
+        } else if (this.jDateChooser.getDate() == null) {
             javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar la fecha en la que comenzará a regir el IVA ingresado.");
         } else {
             int shrek = 4;
@@ -179,7 +181,7 @@ public class altaIVA extends javax.swing.JFrame {
                 } else {
                     javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                 }
-            }else{
+            } else {
                 javax.swing.JOptionPane.showMessageDialog(null, "El IVA con la fecha ingresada ya existe.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
             }
         }
