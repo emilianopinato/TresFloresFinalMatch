@@ -708,7 +708,7 @@ public class Conexion {
         em.getTransaction().begin();
         try {
             listaComprobantes = em.createNativeQuery("SELECT recibo.* , comprobante.* FROM recibo INNER JOIN comprobante WHERE "
-                    + "AND recibo.id = comprobante.id "
+                    + "recibo.id = comprobante.id "
                     + " AND recibo.deshabilitado = 1 ", Recibo.class)
                     .getResultList();
             em.getTransaction().commit();
