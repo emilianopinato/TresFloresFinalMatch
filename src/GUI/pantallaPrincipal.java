@@ -110,7 +110,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         this.JLabelCompararPrecios.setIcon(iconolb7);
         this.JLabelListadoxIVAS.setIcon(iconolb8);
 
-        //this.getContentPane().setBackground(this.color);
+        this.getContentPane().setBackground(this.color);
         this.setResizable(false);
         //this.jMenuBar1.setBackground(color);
     }

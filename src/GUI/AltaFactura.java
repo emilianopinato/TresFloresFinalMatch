@@ -16,6 +16,7 @@ import Clases.controladorBasura;
 import Clases.tipoComprobante;
 import Clases.tipoIVA;
 import Clases.tipoMoneda;
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -52,6 +53,8 @@ public class AltaFactura extends javax.swing.JFrame {
     private boolean banderita = false;
 
     private boolean vista;
+    
+    Color color = this.getBackground();
 
     public AltaFactura() {
         initComponents();
@@ -1465,15 +1468,34 @@ public class AltaFactura extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBoxIvaIncItemStateChanged
 
     private void jCBTipoComprobanteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBTipoComprobanteItemStateChanged
-        if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
-            this.ListaFacparaNC(false);
-        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Crédito")) {
-            this.ListaFacparaNC(false);
-        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Devolución Contado")) {
-            this.ListaFacparaNC(false);
-        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Nota de crédito")) {
-            this.ListaFacparaNC(true);
-        }
+//        if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
+//            this.getContentPane().setBackground(this.color);
+//            this.jPanel1.setBackground(this.color);
+//            this.jPanelSetArticulo.setBackground(this.color);
+//            this.jPanelModificar.setBackground(this.color);
+//            this.jTableArticulos.setBackground(this.color);
+//        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Crédito")) {
+//            this.getContentPane().setBackground(this.color);
+//            this.jPanel1.setBackground(this.color);
+//            this.jPanelSetArticulo.setBackground(this.color);
+//            this.jPanelModificar.setBackground(this.color);
+//            this.jTableArticulos.setBackground(this.color);
+//        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Devolución Contado")) {
+//            Color color = new Color(235, 160, 160);
+//            this.getContentPane().setBackground(color);
+//            this.jCBTipoComprobante.setBackground(color);
+//            this.jPanel1.setBackground(color);
+//            this.jPanelSetArticulo.setBackground(color);
+//            this.jPanelModificar.setBackground(color);
+//            this.jTableArticulos.setBackground(color);
+//        } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Nota de crédito")) {
+//            Color color = new Color(235, 160, 160);
+//            this.getContentPane().setBackground(color);
+//            this.jPanel1.setBackground(color);
+//            this.jPanelSetArticulo.setBackground(color);
+//            this.jPanelModificar.setBackground(color);
+//            this.jTableArticulos.setBackground(color);
+//        }
     }//GEN-LAST:event_jCBTipoComprobanteItemStateChanged
 
     private void jMenuItemModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemModificarActionPerformed
