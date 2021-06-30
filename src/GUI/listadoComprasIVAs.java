@@ -114,12 +114,28 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
             }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+            jTable1.getColumnModel().getColumn(2).setResizable(false);
+            jTable1.getColumnModel().getColumn(3).setResizable(false);
+            jTable1.getColumnModel().getColumn(4).setResizable(false);
+            jTable1.getColumnModel().getColumn(5).setResizable(false);
+            jTable1.getColumnModel().getColumn(6).setResizable(false);
+        }
 
         jLabel2.setText("Desde");
 
@@ -287,7 +303,7 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
         // TODO add your handling code here:
         Date fechaDesde = jDateChooserDesde.getDate();
         Date fechaHasta = jDateChooserHasta.getDate();
-
+        DecimalFormat formatoFloat = new DecimalFormat("#.00");
         if (fechaDesde.after(fechaHasta)) {
             javax.swing.JOptionPane.showMessageDialog(null, "Fecha desde debe ser menor a fecha hasta");
         } else {
@@ -311,19 +327,19 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
                     ivaBasico = ivaBasico + (next.getIvaBasico() * next.getCotizacion());
                     fila[0] = next.getProveedor().getRazonSocial();
                     fila[1] = next.getProveedor().getRUT();
-                    fila[2] = subTotal;
-                    fila[3] = next.getIvaMinimo() * next.getCotizacion();
-                    fila[4] = next.getIvaBasico() * next.getCotizacion();
-                    fila[5] = next.getTotal() * next.getCotizacion();
+                    fila[2] = formatoFloat.format(subTotal);
+                    fila[3] = formatoFloat.format(next.getIvaMinimo() * next.getCotizacion());
+                    fila[4] = formatoFloat.format(next.getIvaBasico() * next.getCotizacion());
+                    fila[5] = formatoFloat.format(next.getTotal() * next.getCotizacion());
                     fila[6] = next;
                     mdl.addRow(fila);
 
                 }
             }
 
-            this.jTextField1.setText(String.valueOf(total));
-            this.jTextField2.setText(String.valueOf(ivaBasico));
-            this.jTextField3.setText(String.valueOf(ivaMinimo));
+            this.jTextField1.setText(String.valueOf(formatoFloat.format(total)));
+            this.jTextField2.setText(String.valueOf(formatoFloat.format(ivaBasico)));
+            this.jTextField3.setText(String.valueOf(formatoFloat.format(ivaMinimo)));
         }
 
     }//GEN-LAST:event_jButton3ActionPerformed
