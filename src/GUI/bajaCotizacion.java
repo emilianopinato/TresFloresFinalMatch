@@ -24,6 +24,7 @@ public class bajaCotizacion extends javax.swing.JFrame {
      */
     public bajaCotizacion() {
         initComponents();
+        this.setTitle("Baja Cotización");
 
         this.setLocationRelativeTo(null);
         jTable1.getColumnModel().getColumn(3).setMinWidth(0);
@@ -61,7 +62,7 @@ public class bajaCotizacion extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {

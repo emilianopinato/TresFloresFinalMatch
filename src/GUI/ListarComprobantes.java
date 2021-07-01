@@ -36,6 +36,7 @@ public class ListarComprobantes extends javax.swing.JFrame {
      */
     public ListarComprobantes() {
         initComponents();
+        this.setTitle("Listado de comprobantes");
 
         this.setLocationRelativeTo(null);
         AutoCompleteDecorator.decorate(this.jCBProveedor);

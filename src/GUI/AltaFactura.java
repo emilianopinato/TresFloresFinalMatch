@@ -17,6 +17,7 @@ import Clases.tipoComprobante;
 import Clases.tipoIVA;
 import Clases.tipoMoneda;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,13 +25,17 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 
@@ -55,9 +60,19 @@ public class AltaFactura extends javax.swing.JFrame {
     private boolean vista;
     
     Color color = this.getBackground();
+    
+    Dimension original;
 
     public AltaFactura() {
         initComponents();
+        this.setTitle("Nuevo comprobante");
+        original = this.getSize();
+        this.setSize((int) original.getWidth(), (int) original.getHeight() - 40);
+        //cambiarle el titulo al panel
+        String title = "Nuevo Comprobante";
+        Border border = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED),title);
+        //this.jPanel1.getBorder().getBorderInsets(this);
+        this.jPanel1.setBorder(border);
         this.jCBTipoComprobante.setModel(new DefaultComboBoxModel(tipoComprobante.values()));
         this.jCBMoneda.setModel(new DefaultComboBoxModel(tipoMoneda.values()));
         this.jTextSubTotal.setEditable(false);
@@ -161,6 +176,16 @@ public class AltaFactura extends javax.swing.JFrame {
 
     public AltaFactura(Factura fac) {
         initComponents();
+        this.setTitle("Comprobante: " + fac.getSerieComprobante() + " - " + fac.getNroComprobante());
+        this.setResizable(false);
+        original = this.getSize();
+        this.setSize((int) original.getWidth(), (int) original.getHeight() - 140);
+        //cambiarle el titulo al panel
+        String title = "Comprobante: " + fac.getSerieComprobante()+ " - " + fac.getNroComprobante();
+        Border border = BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(BevelBorder.LOWERED),title);
+        //this.jPanel1.getBorder().getBorderInsets(this);
+        this.jPanel1.setBorder(border);
+        
         this.setLocationRelativeTo(null);
         //this.jLabel17.setVisible(false);
         //this.jListFacturaspNC.setVisible(false);
@@ -369,7 +394,7 @@ public class AltaFactura extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "Agregar Comprobante"));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED), "Nuevo Comprobante"));
 
         jTableArticulos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -402,11 +427,16 @@ public class AltaFactura extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jTableArticulos);
         if (jTableArticulos.getColumnModel().getColumnCount() > 0) {
+            jTableArticulos.getColumnModel().getColumn(0).setResizable(false);
             jTableArticulos.getColumnModel().getColumn(0).setPreferredWidth(530);
+            jTableArticulos.getColumnModel().getColumn(1).setResizable(false);
             jTableArticulos.getColumnModel().getColumn(1).setPreferredWidth(70);
+            jTableArticulos.getColumnModel().getColumn(2).setResizable(false);
             jTableArticulos.getColumnModel().getColumn(2).setPreferredWidth(70);
+            jTableArticulos.getColumnModel().getColumn(3).setResizable(false);
             jTableArticulos.getColumnModel().getColumn(3).setPreferredWidth(70);
-            jTableArticulos.getColumnModel().getColumn(4).setPreferredWidth(120);
+            jTableArticulos.getColumnModel().getColumn(4).setResizable(false);
+            jTableArticulos.getColumnModel().getColumn(4).setPreferredWidth(130);
         }
 
         jButtonIngresar.setText("Ingresar");
@@ -760,16 +790,16 @@ public class AltaFactura extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addGap(6, 6, 6)
                                         .addComponent(jLabel17)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextComentario, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTextComentario, javax.swing.GroupLayout.PREFERRED_SIZE, 575, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jCheckBoxIvaInc)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addGroup(jPanel1Layout.createSequentialGroup()
+                                            .addGap(19, 19, 19)
+                                            .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
@@ -862,13 +892,16 @@ public class AltaFactura extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextTOTAL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel15))
-                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButtonIngresar)
-                        .addComponent(jButtonCerrar)))
-                .addContainerGap(10, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButtonIngresar)
+                            .addComponent(jButtonCerrar)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         jMenuEdicion.setText("Edición");
@@ -922,11 +955,10 @@ public class AltaFactura extends javax.swing.JFrame {
         Date date = this.jDateChooser.getDate();
 
         if (((Proveedor) this.jCBProveedor.getSelectedItem()) != null) {
-            //Agregamos IVA Básico y Mínimo.
-            fac.setIvaBasico(Float.parseFloat(jTextIVAbasico.getText()));
-            fac.setIvaMinimo(Float.parseFloat(jTextIVAminimo.getText()));
-            fac.setDeshabilitado(false);
-
+            
+//            if(this.jDateChooser.getDate() > LocalDateTime.now()){
+//                
+//            }
             if (this.precioCotizacion == 0 && this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Está intentando ingresar una factura en dolares que no tiene cotización. "
                         + "Seleccione otra fecha y vuelva a intentarlo.");
@@ -939,7 +971,10 @@ public class AltaFactura extends javax.swing.JFrame {
             } else if (this.ListaArticulo.isEmpty()) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Es necesario ingresar minimo un articulo.");
             } else {
-
+                //Agregamos IVA Básico y Mínimo.
+                fac.setIvaBasico(Float.parseFloat(jTextIVAbasico.getText()));
+                fac.setIvaMinimo(Float.parseFloat(jTextIVAminimo.getText()));
+                fac.setDeshabilitado(false);
                 LocalDate fechaDatechoser = new java.sql.Date(date.getTime()).toLocalDate();
                 boolean mescerrado = false;
                 LocalDate fechaDesde = LocalDate.of(fechaDatechoser.getYear(), fechaDatechoser.getMonth(), 1);
@@ -1428,8 +1463,12 @@ public class AltaFactura extends javax.swing.JFrame {
 
     private void jTextUnitarioKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextUnitarioKeyTyped
         char caracter = evt.getKeyChar();
-        if (caracter == '.') {
-            //no hace nadaxd
+        if (caracter == '.' && this.jTextUnitario.getText().length() == 0) {
+            evt.consume();
+        }else if(caracter == '.'){
+            if(this.jTextUnitario.getText().contains(".")){
+                evt.consume();
+            }
         } else if (((caracter < '0')
                 || (caracter > '9'))
                 && (caracter != '\b' /*corresponde a BACK_SPACE*/)) {
@@ -1439,9 +1478,13 @@ public class AltaFactura extends javax.swing.JFrame {
 
     private void jTextCantidadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextCantidadKeyTyped
         char caracter = evt.getKeyChar();
-        if (caracter == '.') {
-            //no hace nadaxd
-        } else if (((caracter < '0')
+        if (caracter == '.' && this.jTextCantidad.getText().length() == 0) {
+            evt.consume();
+        }else if(caracter == '.'){
+            if(this.jTextCantidad.getText().contains(".")){
+                evt.consume();
+            }
+        }else if (((caracter < '0')
                 || (caracter > '9'))
                 && (caracter != '\b' /*corresponde a BACK_SPACE*/)) {
             evt.consume();  // ignorar el evento de teclado
@@ -1450,8 +1493,12 @@ public class AltaFactura extends javax.swing.JFrame {
 
     private void jTextDescuentoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextDescuentoKeyTyped
         char caracter = evt.getKeyChar();
-        if (caracter == '.') {
-            //no hace nadaxd
+        if (caracter == '.' && this.jTextDescuento.getText().length() == 0) {
+            evt.consume();
+        }else if(caracter == '.'){
+            if(this.jTextDescuento.getText().contains(".")){
+                evt.consume();
+            }
         } else if (((caracter < '0')
                 || (caracter > '9'))
                 && (caracter != '\b' /*corresponde a BACK_SPACE*/)) {
@@ -1502,6 +1549,7 @@ public class AltaFactura extends javax.swing.JFrame {
         if (this.f.isCerrada()) {
             javax.swing.JOptionPane.showMessageDialog(null, "No se puede modificar una factura que esta cerrada.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
+            this.setSize((int) original.getWidth(), (int) original.getHeight());
             this.jTextSerie.setEditable(true);
             this.jTextNumeroFact.setEditable(true);
             this.jDateChooser.setEnabled(true);
@@ -1517,12 +1565,15 @@ public class AltaFactura extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemModificarActionPerformed
 
     private void jMenuItemEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemEliminarActionPerformed
-
-        int resp = JOptionPane.showConfirmDialog(this, "Seguro desea deshabilitar esta factura?", "Confirmar", JOptionPane.YES_NO_OPTION);
-        if (resp == 0) {
-            this.f.setDeshabilitado(true);
-            Conexion.getInstance().merge(f);
-            javax.swing.JOptionPane.showMessageDialog(this, "La factura se ha deshabilitado correctamente.");
+        if (this.f.isCerrada()) {
+            javax.swing.JOptionPane.showMessageDialog(null, "No se puede modificar una factura que esta cerrada.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } else {
+            int resp = JOptionPane.showConfirmDialog(this, "Seguro desea deshabilitar esta factura?", "Confirmar", JOptionPane.YES_NO_OPTION);
+            if (resp == 0) {
+                this.f.setDeshabilitado(true);
+                Conexion.getInstance().merge(f);
+                javax.swing.JOptionPane.showMessageDialog(this, "La factura se ha deshabilitado correctamente.");
+            }
         }
     }//GEN-LAST:event_jMenuItemEliminarActionPerformed
 
@@ -1736,6 +1787,7 @@ public class AltaFactura extends javax.swing.JFrame {
             this.jPanelSetArticulo.setVisible(false);
 
             this.jPanelModificar.setVisible(false);
+            this.setSize((int) original.getWidth(), (int) original.getHeight() - 140);
         }
     }//GEN-LAST:event_jButtonModificarActionPerformed
 
@@ -1753,7 +1805,7 @@ public class AltaFactura extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableArticulosMouseClicked
 
     private void jButtonCerrarModActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCerrarModActionPerformed
-
+        this.setSize((int) original.getWidth(), (int) original.getHeight() - 140);
         Factura fac = this.f;
         this.vista = true;
         this.labelCotizacion.setText("");
@@ -1884,6 +1936,12 @@ public class AltaFactura extends javax.swing.JFrame {
 
     private void jTextCantidadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextCantidadKeyReleased
         if (!this.jTextCantidad.getText().isEmpty()) {
+            Locale currentLocale = getLocale();
+            DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+            unusualSymbols.setDecimalSeparator('.');
+            String strange = "#.00";
+            DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
+            
             float des = 0, un = 0;
             if (this.jTextDescuento.getText().length() > 0) {
                 des = Float.parseFloat(this.jTextDescuento.getText());
@@ -1893,7 +1951,8 @@ public class AltaFactura extends javax.swing.JFrame {
             }
 
             float sub = Float.parseFloat(this.jTextCantidad.getText()) * un - des;
-            this.jTextSubTotalArt.setText(Float.toString(sub));
+            this.jTextSubTotalArt.setText(formatoFloat.format(sub));
+            //this.jTextSubTotalArt.setText(Float.toString(sub));
         } else {
             float des = 0, un = 0;
             if (this.jTextDescuento.getText().length() > 0) {
@@ -1904,12 +1963,23 @@ public class AltaFactura extends javax.swing.JFrame {
             }
 
             float sub = 0 * un - des;
-            this.jTextSubTotalArt.setText(Float.toString(sub));
+            Locale currentLocale = getLocale();
+            DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+            unusualSymbols.setDecimalSeparator('.');
+            String strange = "#.00";
+            DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
+            //this.jTextSubTotalArt.setText(Float.toString(sub));
+            this.jTextSubTotalArt.setText(formatoFloat.format(sub));
         }
     }//GEN-LAST:event_jTextCantidadKeyReleased
 
     private void jTextUnitarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextUnitarioKeyReleased
         if (!this.jTextUnitario.getText().isEmpty()) {
+            Locale currentLocale = getLocale();
+            DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+            unusualSymbols.setDecimalSeparator('.');
+            String strange = "#.00";
+            DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
             float cant = 0, des = 0;
             if (this.jTextCantidad.getText().length() > 0) {
                 cant = Float.parseFloat(this.jTextCantidad.getText());
@@ -1919,7 +1989,8 @@ public class AltaFactura extends javax.swing.JFrame {
             }
 
             float sub = cant * Float.parseFloat(this.jTextUnitario.getText()) - des;
-            this.jTextSubTotalArt.setText(Float.toString(sub));
+            this.jTextSubTotalArt.setText(formatoFloat.format(sub));
+//            this.jTextSubTotalArt.setText(Float.toString(sub));
         } else {
             float cant = 0, des = 0;
             if (this.jTextCantidad.getText().length() > 0) {
@@ -1930,12 +2001,23 @@ public class AltaFactura extends javax.swing.JFrame {
             }
 
             float sub = cant * 0 - des;
-            this.jTextSubTotalArt.setText(Float.toString(sub));
+            Locale currentLocale = getLocale();
+            DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+            unusualSymbols.setDecimalSeparator('.');
+            String strange = "#.00";
+            DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
+            //this.jTextSubTotalArt.setText(Float.toString(sub));
+            this.jTextSubTotalArt.setText(formatoFloat.format(sub));
         }
     }//GEN-LAST:event_jTextUnitarioKeyReleased
 
     private void jTextDescuentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextDescuentoKeyReleased
         if (!this.jTextDescuento.getText().isEmpty()) {
+            Locale currentLocale = getLocale();
+            DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+            unusualSymbols.setDecimalSeparator('.');
+            String strange = "#.00";
+            DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
             float cant = 0, un = 0;
             if (this.jTextCantidad.getText().length() > 0) {
                 cant = Float.parseFloat(this.jTextCantidad.getText());
@@ -1945,7 +2027,8 @@ public class AltaFactura extends javax.swing.JFrame {
             }
 
             float sub = cant * un - Float.parseFloat(this.jTextDescuento.getText());
-            this.jTextSubTotalArt.setText(Float.toString(sub));
+            this.jTextSubTotalArt.setText(formatoFloat.format(sub));
+//            this.jTextSubTotalArt.setText(Float.toString(sub));
         } else {
             float cant = 0, un = 0;
             if (this.jTextCantidad.getText().length() > 0) {
@@ -1956,7 +2039,13 @@ public class AltaFactura extends javax.swing.JFrame {
             }
 
             float sub = cant * un - 0;
-            this.jTextSubTotalArt.setText(Float.toString(sub));
+            Locale currentLocale = getLocale();
+            DecimalFormatSymbols unusualSymbols = new DecimalFormatSymbols(currentLocale);
+            unusualSymbols.setDecimalSeparator('.');
+            String strange = "#.00";
+            DecimalFormat formatoFloat = new DecimalFormat(strange, unusualSymbols);
+            //this.jTextSubTotalArt.setText(Float.toString(sub));
+            this.jTextSubTotalArt.setText(formatoFloat.format(sub));
         }
     }//GEN-LAST:event_jTextDescuentoKeyReleased
 

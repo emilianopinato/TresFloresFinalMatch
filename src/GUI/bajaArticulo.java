@@ -21,6 +21,7 @@ public class bajaArticulo extends javax.swing.JFrame {
      */
     public bajaArticulo() {
         initComponents();
+        this.setTitle("Baja articulo");
         this.setLocationRelativeTo(null);
         //Escondo la columna que tiene el objeto guardado.
         jTable1.getColumnModel().getColumn(3).setMinWidth(0);

@@ -24,6 +24,7 @@ public class altaIVA extends javax.swing.JFrame {
      */
     public altaIVA() {
         initComponents();
+        this.setTitle("Alta IVA");
         jComboBox1.setModel(new DefaultComboBoxModel(tipoIVA.values()));
         jComboBox1.setSelectedIndex(0);
     }

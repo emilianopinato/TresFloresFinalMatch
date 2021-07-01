@@ -13,6 +13,7 @@ import Clases.Proveedor;
 import Clases.Recibo;
 import Clases.tipoMoneda;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Date;
@@ -33,12 +34,16 @@ public class AltaRecibo extends javax.swing.JFrame {
     boolean vista = false;
     Recibo r;
     float importerecordado = 0;
+    Dimension original;
 
     /**
      * Creates new form AltaRecibo
      */
     public AltaRecibo() {
         initComponents();
+        this.setTitle("Nuevo recibo");
+        original = this.getSize();
+        this.setSize((int) original.getWidth()-18, (int) original.getHeight() - 40);
         this.setLocationRelativeTo(null);
         this.jMenuBar1.setVisible(false);
         AutoCompleteDecorator.decorate(this.jCBProveedor);
@@ -86,6 +91,8 @@ public class AltaRecibo extends javax.swing.JFrame {
 
     public AltaRecibo(Recibo rec) {
         initComponents();
+        this.setTitle("Recibo: " + rec.getSerieComprobante() + " - " + rec.getNroComprobante());
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.jMenuBar1.setVisible(true);
         AutoCompleteDecorator.decorate(this.jCBProveedor);
@@ -372,7 +379,7 @@ public class AltaRecibo extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(45, 45, 45)
+                .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(layout.createSequentialGroup()
@@ -416,7 +423,7 @@ public class AltaRecibo extends javax.swing.JFrame {
                                         .addComponent(jTextNumero))
                                     .addComponent(jTextImporte, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(jCBMoneda, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -451,7 +458,7 @@ public class AltaRecibo extends javax.swing.JFrame {
                         .addComponent(jButtonIngresar)
                         .addComponent(jButtonCerrar))
                     .addComponent(jPanelModificar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
