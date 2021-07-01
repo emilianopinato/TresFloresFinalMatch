@@ -1260,19 +1260,16 @@ public class listadoComprasIVAs extends javax.swing.JFrame {
             int cantidadFacturas = facturas.size();
             int cantidadFacturasCerradas = 0;
 
-            if (facturas.isEmpty()) {
-                return false;
-            } else {
-                for (Factura f : facturas) {
-                    if (f.isCerrada()) {
-                        cantidadFacturasCerradas++;
-                    }
-                }
-                if (cantidadFacturas != cantidadFacturasCerradas) {
-                    return true;
+            for (Factura f : facturas) {
+                if (f.isCerrada()) {
+                    cantidadFacturasCerradas++;
                 }
             }
+            if (cantidadFacturas != cantidadFacturasCerradas) {
+                return true;
+            }
         }
+
         return true;
     }
 

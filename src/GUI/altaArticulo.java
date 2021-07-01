@@ -10,6 +10,7 @@ import Clases.Articulo;
 import Clases.IVA;
 import Clases.Proveedor;
 import Clases.controladorBasura;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -35,13 +36,14 @@ public class altaArticulo extends javax.swing.JFrame {
     /**
      * Creates new form altaProducto
      */
+    Dimension original;
     public altaArticulo() {
         initComponents();
         modificar = false;
         setTitle("Alta Articulo");
         jButton1.setText("Crear");
-        
-        this.setSize(475, 725);
+        original = this.getSize();
+        this.setSize((int) original.getWidth() - 95, (int) original.getHeight());       
         
         DefaultListModel listModel;
         listModel = new DefaultListModel();
@@ -334,9 +336,9 @@ public class altaArticulo extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addContainerGap()
+                        .addGap(16, 16, 16)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -355,100 +357,99 @@ public class altaArticulo extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        IVA iva = (IVA) jComboBox1.getSelectedItem();
-        Date fechaHoy = new Date();
-        Date fechaRegirIVA = iva.getFechaRegir();
+        if (jComboBox1.getSelectedIndex() != -1) {
+            IVA iva = (IVA) jComboBox1.getSelectedItem();
+            Date fechaHoy = new Date();
+            Date fechaRegirIVA = iva.getFechaRegir();
 
-        if (modificar == false) {
-            //ALTA ARTICULO.
-            if (jTextField1.getText().isEmpty()) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el código del artículo.");
-            } else if (jTextField2.getText().isEmpty()) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el nombre del artículo.");
-            } else if(fechaHoy.before(fechaRegirIVA)){
-                javax.swing.JOptionPane.showMessageDialog(null, "Ha seleccionado un IVA que todavía no empezó a regir. Vuelva a intentarlo con otro IVA.");
-            }else if (jComboBox2.getSelectedIndex() == -1) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar el proveedor del artículo.");
+            if (modificar == false) {
+                //ALTA ARTICULO.
+                if (jTextField1.getText().isEmpty()) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el código del artículo.");
+                } else if (jTextField2.getText().isEmpty()) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el nombre del artículo.");
+                } else if (fechaHoy.before(fechaRegirIVA)) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Ha seleccionado un IVA que todavía no empezó a regir. Vuelva a intentarlo con otro IVA.");
+                } else if (jComboBox2.getSelectedIndex() == -1) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar el proveedor del artículo.");
+                } else {
+                    boolean existeA = Conexion.getInstance().existeArticulo(jTextField1.getText());
+                    if (existeA) {
+                        javax.swing.JOptionPane.showMessageDialog(null, "El artículo ya existe.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        Articulo art = new Articulo();
+                        DefaultListModel listModel = (DefaultListModel) this.jList1.getModel();
+                        List<Proveedor> provs = new ArrayList<>();
+                        //Agrego los proveedores de la lista a un array de proveedores
+                        for (int i = 0; i < listModel.getSize(); i++) {
+                            Proveedor p = (Proveedor) listModel.get(i);
+                            p.getArticulos().add(a);
+                            provs.add(p);
+                        }
+                        //Datos del artículo a crear//
+                        art.setCodigo(jTextField1.getText());
+                        art.setNombre(jTextField2.getText());
+
+                        if (!jTextArea1.getText().isEmpty()) {
+                            art.setDescripcion(jTextArea1.getText());
+                        } else {
+                            art.setDescripcion("");
+                        }
+
+                        art.setIva(iva);
+                        art.setProveedores(provs);
+                        art.setUsuario(controladorBasura.getU());
+                        boolean e = Conexion.getInstance().persist(art);
+                        if (e) {
+                            javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue dado de alta exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                            this.jTextField1.setText("");
+                            this.jTextField2.setText("");
+                            this.jTextArea1.setText("");
+                            this.jList1.clearSelection();
+                        } else {
+                            javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                }
             } else {
-                boolean existeA = Conexion.getInstance().existeArticulo(jTextField1.getText());
-                if (existeA) {
-                    javax.swing.JOptionPane.showMessageDialog(null, "El artículo ya existe.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                } else {                   
-                    Articulo art = new Articulo();
+                //MODIFICAR ARTICULO.
+                if (jTextField2.getText().isEmpty()) {
+                    javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el nombre del artículo.");
+                } else {
+                    //Datos del artículo a modificar----------------//
+                    a.setNombre(jTextField2.getText());
+
+                    if (!jTextArea1.getText().isEmpty()) {
+                        a.setDescripcion(jTextArea1.getText());
+                    } else {
+                        a.setDescripcion("");
+                    }
+
+                    a.setIva((IVA) jComboBox1.getSelectedItem());
+                    a.setUsuario(controladorBasura.getU());
+                    if (this.jCheckBox1.isSelected()) {
+                        a.setDeshabilitado(true);
+
+                    } else {
+                        a.setDeshabilitado(false);
+                    }
+
+                    //---------------------------------------------//
+                    //Agrego los proveedores de la lista a un array de proveedores y los seteo//
                     DefaultListModel listModel = (DefaultListModel) this.jList1.getModel();
                     List<Proveedor> provs = new ArrayList<>();
-                    //Agrego los proveedores de la lista a un array de proveedores
-                    for(int i = 0; i < listModel.getSize(); i++){
-                        Proveedor p = (Proveedor)listModel.get(i);
+
+                    for (int i = 0; i < listModel.getSize(); i++) {
+                        Proveedor p = (Proveedor) listModel.get(i);
+                        //Agrego el artículo a la lista de artículos del proveedor//
                         p.getArticulos().add(a);
-                        provs.add(p);                       
+                        provs.add(p);
                     }
-                    //Datos del artículo a crear//
-                    art.setCodigo(jTextField1.getText());
-                    art.setNombre(jTextField2.getText());
-      
-                    if (!jTextArea1.getText().isEmpty()) {
-                        art.setDescripcion(jTextArea1.getText());
-                    } else {
-                        art.setDescripcion("");
-                    }
+                    a.setProveedores(provs);
+                    //-----------------------------------------------------------------------//
 
-                    art.setIva(iva);
-                    art.setProveedores(provs);
-                    art.setUsuario(controladorBasura.getU());
-                    boolean e = Conexion.getInstance().persist(art);
-                    if (e) {
-                        javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue dado de alta exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
-                        this.jTextField1.setText("");
-                        this.jTextField2.setText("");
-                        this.jTextArea1.setText("");
-                        this.jList1.clearSelection();
-                    } else {
-                        javax.swing.JOptionPane.showMessageDialog(null, "Ha ocurrido un problema.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            }
-        } else {
-            //MODIFICAR ARTICULO.
-            if (jTextField2.getText().isEmpty()) {
-                javax.swing.JOptionPane.showMessageDialog(null, "Debe ingresar el nombre del artículo.");
-            } else {
-                //Datos del artículo a modificar----------------//
-                a.setNombre(jTextField2.getText());
-                
-                if (!jTextArea1.getText().isEmpty()) {
-                    a.setDescripcion(jTextArea1.getText());
-                } else {
-                    a.setDescripcion("");
-                }
-
-                a.setIva((IVA) jComboBox1.getSelectedItem());
-                a.setUsuario(controladorBasura.getU());
-                if (this.jCheckBox1.isSelected()) {
-                    a.setDeshabilitado(true);
-                    
-                } else {
-                    a.setDeshabilitado(false);
-                }
-                
-              
-                //---------------------------------------------//
-
-                //Agrego los proveedores de la lista a un array de proveedores y los seteo//
-                DefaultListModel listModel = (DefaultListModel) this.jList1.getModel();
-                List<Proveedor> provs = new ArrayList<>();
-
-                for (int i = 0; i < listModel.getSize(); i++) {
-                    Proveedor p = (Proveedor) listModel.get(i);
-                    //Agrego el artículo a la lista de artículos del proveedor//
-                    p.getArticulos().add(a);
-                    provs.add(p);
-                }
-                a.setProveedores(provs);
-                //-----------------------------------------------------------------------//
-
-                Conexion.getInstance().merge(a);
-                javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue modificado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+                    Conexion.getInstance().merge(a);
+                    javax.swing.JOptionPane.showMessageDialog(null, "El artículo fue modificado exitosamente.", "Enhorabuena", javax.swing.JOptionPane.INFORMATION_MESSAGE);
 
 //                //Actualizo los datos de la tabla----------------------------//
 //                int fila = tabla.getSelectedRow();
@@ -464,46 +465,48 @@ public class altaArticulo extends javax.swing.JFrame {
 //                listModel2.removeAllElements();
 //                listaEnModificar.setModel(listModel);
 //                //---------------------------------------------------------------------------//
+                    DefaultTableModel dm = (DefaultTableModel) tabla.getModel();
+                    dm.getDataVector().removeAllElements();
+                    dm.fireTableDataChanged();
 
-                DefaultTableModel dm = (DefaultTableModel) tabla.getModel();
-                dm.getDataVector().removeAllElements();
-                dm.fireTableDataChanged();
-
-                Iterator<Articulo> it = Conexion.getInstance().listadoArticulos().iterator();
-                if (mostrarDeshabilitados) {
-                    while (it.hasNext()) {
-                        Articulo next = it.next();
-                        Object[] fila2 = new Object[5];
-                        fila2[0] = next.getCodigo();
-                        fila2[1] = next.getNombre();
-                        fila2[2] = next.getDescripcion();
-                        fila2[3] = next.getIva().toString();
-                        fila2[4] = next;
-                        dm.addRow(fila2);
-                    }
-
-                } else {
-
-                    while (it.hasNext()) {
-                        Articulo next = it.next();
-                        Object[] fila3 = new Object[5];
-                        if (!next.isDeshabilitado()) {
-                            fila3[0] = next.getCodigo();
-                            fila3[1] = next.getNombre();
-                            fila3[2] = next.getDescripcion();
-                            fila3[3] = next.getIva().toString();
-                            fila3[4] = next;
-                            dm.addRow(fila3);
-                        } else {
-                            Articulo art = (Articulo) next;
-
+                    Iterator<Articulo> it = Conexion.getInstance().listadoArticulos().iterator();
+                    if (mostrarDeshabilitados) {
+                        while (it.hasNext()) {
+                            Articulo next = it.next();
+                            Object[] fila2 = new Object[5];
+                            fila2[0] = next.getCodigo();
+                            fila2[1] = next.getNombre();
+                            fila2[2] = next.getDescripcion();
+                            fila2[3] = next.getIva().toString();
+                            fila2[4] = next;
+                            dm.addRow(fila2);
                         }
+
+                    } else {
+
+                        while (it.hasNext()) {
+                            Articulo next = it.next();
+                            Object[] fila3 = new Object[5];
+                            if (!next.isDeshabilitado()) {
+                                fila3[0] = next.getCodigo();
+                                fila3[1] = next.getNombre();
+                                fila3[2] = next.getDescripcion();
+                                fila3[3] = next.getIva().toString();
+                                fila3[4] = next;
+                                dm.addRow(fila3);
+                            } else {
+                                Articulo art = (Articulo) next;
+
+                            }
+                        }
+
                     }
 
                 }
-  
             }
-        }       
+        }else{
+            javax.swing.JOptionPane.showMessageDialog(null, "Debe seleccionar el tipo de IVA.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

@@ -935,7 +935,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             //javax.swing.JOptionPane.showMessageDialog(null, "No se pudo obtener cotización en la fecha seleccionada.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
             for (DatoscotizacionesDato dtc1 : dtc) {
-                Date fechaConvertida = null;
+                Date fechaConvertida;
                 XMLGregorianCalendar fecha = dtc1.getFecha();
                 Calendar calendario2 = Calendar.getInstance();
                 calendario2.set(fecha.getYear(), fecha.getMonth() - 1, fecha.getDay());
