@@ -30,6 +30,7 @@ public class articulosBuscador extends javax.swing.JFrame {
 
     public articulosBuscador(String texto, AltaFactura AT) {
         initComponents();
+        this.setResizable(false);
         //bordes redondeados
         Shape forma = new RoundRectangle2D.Double(0, 0, this.getBounds().width, this.getBounds().height, 30, 30);
         AWTUtilities.setWindowShape(this, forma);

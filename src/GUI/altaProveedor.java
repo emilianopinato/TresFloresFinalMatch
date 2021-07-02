@@ -102,6 +102,11 @@ public class altaProveedor extends javax.swing.JFrame {
                 jTextField1ActionPerformed(evt);
             }
         });
+        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
+        });
 
         jLabel2.setText("Razón social");
 
@@ -115,6 +120,12 @@ public class altaProveedor extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea1);
 
         jLabel4.setText("Teléfono");
+
+        jTextField3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField3KeyTyped(evt);
+            }
+        });
 
         jLabel5.setText("Tipo de facturación");
 
@@ -355,6 +366,24 @@ public class altaProveedor extends javax.swing.JFrame {
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField5ActionPerformed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0')
+                || (caracter > '9'))
+                && (caracter != '\b' /*corresponde a BACK_SPACE*/)) {
+            evt.consume();  // ignorar el evento de teclado
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
+
+    private void jTextField3KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField3KeyTyped
+        char caracter = evt.getKeyChar();
+        if (((caracter < '0')
+                || (caracter > '9'))
+                && (caracter != '\b' /*corresponde a BACK_SPACE*/)) {
+            evt.consume();  // ignorar el evento de teclado
+        }
+    }//GEN-LAST:event_jTextField3KeyTyped
 
     /**
      * @param args the command line arguments

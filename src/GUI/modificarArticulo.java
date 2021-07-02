@@ -109,7 +109,7 @@ public class modificarArticulo extends javax.swing.JFrame {
         jList1 = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Modifcar artículo");
+        setTitle("Modificar artículo");
 
         jButton1.setText("Modificar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {

@@ -9,6 +9,7 @@ import BD.Conexion;
 import Clases.Administrador;
 import Clases.Empleado;
 import Clases.Usuario;
+import java.awt.Dimension;
 import java.util.Arrays;
 
 /**
@@ -18,12 +19,15 @@ import java.util.Arrays;
 public class altaUsuario extends javax.swing.JFrame {
     private boolean modificar;
     private Usuario u;
+    Dimension original;
     /**
      * Creates new form altaUsuario
      */
     public altaUsuario() {
         initComponents();
-        
+        this.setResizable(false);
+        original = this.getSize();
+        this.setSize((int) original.getWidth(), (int) original.getHeight() - 150);
         this.setLocationRelativeTo(null);
         this.setTitle("Alta de Usuario");
         this.jButton1.setText("Crear");
@@ -39,6 +43,7 @@ public class altaUsuario extends javax.swing.JFrame {
 
     altaUsuario(Usuario u) {
         initComponents();
+        this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.setTitle("Modificar usuario");
         this.jButton1.setText("Modificar");
@@ -274,13 +279,13 @@ public class altaUsuario extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(19, 19, 19)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGap(18, 18, 18))
         );
 
         pack();

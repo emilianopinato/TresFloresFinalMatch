@@ -39,6 +39,7 @@ public class EstadodeCuenta extends javax.swing.JFrame {
      */
     public EstadodeCuenta() {
         initComponents();
+        this.setTitle("Estado de cuenta");
         AutoCompleteDecorator.decorate(this.jCBProveedor);
         List<Proveedor> LProv = Conexion.getInstance().listadoProveedores();
         LProv.forEach((p) -> {

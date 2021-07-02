@@ -22,6 +22,7 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
      */
     public RecuperarComprobantes() {
         initComponents();
+        this.setTitle("Recuperar comprobantes");
         this.setLocationRelativeTo(null);
         this.jTable1.getColumnModel().getColumn(6).setMinWidth(0);
         this.jTable1.getColumnModel().getColumn(6).setMaxWidth(0);
