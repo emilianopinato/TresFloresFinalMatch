@@ -1051,4 +1051,27 @@ public class Conexion {
         return listaRecibos;
     }
 
+        public boolean existeProveedor(String razonsocial, String rut) {
+        EntityManager em = getEntity();
+        List<Proveedor>  p = null;
+        em.getTransaction().begin();
+        boolean retorno = false;
+        try {
+            p = em.createNativeQuery("SELECT * FROM proveedor WHERE razonSocial = :razonsocial OR RUT = :rut", Proveedor.class)
+                    .setParameter("razonsocial", razonsocial)
+                    .setParameter("rut", rut)
+                    .getResultList();
+            em.getTransaction().commit();
+            if (p.size() > 0) {
+                retorno = true;
+            } else {
+                retorno = false;
+            }
+
+        } catch (Exception e) {
+            em.getTransaction().rollback();
+
+        }
+        return retorno;
+    }
 }
