@@ -13,55 +13,55 @@ import java.util.regex.Pattern;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-
-
 /**
  *
  * @author Leo
  */
 public class altaProveedor extends javax.swing.JFrame {
+
     private boolean modificar;
     private JTable tabla;
     private Proveedor p;
+
     /**
      * Creates new form altaProveedor
      */
     public altaProveedor() {
         initComponents();
         this.setLocationRelativeTo(null);
-        
+
         modificar = false;
         setTitle("Alta Proveedor");
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         jScrollPane1.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
         jScrollPane1.setWheelScrollingEnabled(false);
     }
-    
-    public altaProveedor(Proveedor p,JTable tabla) {
+
+    public altaProveedor(Proveedor p, JTable tabla) {
         initComponents();
         modificar = true;
         this.p = p;
         this.tabla = tabla;
-        
+
         setTitle("Modificar Proveedor");
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         jScrollPane1.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
         jScrollPane1.setWheelScrollingEnabled(false);
-        
+
         jTextField1.setText(String.valueOf(p.getRUT()));
         jTextField2.setText(p.getRazonSocial());
         jTextField3.setText(p.getTelefono());
-        
-        if(p.isTipoFacturacion()){
+
+        if (p.isTipoFacturacion()) {
             jRadioButton1.setSelected(true);
-        }else{
+        } else {
             jRadioButton2.setSelected(true);
         }
-        
+
         jTextField4.setText(p.getMailProveedor());
         jTextField5.setText(p.getContactoProveedor());
         jTextArea1.setText(p.getDireccion());
-        
+
     }
 
     /**
@@ -169,7 +169,7 @@ public class altaProveedor extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+                .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jLabel3)
                     .addComponent(jLabel6)
@@ -191,13 +191,13 @@ public class altaProveedor extends javax.swing.JFrame {
                     .addComponent(jTextField4)
                     .addComponent(jTextField3)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
-                .addContainerGap(169, Short.MAX_VALUE))
+                .addContainerGap(25, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addContainerGap())
+                .addGap(21, 21, 21))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,16 +227,16 @@ public class altaProveedor extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(38, 38, 38)
+                        .addGap(20, 20, 20)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton1)
                             .addComponent(jButton2)))
                     .addComponent(jLabel3))
-                .addContainerGap())
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -257,108 +257,110 @@ public class altaProveedor extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        
-           String email = jTextField4.getText();
-           boolean correoBien = false;
-           boolean nombreBien = false;
-         
-           //Chequear si el correo es efectivamente un correo//
-            Pattern pattern = Pattern.compile("^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)(.[A-Za-z]{2,})$");
-            Matcher matcher = pattern.matcher(email) ;
-            correoBien = matcher.matches();
-            
-            String nomValidar = jTextField5.getText();
-            Pattern pat = Pattern.compile("^[a-zA-Z ]+");
-            Matcher mat = pat.matcher(nomValidar);
-            nombreBien = mat.matches();
-            
-           
-        
-        if(jTextField1.getText().isEmpty()){
+
+        String email = jTextField4.getText();
+        boolean correoBien = false;
+        boolean nombreBien = false;
+
+        //Chequear si el correo es efectivamente un correo//
+        Pattern pattern = Pattern.compile("^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)(.[A-Za-z]{2,})$");
+        Matcher matcher = pattern.matcher(email);
+        correoBien = matcher.matches();
+
+        String nomValidar = jTextField5.getText();
+        Pattern pat = Pattern.compile("^[a-zA-Z ]+");
+        Matcher mat = pat.matcher(nomValidar);
+        nombreBien = mat.matches();
+
+        if (jTextField1.getText().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe ingresar el RUT del proveedor.");
-        }else if(jTextField2.getText().isEmpty()){
+        } else if (jTextField2.getText().isEmpty()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe ingresar el nombre de la empresa en el campo Razón Social.");
-        }else if( !jRadioButton1.isSelected() && !jRadioButton2.isSelected()){
+        } else if (!jRadioButton1.isSelected() && !jRadioButton2.isSelected()) {
             javax.swing.JOptionPane.showMessageDialog(this, "Debe ingresar si el proveedor trabaja con IVA o Son IVA.");
-        }else if(!jTextField1.getText().matches("[0-9]*")){
-                javax.swing.JOptionPane.showMessageDialog(this, "El RUT debe estar compuesto solo por Números");
-        }else if(!jTextField3.getText().matches("[0-9]*")){
+        } else if (!jTextField1.getText().matches("[0-9]*")) {
+            javax.swing.JOptionPane.showMessageDialog(this, "El RUT debe estar compuesto solo por Números");
+        } else if (!jTextField3.getText().matches("[0-9]*")) {
             javax.swing.JOptionPane.showMessageDialog(this, "El Telefono debe estar compuesto solo por Números");
-        }else if (!email.isEmpty() && correoBien == false){
+        } else if (!email.isEmpty() && correoBien == false) {
             javax.swing.JOptionPane.showMessageDialog(this, "El Correo electrónico ingresado no es válido");
-        }else if(!nomValidar.isEmpty() && nombreBien == false){
+        } else if (!nomValidar.isEmpty() && nombreBien == false) {
             javax.swing.JOptionPane.showMessageDialog(this, "El Contacto ingresado no es válido.Recuerde que los\ntildes y caracteres especiales No son validos");
-        }else{
-        
-            if(modificar == false){
-                Proveedor p = new Proveedor();
+        } else {
+            boolean existeprov = Conexion.getInstance().existeProveedor(this.jTextField2.getText(), this.jTextField1.getText());
+            if (existeprov) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Ya existe otro proveedor con igual RUT o Razon Social");
+            } else {
 
-                p.setRUT(jTextField1.getText());
-                p.setRazonSocial(jTextField2.getText());
-                p.setTelefono(jTextField3.getText());
+                if (modificar == false) {
+                    Proveedor p = new Proveedor();
 
-                if(jRadioButton1.isSelected()){
-                    p.setTipoFacturacion(true);
-                }else if(jRadioButton2.isSelected()){
-                    p.setTipoFacturacion(false);
-                }
-                p.setDeshabilitado(false);
-                p.setMailProveedor(jTextField4.getText());
-                p.setDireccion(jTextArea1.getText());
-                p.setContactoProveedor(jTextField5.getText());
-                Conexion.getInstance().persist(p);
+                    p.setRUT(jTextField1.getText());
+                    p.setRazonSocial(jTextField2.getText());
+                    p.setTelefono(jTextField3.getText());
 
-                
-                javax.swing.JOptionPane.showMessageDialog(this, "Creado correctamente.");
-                jTextField1.setText("");
-                jTextField2.setText("");
-                jTextField3.setText("");
-                jTextField4.setText("");
-                jTextField5.setText("");
-                jTextArea1.setText("");
-                buttonGroup1.clearSelection();
-            }else{
-                String rut = jTextField1.getText();
-                String razonsocial = jTextField2.getText();
-                String tel = jTextField3.getText();
+                    if (jRadioButton1.isSelected()) {
+                        p.setTipoFacturacion(true);
+                    } else if (jRadioButton2.isSelected()) {
+                        p.setTipoFacturacion(false);
+                    }
+                    p.setDeshabilitado(false);
+                    p.setMailProveedor(jTextField4.getText());
+                    p.setDireccion(jTextArea1.getText());
+                    p.setContactoProveedor(jTextField5.getText());
+                    Conexion.getInstance().persist(p);
 
-                boolean tipoF = false;
-                if(jRadioButton1.isSelected()){
-                    tipoF = true;
-                }
-
-                String correo = jTextField4.getText();
-                String contacto = jTextField5.getText();
-                String direccion = jTextArea1.getText();
-                p.setRUT(rut);
-                p.setRazonSocial(razonsocial);
-                p.setMailProveedor(correo);
-                p.setTipoFacturacion(tipoF);
-                p.setTelefono(tel);
-                p.setContactoProveedor(contacto);
-                p.setDireccion(direccion);
-    ;            
-                Conexion.getInstance().merge(p);
-
-                int fila = tabla.getSelectedRow();
-                tabla.getModel().setValueAt(p.getRUT(), fila, 0);
-                tabla.getModel().setValueAt(p.getRazonSocial(),fila,1 );
-                tabla.getModel().setValueAt(p.getTelefono(), fila, 2);
-
-                if (p.isTipoFacturacion() == false) {
-                    tabla.getModel().setValueAt("Sin IVA", fila, 3);
+                    javax.swing.JOptionPane.showMessageDialog(this, "Creado correctamente.");
+                    jTextField1.setText("");
+                    jTextField2.setText("");
+                    jTextField3.setText("");
+                    jTextField4.setText("");
+                    jTextField5.setText("");
+                    jTextArea1.setText("");
+                    buttonGroup1.clearSelection();
                 } else {
-                    tabla.getModel().setValueAt("Con IVA", fila, 3);
+                    String rut = jTextField1.getText();
+                    String razonsocial = jTextField2.getText();
+                    String tel = jTextField3.getText();
+
+                    boolean tipoF = false;
+                    if (jRadioButton1.isSelected()) {
+                        tipoF = true;
+                    }
+
+                    String correo = jTextField4.getText();
+                    String contacto = jTextField5.getText();
+                    String direccion = jTextArea1.getText();
+                    p.setRUT(rut);
+                    p.setRazonSocial(razonsocial);
+                    p.setMailProveedor(correo);
+                    p.setTipoFacturacion(tipoF);
+                    p.setTelefono(tel);
+                    p.setContactoProveedor(contacto);
+                    p.setDireccion(direccion);
+
+                    Conexion.getInstance().merge(p);
+
+                    int fila = tabla.getSelectedRow();
+                    tabla.getModel().setValueAt(p.getRUT(), fila, 0);
+                    tabla.getModel().setValueAt(p.getRazonSocial(), fila, 1);
+                    tabla.getModel().setValueAt(p.getTelefono(), fila, 2);
+
+                    if (p.isTipoFacturacion() == false) {
+                        tabla.getModel().setValueAt("Sin IVA", fila, 3);
+                    } else {
+                        tabla.getModel().setValueAt("Con IVA", fila, 3);
+                    }
+
+                    tabla.getModel().setValueAt(p.getMailProveedor(), fila, 4);
+                    tabla.getModel().setValueAt(p.getContactoProveedor(), fila, 5);
+                    tabla.getModel().setValueAt(p.getDireccion(), fila, 6);
+                    tabla.getModel().setValueAt(p, fila, 7);
+                    tabla.clearSelection();
+                    javax.swing.JOptionPane.showMessageDialog(this, "Datos modificados correctamente");
+                    this.dispose();
+
                 }
-
-                tabla.getModel().setValueAt(p.getMailProveedor(), fila, 4);
-                tabla.getModel().setValueAt(p.getContactoProveedor(),fila,5);
-                tabla.getModel().setValueAt(p.getDireccion(), fila, 6);
-                tabla.getModel().setValueAt(p,fila,7);
-                tabla.clearSelection();
-                javax.swing.JOptionPane.showMessageDialog(this, "Datos modificados correctamente");
-                this.dispose();
-
             }
         }
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -26,6 +26,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -955,11 +956,12 @@ public class AltaFactura extends javax.swing.JFrame {
         Date date = this.jDateChooser.getDate();
 
         if (((Proveedor) this.jCBProveedor.getSelectedItem()) != null) {
+            LocalDate fechaActual = LocalDate.now();
+            LocalDate fecha_seleccionada = jDateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
             
-//            if(this.jDateChooser.getDate() > LocalDateTime.now()){
-//                
-//            }
-            if (this.precioCotizacion == 0 && this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
+            if(fecha_seleccionada.isAfter(fechaActual)){
+                javax.swing.JOptionPane.showMessageDialog(null, "No se puede ingresar una factura con fecha mayor a la de hoy.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            }else if (this.precioCotizacion == 0 && this.jCBMoneda.getSelectedItem() == tipoMoneda.US$) {
                 javax.swing.JOptionPane.showMessageDialog(null, "Está intentando ingresar una factura en dolares que no tiene cotización. "
                         + "Seleccione otra fecha y vuelva a intentarlo.");
             } else if (this.jTextSerie.getText().isEmpty()) {
