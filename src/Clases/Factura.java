@@ -6,9 +6,12 @@
 package Clases;
 
 import java.io.Serializable;
+import java.util.AbstractList;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 
 /**
@@ -17,12 +20,14 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Factura extends Comprobante implements Serializable {
+
     private tipoComprobante tipo;
     private float Pendiente;
 
     private boolean deshabilitado;
     private boolean cerrada;
     private String observacion;
+    private boolean ivaPrecioUnit;
 
     public String getObservacion() {
         return observacion;
@@ -31,14 +36,14 @@ public class Factura extends Comprobante implements Serializable {
     public void setObservacion(String observacion) {
         this.observacion = observacion;
     }
-    
+
     //LINKS-------------------------//
-      
-    @OneToMany(mappedBy = "factura",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<F_P> fp_s;
-    
-    @OneToMany(mappedBy = "factura")
-    private List<F_R> fr_s;
+
+    //@OneToMany(mappedBy = "factura")
+    @OneToMany(mappedBy = "factura", fetch=FetchType.EAGER)
+    private List<F_R> fr_s = new ArrayList<F_R>();
     //------------------------------//
 
     public tipoComprobante getTipo() {
@@ -72,8 +77,8 @@ public class Factura extends Comprobante implements Serializable {
     public void setFr_s(List<F_R> fr_s) {
         this.fr_s = fr_s;
     }
-    
-        public boolean isDeshabilitado() {
+
+    public boolean isDeshabilitado() {
         return deshabilitado;
     }
 
@@ -87,6 +92,14 @@ public class Factura extends Comprobante implements Serializable {
 
     public void setCerrada(boolean cerrada) {
         this.cerrada = cerrada;
+    }
+
+    public boolean isIvaPrecioUnit() {
+        return ivaPrecioUnit;
+    }
+
+    public void setIvaPrecioUnit(boolean ivaPrecioUnit) {
+        this.ivaPrecioUnit = ivaPrecioUnit;
     }
 
 }

@@ -159,6 +159,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuItem19 = new javax.swing.JMenuItem();
         jMenuItem20 = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
+        jMenuItem23 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
@@ -326,6 +327,16 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         jMenuBar1.add(jMenu3);
 
         jMenuFactura.setText("Factura");
+        jMenuFactura.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuFacturaMouseClicked(evt);
+            }
+        });
+        jMenuFactura.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuFacturaActionPerformed(evt);
+            }
+        });
 
         jMenuItem6.setText("Ingresar Factura");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
@@ -374,6 +385,14 @@ public class pantallaPrincipal extends javax.swing.JFrame {
             }
         });
         jMenuFactura.add(jMenuItem14);
+
+        jMenuItem23.setText("Asignar N/C");
+        jMenuItem23.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem23ActionPerformed(evt);
+            }
+        });
+        jMenuFactura.add(jMenuItem23);
 
         jMenuBar1.add(jMenuFactura);
 
@@ -776,6 +795,21 @@ public class pantallaPrincipal extends javax.swing.JFrame {
         aP.setVisible(true);
     }//GEN-LAST:event_JLabelAltaProductoMouseClicked
 
+    private void jMenuFacturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuFacturaActionPerformed
+
+    }//GEN-LAST:event_jMenuFacturaActionPerformed
+
+    private void jMenuFacturaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuFacturaMouseClicked
+
+    }//GEN-LAST:event_jMenuFacturaMouseClicked
+
+    private void jMenuItem23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem23ActionPerformed
+        AsignarNC aNC = new AsignarNC();
+        aNC.setResizable(false);
+        aNC.setLocationRelativeTo(null);
+        aNC.setVisible(true);
+    }//GEN-LAST:event_jMenuItem23ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -851,6 +885,7 @@ public class pantallaPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem22;
+    private javax.swing.JMenuItem jMenuItem23;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;

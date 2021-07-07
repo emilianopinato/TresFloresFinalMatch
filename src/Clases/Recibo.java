@@ -19,6 +19,7 @@ public class Recibo extends Comprobante implements Serializable {
     
     private String observacion;
     private boolean deshabilitado;
+    private boolean nc;
 
     //LINKS------------------------//
     @OneToMany(mappedBy = "recibo")
@@ -47,6 +48,14 @@ public class Recibo extends Comprobante implements Serializable {
 
     public void setDeshabilitado(boolean deshabilitado) {
         this.deshabilitado = deshabilitado;
+    }
+
+    public boolean isNc() {
+        return nc;
+    }
+
+    public void setNc(boolean nc) {
+        this.nc = nc;
     }
 
 }

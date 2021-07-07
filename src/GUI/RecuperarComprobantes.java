@@ -6,6 +6,7 @@
 package GUI;
 
 import BD.Conexion;
+import Clases.F_R;
 import Clases.Factura;
 import Clases.Recibo;
 import java.util.List;
@@ -135,6 +136,12 @@ public class RecuperarComprobantes extends javax.swing.JFrame {
                 javax.swing.JOptionPane.showMessageDialog(this, "La factura se ha habilitado correctamente.");
             } else if (this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6) instanceof Recibo) {
                 Recibo rec = (Recibo) this.jTable1.getModel().getValueAt(this.jTable1.getSelectedRow(), 6);
+                
+                List<F_R> listaf_r = rec.getFr_s();
+                for (int i = 0; i < listaf_r.size(); i++) {
+                    Float pen_nuevo = listaf_r.get(i).getFactura().getPendiente() - listaf_r.get(i).getSaldo();
+                    listaf_r.get(i).getFactura().setPendiente(pen_nuevo);
+                }
                 rec.setDeshabilitado(false);
                 Conexion.getInstance().merge(rec);
                 ((DefaultTableModel)this.jTable1.getModel()).removeRow(this.jTable1.getSelectedRow());
