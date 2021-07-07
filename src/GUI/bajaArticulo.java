@@ -90,7 +90,7 @@ public class bajaArticulo extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setText("Eliminar");
+        jButton2.setText("Deshabilitar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);

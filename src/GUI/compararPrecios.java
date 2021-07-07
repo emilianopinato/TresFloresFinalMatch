@@ -97,14 +97,14 @@ public class compararPrecios extends javax.swing.JFrame {
         tablita.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(tablita);
 
-        jButton1.setText("Comprar precios");
+        jButton1.setText("Comparar precios");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
-        jButton2.setText("cerrar");
+        jButton2.setText("Cerrar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);

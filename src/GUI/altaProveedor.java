@@ -35,6 +35,7 @@ public class altaProveedor extends javax.swing.JFrame {
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         jScrollPane1.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
         jScrollPane1.setWheelScrollingEnabled(false);
+        jButton1.setText("Crear");
     }
 
     public altaProveedor(Proveedor p, JTable tabla) {
@@ -47,6 +48,7 @@ public class altaProveedor extends javax.swing.JFrame {
         jScrollPane1.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
         jScrollPane1.getHorizontalScrollBar().setPreferredSize(new Dimension(0, 0));
         jScrollPane1.setWheelScrollingEnabled(false);
+        jButton1.setText("Modificar");
 
         jTextField1.setText(String.valueOf(p.getRUT()));
         jTextField2.setText(p.getRazonSocial());
@@ -142,7 +144,6 @@ public class altaProveedor extends javax.swing.JFrame {
 
         jLabel6.setText("Correo electrónico");
 
-        jButton1.setText("Aceptar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -191,13 +192,13 @@ public class altaProveedor extends javax.swing.JFrame {
                     .addComponent(jTextField4)
                     .addComponent(jTextField3)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
-                .addGap(21, 21, 21))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

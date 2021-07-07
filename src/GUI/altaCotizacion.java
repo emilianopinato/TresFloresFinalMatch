@@ -27,10 +27,11 @@ public class altaCotizacion extends javax.swing.JFrame {
      * Creates new form altaCotizacion
      */
     public altaCotizacion() {
-        tipo = "alta";
-        
+        tipo = "alta";       
         initComponents();
         this.setLocationRelativeTo(null);
+        this.jButton1.setText("Crear");
+        this.setTitle("Alta");
         
     }
     
@@ -41,6 +42,8 @@ public class altaCotizacion extends javax.swing.JFrame {
         tabla = jTable1;
         this.jDateChooser.setDate(c.getFecha());
         this.jTextField1.setText(String.valueOf(c.getImporte()));
+        this.jButton1.setText("Modificar");
+        this.setTitle("Modificar");
     }
 
     altaCotizacion(LocalDate fecha, JTable jTable1) {
@@ -48,6 +51,8 @@ public class altaCotizacion extends javax.swing.JFrame {
         tipo = "altafactura";
         tabla = jTable1;
         this.jDateChooser.setDate(java.sql.Date.valueOf(fecha));
+        this.jButton1.setText("Crear");
+        this.setTitle("Alta");
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -66,7 +71,6 @@ public class altaCotizacion extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Crear cotización");
 
         jLabel1.setText("Fecha: ");
 
@@ -78,7 +82,6 @@ public class altaCotizacion extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Crear");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -108,10 +111,10 @@ public class altaCotizacion extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jButton1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
