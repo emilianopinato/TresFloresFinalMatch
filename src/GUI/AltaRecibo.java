@@ -931,8 +931,10 @@ public class AltaRecibo extends javax.swing.JFrame {
                         }
                     }
                 } else {
-                    float entrega = (float) this.jTableFacturas.getModel().getValueAt(i, 4);
-                    float pend = (float) this.jTableFacturas.getModel().getValueAt(i, 3);
+                    String e = modelo.getValueAt(i, 4).toString();
+                    float entrega = Float.parseFloat(e);
+                    String p = modelo.getValueAt(i, 3).toString();
+                    float pend = Float.parseFloat(p);
                     if (entrega > pend) {
                         saldomayorpendiente = true;
                     }

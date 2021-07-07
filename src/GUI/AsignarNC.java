@@ -14,6 +14,7 @@ import Clases.tipoMoneda;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
@@ -152,7 +153,7 @@ public class AsignarNC extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setText("Facturas a asigar:");
+        jLabel1.setText("Facturas a asignar:");
 
         jLabel2.setText("Nota de credito:");
 
@@ -220,10 +221,8 @@ public class AsignarNC extends javax.swing.JFrame {
                                     .addComponent(jLabel2))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 24, Short.MAX_VALUE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addGap(257, 257, 257))
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 359, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1)))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -442,6 +441,8 @@ public class AsignarNC extends javax.swing.JFrame {
                         rec.setProveedor((Proveedor) this.jComboBoxProveedores.getSelectedItem());
                         rec.setTotal(saldototal);
                         rec.setDeshabilitado(false);
+                        
+                        rec.setFecha(new Date());
 
                         for (int i = 0; i < modelo.getRowCount(); i++) {
                             String s = modelo.getValueAt(i, 2).toString();
@@ -456,6 +457,8 @@ public class AsignarNC extends javax.swing.JFrame {
                                 float pendiente = f.getPendiente() - saldo;
                                 f.setPendiente(pendiente);
                                 f_r.setFactura(f);
+                                f.getFr_s().add(f_r);
+                                //boolean fr = Conexion.getInstance().persist(f_r);
                                 Conexion.getInstance().merge(f);
                                 listaf_r.add(f_r);
                             }

@@ -1005,7 +1005,7 @@ public class AltaFactura extends javax.swing.JFrame {
                     if (!mescerrado) {
                         String prov = String.valueOf(((Proveedor) this.jCBProveedor.getSelectedItem()).getCodigo());
                         if (Conexion.getInstance().existeFac(this.jTextSerie.getText(), this.jTextNumeroFact.getText(), prov) == true) {
-                            javax.swing.JOptionPane.showMessageDialog(null, "Ya ingresaste un recibo con ese numero anteriormente.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+                            javax.swing.JOptionPane.showMessageDialog(null, "Ya ingresaste una factura con ese numero anteriormente.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
                         } else {
 
                             if (this.jCBTipoComprobante.getSelectedItem().toString().equals("Contado")) {
@@ -1602,7 +1602,7 @@ public class AltaFactura extends javax.swing.JFrame {
         fac.setIvaMinimo(Float.parseFloat(jTextIVAminimo.getText()));
         if (Conexion.getInstance().existeFacModificar(fac.getSerieComprobante(), String.valueOf(fac.getNroComprobante()), String.valueOf(fac.getProveedor().getCodigo()),
                 this.jTextSerie.getText(), this.jTextNumeroFact.getText(), String.valueOf(fac.getProveedor().getCodigo())) == true) {
-            javax.swing.JOptionPane.showMessageDialog(null, "Ya existe otro recibo con ese numero.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+            javax.swing.JOptionPane.showMessageDialog(null, "Ya existe una factura con ese numero.", "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
         } else {
             if (this.jCheckBoxIvaInc.isSelected()) {
                 fac.setIvaPrecioUnit(true);
@@ -1755,10 +1755,23 @@ public class AltaFactura extends javax.swing.JFrame {
                 }
 //            fac.setFp_s(listaf_p);
             } else if (this.jCBTipoComprobante.getSelectedItem().toString().equals(tipoComprobante.NotaCredito.toString())) {
+                Float total_nuevo = Float.parseFloat(this.jTextTOTAL.getText());
+                Float pend_nuevo = 0f;
+
+                List<F_R> ListF_R = fac.getFr_s();
+                Float asignado = 0f;
+                for (int i = 0; i < ListF_R.size(); i++) {
+                    asignado = asignado + ListF_R.get(i).getSaldo();
+                }
+                pend_nuevo = total_nuevo - asignado;
+                if (pend_nuevo < 0f) {
+                    pend_nuevo = 0f;
+                }
+                
                 fac.setTipo(tipoComprobante.NotaCredito);
                 fac.setSerieComprobante(this.jTextSerie.getText());
                 fac.setNroComprobante(Integer.parseInt(this.jTextNumeroFact.getText()));
-                fac.setPendiente(Float.parseFloat(this.jTextTOTAL.getText()));
+                fac.setPendiente(pend_nuevo);
                 fac.setTotal(Float.parseFloat(this.jTextTOTAL.getText()));
                 fac.setFecha(this.jDateChooser.getDate());
                 fac.setProveedor((Proveedor) this.jCBProveedor.getSelectedItem());
@@ -1812,6 +1825,12 @@ public class AltaFactura extends javax.swing.JFrame {
             this.f= Conexion.getInstance().getFac(fac.getSerieComprobante(), String.valueOf(fac.getNroComprobante()));
 
             this.jPanelModificar.setVisible(false);
+            this.articulo_seleccionado = null;
+            this.jTextArticulo.setText("");
+            this.jTextCantidad.setText("");
+            this.jTextUnitario.setText("");
+            this.jTextDescuento.setText("");
+            this.jTextSubTotalArt.setText("");
             this.setSize((int) original.getWidth(), (int) original.getHeight() - 140);
         }
     }//GEN-LAST:event_jButtonModificarActionPerformed
@@ -1826,6 +1845,11 @@ public class AltaFactura extends javax.swing.JFrame {
             this.articulo_seleccionado = this.ListaArticulo.get(this.jTableArticulos.getSelectedRow());
             this.ListaArticulo.remove(this.jTableArticulos.getSelectedRow());
             modelo.removeRow(this.jTableArticulos.getSelectedRow());
+            if(this.jCheckBoxIvaInc.isSelected()){
+                this.CalcularTotales_conIVA_inc();
+            }else if(!this.jCheckBoxIvaInc.isSelected()){
+                this.CalcularTotales_sinIVA_inc();
+            }
         }
     }//GEN-LAST:event_jTableArticulosMouseClicked
 

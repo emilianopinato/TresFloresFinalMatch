@@ -249,7 +249,8 @@ public class Conexion {
         em.getTransaction().begin();
         try {
             listaA = em.createNativeQuery("SELECT * FROM articulo\n"
-                    + "WHERE nombre LIKE :texto\n"
+                    + "WHERE deshabilitado = 0 "
+                    + "AND nombre LIKE :texto\n"
                     + "   OR codigo LIKE :texto\n"
                     + "   OR descripcion LIKE :texto", Articulo.class)
                     .setParameter("texto", texto)
@@ -257,6 +258,12 @@ public class Conexion {
             em.getTransaction().commit();
         } catch (Exception e) {
             em.getTransaction().rollback();
+        }
+        for(int i = 0 ; listaA.size() > i ; i++){
+            Articulo a = listaA.get(i);
+            if(a.isDeshabilitado()){
+                listaA.remove(a);
+            }
         }
         return listaA;
     }
